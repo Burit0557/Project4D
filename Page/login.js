@@ -16,7 +16,7 @@ export default function login({ navigation }) {
             <View style={styles.logo} >
             </View>
             <View style={[styles.listRow, { marginTop: hp('7%') }]}>
-                <ImageBackground source={require('../assets/settings.png')} style={styles.smallIcon} />
+                <ImageBackground source={require('../assets/profile-user2.png')} style={styles.smallIcon} />
                 <TextInput
                     style={styles.textInput}
                     value={input.username}
