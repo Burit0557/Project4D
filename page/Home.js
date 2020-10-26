@@ -20,17 +20,31 @@ export default function home({ navigation }) {
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
                         <TouchableOpacity onPress={() => navigation.navigate('History')}>
                             <View style={[styles.item, styles.Shadow]}>
-                                <ImageBackground source={require('../assets/settings.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
+                                <ImageBackground source={require('../assets/placeholder.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
                                 <Text style={styles.Text}>เดินทางไกล</Text>
                             </View>
-                            </TouchableOpacity>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
                             <View style={[styles.item, styles.Shadow]}>
+                                <ImageBackground source={require('../assets/user-1.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
+                                <Text style={styles.Text}>สมาชิก</Text>
                             </View>
-                        
+                        </TouchableOpacity>
+
                     </View>
                     <View style={styles.listRow}>
-                        <View style={[styles.item, styles.Shadow]}></View>
-                        <View style={[styles.item, styles.Shadow]}></View>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                            <View style={[styles.item, styles.Shadow]}>
+                                <ImageBackground source={require('../assets/history.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
+                                <Text style={styles.Text}>ประวัติ</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                            <View style={[styles.item, styles.Shadow]}>
+                                <ImageBackground source={require('../assets/setting.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
+                                <Text style={styles.Text}>ตั้งค่า</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <Button

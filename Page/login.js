@@ -25,7 +25,7 @@ export default function login({ navigation }) {
                 />
             </View>
             <View style={styles.listRow}>
-                <ImageBackground source={require('../assets/settings.png')} style={styles.smallIcon} />
+                <ImageBackground source={require('../assets/padlock2.png')} style={styles.smallIcon} />
                 <TextInput
                     style={styles.textInput}
                     secureTextEntry={true}
@@ -82,6 +82,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 4.65,
         elevation: 8,
+    },
+    smallIcon: {
+        width: hp('5%'),
+        height: hp('5%'),
+        borderWidth: 0,
     },
     Text: {
         color: '#12283D',
