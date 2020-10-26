@@ -1,6 +1,6 @@
 import React from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 
 export default function home({ navigation }) {
@@ -18,13 +18,15 @@ export default function home({ navigation }) {
             <View style={styles.body}>
                 <View style={styles.content}>
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
-                        <View style={[styles.item, styles.Shadow]}
-                            onPress={() => navigation.navigate('')} >
-                            <ImageBackground source={require('../assets/settings.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
-                            <Text style={styles.Text}>เดินทางไกล</Text>
-                        </View>
-                        <View style={[styles.item, styles.Shadow]}>
-                        </View>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                            <View style={[styles.item, styles.Shadow]}>
+                                <ImageBackground source={require('../assets/settings.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
+                                <Text style={styles.Text}>เดินทางไกล</Text>
+                            </View>
+                            </TouchableOpacity>
+                            <View style={[styles.item, styles.Shadow]}>
+                            </View>
+                        
                     </View>
                     <View style={styles.listRow}>
                         <View style={[styles.item, styles.Shadow]}></View>
@@ -32,13 +34,13 @@ export default function home({ navigation }) {
                     </View>
                 </View>
                 <Button
-                title="test"
-                buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
-                onPress={() => navigation.navigate('Login')}
-                titleStyle={{ fontSize: hp('2%') }}
-            />
+                    title="test"
+                    buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
+                    onPress={() => navigation.navigate('Login')}
+                    titleStyle={{ fontSize: hp('2%') }}
+                />
             </View>
-            
+
         </View>
 
     )

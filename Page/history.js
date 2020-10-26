@@ -1,9 +1,9 @@
 import React from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 
-export default function home({ navigation }) {
+export default function history({ navigation }) {
     data = [
         {
             number: 1,
@@ -47,13 +47,18 @@ export default function home({ navigation }) {
         },
     ]
 
-    
+    renderLeftComponent = () => {
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                <View style={{ borderWidth: 1, width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}></View>
+            </TouchableOpacity>)
+    }
+
     return (
         <View style={styles.container}>
             <Header
                 containerStyle={{ height: hp('15%') }}
-                // leftContainerStyle={{ marginBottom: '5%' }}
-                leftComponent={{ style: { borderWidth: 1, width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') } }}
+                leftComponent={this.renderLeftComponent()}
                 centerComponent={{ text: 'ดูประวัติ', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
                 // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 // barStyle="dark-content"
