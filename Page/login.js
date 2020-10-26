@@ -83,11 +83,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 8,
     },
-    smallIcon: {
-        width: hp('5%'),
-        height: hp('5%'),
-        borderWidth: 1,
-    },
     Text: {
         color: '#12283D',
         fontSize: hp('2%'),
