@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     smallIcon: {
         width: hp('5%'),
         height: hp('5%'),
-        borderWidth: 1,
+        borderWidth: 0,
     },
     Text: {
         color: '#12283D',
