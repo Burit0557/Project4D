@@ -20,7 +20,7 @@ export default function home({ navigation }) {
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
                         <TouchableOpacity onPress={() => navigation.navigate('History')}>
                             <View style={[styles.item, styles.Shadow]}>
-                                <ImageBackground source={require('../assets/placeholder.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
+                                <ImageBackground source={require('../assets/placeholder.png')} style={{ width: '80%', height: '80%', borderWidth: 0, }} />
                                 <Text style={styles.Text}>เดินทางไกล</Text>
                             </View>
                         </TouchableOpacity>
