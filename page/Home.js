@@ -1,7 +1,7 @@
 import React from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, Image, Icon, Header } from 'react-native-elements'
+import { View, Text, ImageBackground,Image, StyleSheet, TouchableOpacity ,Im} from 'react-native';
+import { Button, Icon, Header } from 'react-native-elements'
 
 export default function home({ navigation }) {
     return (
@@ -20,17 +20,36 @@ export default function home({ navigation }) {
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
                         <TouchableOpacity onPress={() => navigation.navigate('History')}>
                             <View style={[styles.item, styles.Shadow]}>
-                                <ImageBackground source={require('../assets/settings.png')} style={{ width: '80%', height: '80%', borderWidth: 1, }} />
+                                <Image
+                                    style={styles.iconhome}
+                                    // style={styles.iconhome} 
+                                    source={require('../assets/placeholder.png')}
+
+                                />
                                 <Text style={styles.Text}>เดินทางไกล</Text>
                             </View>
-                            </TouchableOpacity>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
                             <View style={[styles.item, styles.Shadow]}>
+                                <Image source={require('../assets/user-1.png')} style={styles.iconhome} />
+                                <Text style={styles.Text}>สมาชิก</Text>
                             </View>
-                        
+                        </TouchableOpacity>
+
                     </View>
                     <View style={styles.listRow}>
-                        <View style={[styles.item, styles.Shadow]}></View>
-                        <View style={[styles.item, styles.Shadow]}></View>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                            <View style={[styles.item, styles.Shadow]}>
+                                <Image source={require('../assets/history.png')} style={styles.iconhome} />
+                                <Text style={styles.Text}>ประวัติ</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                            <View style={[styles.item, styles.Shadow]}>
+                                <Image source={require('../assets/setting.png')} style={styles.iconhome} />
+                                <Text style={styles.Text}>ตั้งค่า</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <Button
@@ -41,7 +60,9 @@ export default function home({ navigation }) {
                 />
             </View>
 
+
         </View>
+
 
     )
 }
@@ -94,10 +115,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         marginTop: '5%',
+
     },
     Text: {
-        margin: '1%',
+        margin: '2%',
+        marginTop: '4%',
         color: '#ffff',
         fontSize: hp('2%')
+    },
+    iconhome: {
+        width: '70%',
+        height: '70%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
     }
 })

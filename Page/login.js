@@ -16,7 +16,7 @@ export default function login({ navigation }) {
             <View style={styles.logo} >
             </View>
             <View style={[styles.listRow, { marginTop: hp('7%') }]}>
-                <ImageBackground source={require('../assets/settings.png')} style={styles.smallIcon} />
+                <ImageBackground source={require('../assets/profile-user2.png')} style={styles.smallIcon} />
                 <TextInput
                     style={styles.textInput}
                     value={input.username}
@@ -25,7 +25,7 @@ export default function login({ navigation }) {
                 />
             </View>
             <View style={styles.listRow}>
-                <ImageBackground source={require('../assets/settings.png')} style={styles.smallIcon} />
+                <ImageBackground source={require('../assets/padlock2.png')} style={styles.smallIcon} />
                 <TextInput
                     style={styles.textInput}
                     secureTextEntry={true}
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     smallIcon: {
         width: hp('5%'),
         height: hp('5%'),
-        borderWidth: 1,
+        borderWidth: 0,
     },
     Text: {
         color: '#12283D',
