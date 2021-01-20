@@ -50,7 +50,9 @@ export default function history({ navigation }) {
     renderLeftComponent = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <View style={{ borderWidth: 1, width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}></View>
+                <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
+                    <Image source={require('../assets/previous.png')} style={styles.iconhome} />
+                </View>
             </TouchableOpacity>)
     }
 
@@ -163,5 +165,11 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 15,
         borderBottomRightRadius: 15,
 
+    },
+    iconhome: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })

@@ -22,14 +22,13 @@ export default function home({ navigation }) {
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image
                                     style={styles.iconhome}
-                                    // style={styles.iconhome} 
                                     source={require('../assets/placeholder.png')}
 
                                 />
                                 <Text style={styles.Text}>เดินทางไกล</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Family')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image source={require('../assets/user-1.png')} style={styles.iconhome} />
                                 <Text style={styles.Text}>สมาชิก</Text>
