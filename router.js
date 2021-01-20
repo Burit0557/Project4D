@@ -6,8 +6,9 @@ import HomeScreen from './Page/home';
 import LoginScreen from './Page/login';
 import HistoryScreen from './Page/history';
 import FamilyScreen from './Page/family';
-import AddFamilyScreen from './Page/family-add';
-
+import FamilyAddScreen from './Page/family-add';
+import FamilySettingScreen from './Page/family-setting';
+import DeviceScreen from './Page/device';
 // import { MyContext } from './context-api/myContext';
 // -------------- Navigation Stack -----------------
 
@@ -21,7 +22,9 @@ function router() {
                     <Stack.Screen name="Login" component={LoginScreen}  options={{ headerShown: false }}/>
                     <Stack.Screen name="History" component={HistoryScreen}  options={{ headerShown: false }}/>
                     <Stack.Screen name="Family" component={FamilyScreen}  options={{ headerShown: false }}/>
-                    <Stack.Screen name="Family-Add" component={AddFamilyScreen}  options={{ headerShown: false }}/>
+                    <Stack.Screen name="Family-Add" component={FamilyAddScreen}  options={{ headerShown: false }}/>
+                    <Stack.Screen name="Family-Setting" component={FamilySettingScreen}  options={{ headerShown: false }}/>
+                    <Stack.Screen name="Device" component={DeviceScreen}  options={{ headerShown: false }}/>
                 </Stack.Navigator>
             </NavigationContainer>
         // </MyContext>

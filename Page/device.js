@@ -7,15 +7,15 @@ export default function history({ navigation }) {
     data = [
         {
             number: 1,
-            name: 'LetMePlay1'
+            name: 'DeviceID1'
         },
         {
             number: 2,
-            name: 'LetMePlay2'
+            name: 'DeviceID2'
         },
         {
             number: 3,
-            name: 'LetMePlay3'
+            name: 'DeviceID3'
         },
 
     ]
@@ -37,7 +37,7 @@ export default function history({ navigation }) {
             <Header
                 containerStyle={{ height: hp('15%') }}
                 leftComponent={this.renderLeftComponent()}
-                centerComponent={{ text: 'สมาชิก', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
+                centerComponent={{ text: 'อุปกรณ์', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
                 // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 // barStyle="dark-content"
                 backgroundColor='#014D81'
@@ -66,25 +66,25 @@ export default function history({ navigation }) {
                                             <TouchableOpacity >
                                                 <View style={styles.select}>
                                                     <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/history.png')} style={styles.icondown} />
+                                                        <Image source={require('../assets/focus.png')} style={styles.icondown} />
                                                     </View>
-                                                    <Text style={styles.Text}>ประวัติ</Text>
+                                                    <Text style={styles.Text}>กำหนดขนาดของดวงตา</Text>
                                                 </View>
                                             </TouchableOpacity>
                                             <TouchableOpacity >
                                                 <View style={styles.select}>
                                                     <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/placeholder.png')} style={styles.icondown} />
+                                                        <Image source={require('../assets/wi-fi.png')} style={styles.icondown} />
                                                     </View>
-                                                    <Text style={styles.Text}>ตำแหน่ง</Text>
+                                                    <Text style={styles.Text}>{"ตั้งค่า WIFI"}</Text>
                                                 </View>
                                             </TouchableOpacity>
-                                            <TouchableOpacity onPress={goSetting}>
+                                            <TouchableOpacity>
                                                 <View style={styles.select}>
                                                     <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/setting.png')} style={styles.icondown} />
+                                                        <Image source={require('../assets/delete.png')} style={styles.icondown} />
                                                     </View>
-                                                    <Text style={styles.Text}>ตั้งค่า</Text>
+                                                    <Text style={styles.Text}>ลบอุปกรณ์</Text>
                                                 </View>
                                             </TouchableOpacity>
                                         </View>
@@ -107,7 +107,7 @@ export default function history({ navigation }) {
                         }
                     </View>
                     <Button
-                        title="เพิ่มสมาชิก"
+                        title="เพิ่มอุปกรณ์"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('25%') }]}
                         onPress={() => navigation.navigate('Family-Add')}
                         titleStyle={{ fontSize: hp('2%') }}
