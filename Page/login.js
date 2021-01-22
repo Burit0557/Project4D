@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet, TextInput } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 
 export default function login({ navigation }) {
@@ -8,9 +8,10 @@ export default function login({ navigation }) {
         username: '',
         password: ''
     })
-    loginFunction = () =>{
+    loginFunction = () => {
         navigation.navigate('Home')
     }
+
     return (
         <View style={styles.container}>
             <View style={styles.logo} >
@@ -35,18 +36,20 @@ export default function login({ navigation }) {
                 />
             </View>
             <Button
-                title="Sign in"
+                title="เข้าสู่ระบบ"
                 buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('7%') }]}
                 onPress={() => loginFunction()}
                 titleStyle={{ fontSize: hp('2%') }}
             />
-            <Text style={styles.textForgot}>Forgot your password?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
+                <Text style={styles.textForgot}>ลืมรหัสผ่าน</Text>
+            </TouchableOpacity>
             <View style={[styles.line, { marginTop: hp('1.5%') }]} />
-            <Text style={[styles.Text, { marginTop: hp('1.5%') }]}>Don't have an account?</Text>
+            <Text style={[styles.Text, { marginTop: hp('1.5%') }]}>ยังไม่มีบัญชีใช่หรือไม่</Text>
             <Button
-                title="Sign up"
+                title="ลงทะเบียน"
                 buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
-                onPress={() => loginFunction()}
+                onPress={() => navigation.navigate('Register')}
                 titleStyle={{ fontSize: hp('2%') }}
             />
         </View>

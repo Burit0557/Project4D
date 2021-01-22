@@ -1,6 +1,6 @@
 import React from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground,Image, StyleSheet, TouchableOpacity ,Im} from 'react-native';
+import { View, Text, ImageBackground,Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements'
 
 export default function home({ navigation }) {
@@ -44,7 +44,7 @@ export default function home({ navigation }) {
                                 <Text style={styles.Text}>ประวัติ</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image source={require('../assets/setting.png')} style={styles.iconhome} />
                                 <Text style={styles.Text}>ตั้งค่า</Text>
@@ -88,6 +88,8 @@ const styles = StyleSheet.create({
     },
     content: {
         width: wp('80%'),
+        height : wp('80%'),
+        // alignItems : 'stretch',
         // alignItems: 'center',
         // backgroundColor: '#00ffff',
     },
