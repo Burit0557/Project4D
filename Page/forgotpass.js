@@ -39,8 +39,8 @@ export default function forgotpass({ navigation }) {
 
             <ScrollView>
                 <View style={styles.body}>
-                    <View style={{ width: '80%' }} >
-                        <Text style={{ fontSize: hp('2%'), marginTop: hp('3%') }}>กรอก Username หรือ Email ที่คุณใช้ลงทะเบียน
+                    <View style={{ width: '80%'}} >
+                        <Text style={[styles.Text,{ marginTop: hp('3%')}]}>กรอก Username หรือ Email ที่คุณใช้ลงทะเบียน
 เพื่อส่งข้อมูลในการตั้งรหัสผ่านใหม่ไปยัง Email </Text>
                     </View>
 
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     Text: {
         margin: '2%',
         marginTop: '4%',
-        color: '#ffff',
+        color: '#12283D',
         fontSize: hp('2%')
     },
     button: {

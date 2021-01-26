@@ -10,6 +10,7 @@ import SettingScreen from './Page/setting';
 import Setting_profileScreen from './Page/setting_profile';
 import RegisterScreen from './Page/register';
 import Device_addScreen from './Page/device_add';
+import Device_EARScreen from './Page/device_EAR';
 
 
 // import { MyContext } from './context-api/myContext';
@@ -29,6 +30,7 @@ function router() {
                     <Stack.Screen name="Setting_profile" component={Setting_profileScreen}  options={{ headerShown: false }}/>
                     <Stack.Screen name="Register" component={RegisterScreen}  options={{ headerShown: false }}/>
                     <Stack.Screen name="Device_add" component={Device_addScreen}  options={{ headerShown: false }}/>
+                    <Stack.Screen name="Device_EAR" component={Device_EARScreen}  options={{ headerShown: false }}/>
                 </Stack.Navigator>
             </NavigationContainer>
         // </MyContext>
