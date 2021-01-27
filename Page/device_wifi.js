@@ -1,10 +1,13 @@
 import React, { useState, useContext } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput,Alert } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 
 export default function register({ navigation }) {
-    const [input, setInput] = useState('')
+    const [input, setInput] = useState({
+        namewifi: '',
+        password: ''
+    })
 
     renderLeftComponent = () => {
         return (
@@ -16,19 +19,19 @@ export default function register({ navigation }) {
     }
 
     const Resetvalue = () =>
-    Alert.alert(
-      "ตั้งค่าเริ่มต้น ?",
-      "ต้องการกลับไปเป็นค่าเริ่มต้นใช่หรือไม่",
-      [
-        {
-          text: "ยกเลิก",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "ยืนยัน", onPress: () => console.log("Reset")}  //navigation.navigate('Login') }
-      ],
-      { cancelable: false }
-    );
+        Alert.alert(
+            "ตั้งค่าเริ่มต้น ?",
+            "ต้องการกลับไปเป็นค่าเริ่มต้นใช่หรือไม่",
+            [
+                {
+                    text: "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "ยืนยัน", onPress: () => console.log("Reset") }  //navigation.navigate('Login') }
+            ],
+            { cancelable: false }
+        );
 
     return (
         <View style={styles.container}>
@@ -43,34 +46,39 @@ export default function register({ navigation }) {
             <ScrollView>
                 <View style={styles.body}>
                     <View style={{ margin: hp('5%') }}>
-                        <Text style={styles.text}>สามารถดูขนาดตาของท่านได้จากจอ</Text>
-                    </View>
-                    <View style={{ borderWidth: 1, width: wp('80%'), height: wp('47%'), padding: 0 }}>
-                        <Image source={require('../assets/EAR.png')} style={styles.addimage} />
-                    </View>
-                    <View style={styles.bgInput}>
-                        <Text style={[styles.text, { marginLeft: 5 }]}>ค่าขนาดดวงตา</Text>
-                        <TextInput
-                            style={styles.textInput}
-                            value={input}
-                            onChangeText={(text) => setInput(text)}
-                        // placeholder="Username"
-                        />
-                    </View>
-                    <View style={{ width: wp('80%'),flexDirection: 'row', justifyContent: 'center'  }}>
-                        <Button
-                            title="ค่าเริ่มต้น"
-                            buttonStyle={[styles.btreset, styles.Shadow, { marginTop: hp('5%') , marginRight :  wp('12%')}]}
-                            onPress={() => {Resetvalue()}}
-                            titleStyle={{ fontSize: hp('2%') }}
-                        />
+                        <View style={styles.bgInput}>
+                            <Text style={[styles.text, { marginLeft: 5 }]}>ชื่อ WIFI</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                value={input.namewifi}
+                                onChangeText={(text) => setInput({ ...input, namewifi: text })}
+                                //placeholder="namewifi"
+                            />
+                        </View>
+                        <View style={styles.bgInput}>
+                            <Text style={[styles.text, { marginLeft: 5 }]}>รหัส WIFI</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                value={input.password}
+                                onChangeText={(text) => setInput({ ...input, password: text })}
+                                //placeholder="password"
+                            />
+                        </View>
+                        <View style={{ width: wp('80%'), flexDirection: 'row', justifyContent: 'center' }}>
+                            <Button
+                                title="ค่าเริ่มต้น"
+                                buttonStyle={[styles.btreset, styles.Shadow, { marginTop: hp('5%'), marginRight: wp('12%') }]}
+                                onPress={() => { Resetvalue() }}
+                                titleStyle={{ fontSize: hp('2%') }}
+                            />
 
-                        <Button
-                            title="บันทึก"
-                            buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('5%') }]}
-                            //onPress={() => {cfregister()}}
-                            titleStyle={{ fontSize: hp('2%') }}
-                        />
+                            <Button
+                                title="บันทึก"
+                                buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('5%') }]}
+                                //onPress={() => {cfregister()}}
+                                titleStyle={{ fontSize: hp('2%') }}
+                            />
+                        </View>
                     </View>
 
 
