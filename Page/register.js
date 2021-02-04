@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
+import { useSafeArea } from 'react-native-safe-area-context';
+import { and } from 'react-native-reanimated';
 
 export default function register({ navigation }) {
     const [input, setInput] = useState({
@@ -10,6 +12,24 @@ export default function register({ navigation }) {
         email: '',
     })
 
+    // const [show, setShow] = useState(false)
+    const [showStUser, setShowStUser] = useState(true)
+    const [showUserNA, setShowUserNA] = useState(false)
+    const [showUserNE, setShowUserNE] = useState(false)
+
+    // const [show, setShow] = useState({
+    //     showUserST: true,
+    //     showUserNA: false,
+    //     showUserNE: false,
+    // })
+
+    const [show, setShow] = useState({
+        text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข",
+        color: '#1D1414',
+        hide : false
+    })
+
+    var checkF = true
 
     renderLeftComponent = () => {
         return (
@@ -21,9 +41,121 @@ export default function register({ navigation }) {
     }
     cfregister = () => {
         check = true
-        if(check){
+        if (check) {
             navigation.navigate('Login')
         }
+    }
+
+    const checkInput = (text) => {
+        if (text >= 'A' && text <= 'Z') {
+            return true
+        }
+        else if (text >= 'a' && text <= 'z') {
+            return true
+        }
+        else if (text >= '0' && text <= '9') {
+            return true
+        }
+        else {
+            return false
+        }
+
+    }
+
+
+    const checkFirst = (textF) => {
+        if (textF >= '0' && textF <= '9') {
+            setShow({hide : false, color: '#FF0000', text: "ขออภัย Username ต้องขึ้นต้นด้วยตัวอักษร" })
+            setShowUserNA(true)
+            console.log(checkF)
+        }
+    }
+    const checkUser = (text) => {
+        //Username สามารถใช้ อักษรภาษาอังกฤษ, 0-9, เท่านั้น  โดยมี 6-15 ตัว
+        checktext = false
+        text == '' ?
+            (
+                //console.log("text"),
+                setShow({ hide : false,color: '#1D1414', text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข" }),
+                setShowStUser(true),
+                setShowUserNA(false)
+                //checkF = true
+                //setShow({...show,showUserST:true,showUserNA:false})
+            )
+            :
+            (
+                setShowStUser(false)
+
+            )
+
+
+        //console.log(text[0])
+        if (text.length < 16) {
+
+            //console.log(text[text.length - 1])
+            checktext = checkInput(text[text.length - 1])
+            if (checktext || text.length == 0) {
+                //console.log(checkF)
+                if (text.length > 0 && text.length < 6) {
+                    setShow({ hide : false,color: '#FF0000', text: "ขออภัย Username ต้องมีความยาวระหว่าง 6 ถึง 15 ตัวอักษร" })
+                }
+                if(text.length > 5){
+                    setShow({...show,hide:true })
+                }
+
+                setInput({ ...input, username: text })
+                checkFirst(text[0])
+                // if(checkF){
+                //     console.log('hello2')
+                //     checkF = checkFirst(text[0])
+                //     console.log(checkF)
+                // }
+            }
+
+        }
+
+        // (
+        //     console.log('over')
+        // )
+
+
+        // text.length >5 ?
+        //     (
+        //         setShow(true),
+        //         setShow(false),
+        //         setShow(true),
+        //         console.log('3'+1+2)
+        //     )
+        //     :
+        //     (
+        //         setShow(false)
+        //     )
+
+        //setInput({ ...input, username: text })
+    }
+
+    const checkPass = (text) => {
+        // Password สามารถใช้ a-z, A-Z, 0-9, เท่านั้น pass ต้องเริ่มต้นและจบด้วยตัวอักษรหรือตัวเลข และต้องมีตัวอักษรอย่างน้อยหนึ่งตัว โดยมี 8-100 ตัว
+        // if(text.length > 5){
+        //     setShow(true)
+        // }
+        // else{
+        //     setShow(false)
+        // }
+        text.length > 5 ?
+            (
+                setShow(true),
+                setShow(false),
+                setShow(true)
+                //console.log('3' + 1 + 2)
+            )
+            :
+            (
+                setShow(false)
+            )
+
+        setInput({ ...input, password: text })
+
     }
 
     return (
@@ -39,46 +171,86 @@ export default function register({ navigation }) {
             <ScrollView>
                 <View style={styles.body}>
                     <View style={{ marginTop: hp('9.5%') }}>
-                        <View style={styles.Input}>
-                            <View style={{ width: wp('8%'), height: wp('8%') }}>
-                                <Image source={require('../assets/profile-user.png')} style={styles.smallIcon} />
+                        <View style={styles.content}>
+                            <View style={styles.Input}>
+                                <View style={{ width: wp('8%'), height: wp('8%') }}>
+                                    <Image source={require('../assets/profile-user.png')} style={styles.smallIcon} />
+                                </View>
+                                <TextInput
+                                    style={styles.textInput}
+                                    value={input.username}
+                                    onChangeText={checkUser}
+                                    //onChangeText={(text) => setInput({ ...input, username: text })}                                    
+                                    placeholder="Username"
+                                />
                             </View>
-                            <TextInput
-                                style={styles.textInput}
-                                value={input.username}
-                                onChangeText={(text) => setInput({ ...input, username: text })}
-                                placeholder="Username"
+
+                            {!show.hide ?
+                                <Text style={{ color: show.color, fontSize: hp('1.5%') }}>{show.text}</Text>
+                                :
+                                <View></View>
+                            }
+                            
+
+
+                            {/* {showStUser ?
+                                <Text style={{ color: '#1D1414', fontSize: hp('1.5%') }}>สามารถใช้อักษรภาษาอังกฤษ , 0-9 โดยต้องขึ้นต้นด้วยตัวอักษร และมีความยาว 6-15 ตัว </Text>
+                                :
+                                <View>
+                                    {showUserNA ?
+                                        <Text style={styles.textAlert}>ต้องขึ้นต้นด้วยตัวอักษร</Text>
+                                        :
+                                        <View></View>
+                                    }
+
+                                </View>
+                            } */}
+
+                            {/* {showUserFNA ?
+                                <Text style={styles.textAlert}>ต้องขึ้นต้นด้วยตัวอักษร</Text>
+                                :
+                                <View></View>
+                            } */}
+                        </View>
+
+
+                        <View style={styles.content}>
+                            <View style={styles.Input}>
+                                <View style={{ width: wp('8%'), height: wp('8%') }}>
+                                    <Image source={require('../assets/padlock.png')} style={styles.smallIcon} />
+                                </View>
+                                <TextInput
+                                    style={styles.textInput}
+                                    value={input.password}
+                                    secureTextEntry={true}
+                                    onChangeText={checkPass}
+                                    placeholder="Password"
+                                />
+
+                            </View>
+
+
+                        </View>
+
+                        <View style={styles.content}>
+                            <View style={styles.Input}>
+                                <View style={{ width: wp('8%'), height: wp('8%') }}>
+                                    <Image source={require('../assets/email.png')} style={styles.smallIcon} />
+                                </View>
+                                <TextInput
+                                    style={styles.textInput}
+                                    value={input.email}
+                                    onChangeText={(text) => setInput({ ...input, email: text })}
+                                    placeholder="E-mail"
+                                />
+                            </View>
+                            <Button
+                                title="ยืนยัน"
+                                buttonStyle={[styles.btcf, styles.Shadow, { marginTop: hp('2.5%') }]}
+                                onPress={() => { cfregister() }}
+                                titleStyle={{ fontSize: hp('2%') }}
                             />
                         </View>
-                        <View style={styles.Input}>
-                            <View style={{ width: wp('8%'), height: wp('8%') }}>
-                                <Image source={require('../assets/padlock.png')} style={styles.smallIcon} />
-                            </View>
-                            <TextInput
-                                style={styles.textInput}
-                                value={input.password}
-                                secureTextEntry={true}
-                                onChangeText={(text) => setInput({ ...input, password: text })}
-                                placeholder="Password"
-                            />
-                        </View>
-                        <View style={styles.Input}>
-                            <View style={{ width: wp('8%'), height: wp('8%') }}>
-                                <Image source={require('../assets/email.png')} style={styles.smallIcon} />
-                            </View>
-                            <TextInput
-                                style={styles.textInput}
-                                value={input.email}
-                                onChangeText={(text) => setInput({ ...input, email: text })}
-                                placeholder="E-mail"
-                            />
-                        </View>
-                        <Button
-                            title="ยืนยัน"
-                            buttonStyle={[styles.btcf, styles.Shadow, { marginTop: hp('2.5%') }]}
-                            onPress={() => {cfregister()}}
-                            titleStyle={{ fontSize: hp('2%') }}
-                        />
                     </View>
                 </View>
                 <View style={{ height: hp('10%') }}>
@@ -111,10 +283,12 @@ const styles = StyleSheet.create({
     },
     content: {
         width: wp('80%'),
+        alignContent: 'center',
+        marginBottom: hp('2.5%'),
     },
     Input: {
         flexDirection: 'row',
-        marginBottom: hp('1.5%'),
+        //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',
         width: wp('80%'),
         height: hp('6%'),
@@ -147,7 +321,8 @@ const styles = StyleSheet.create({
         width: '80%',
         height: '75%',
         fontSize: hp('2.5%'),
-        paddingBottom: 0,
+        padding: 0,
+        paddingLeft: 5,
         marginLeft: 10,
         backgroundColor: '#C4C4C4'
     },
@@ -157,5 +332,9 @@ const styles = StyleSheet.create({
         width: wp('40%'),
         height: hp('5%'),
         borderRadius: 15,
+    },
+    textAlert: {
+        color: '#FF0000',
+        fontSize: hp('1.5%'),
     },
 })

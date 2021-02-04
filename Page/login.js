@@ -23,6 +23,7 @@ export default function login({ navigation }) {
                     value={input.username}
                     onChangeText={(text) => setInput({ ...input, username: text })}
                     placeholder="Username"
+                    
                 />
             </View>
             <View style={styles.listRow}>
@@ -33,6 +34,7 @@ export default function login({ navigation }) {
                     value={input.password}
                     onChangeText={(text) => setInput({ ...input, password: text })}
                     placeholder="Password"
+                    secureTextEntry
                 />
             </View>
             <Button
