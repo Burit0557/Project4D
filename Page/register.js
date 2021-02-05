@@ -13,9 +13,9 @@ export default function register({ navigation }) {
     })
 
     // const [show, setShow] = useState(false)
-    const [showStUser, setShowStUser] = useState(true)
-    const [showUserNA, setShowUserNA] = useState(false)
-    const [showUserNE, setShowUserNE] = useState(false)
+    // const [showStUser, setShowStUser] = useState(true)
+    // const [showUserNA, setShowUserNA] = useState(false)
+    // const [showUserNE, setShowUserNE] = useState(false)
 
     // const [show, setShow] = useState({
     //     showUserST: true,
@@ -23,13 +23,13 @@ export default function register({ navigation }) {
     //     showUserNE: false,
     // })
 
-    const [show, setShow] = useState({
+    const [showUser, setShowUser] = useState({
         text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข",
         color: '#1D1414',
         hide : false
     })
 
-    var checkF = true
+    //var letters = /^[0-9a-zA-Z]+$/;
 
     renderLeftComponent = () => {
         return (
@@ -47,15 +47,24 @@ export default function register({ navigation }) {
     }
 
     const checkInput = (text) => {
-        if (text >= 'A' && text <= 'Z') {
+        console.log(text)
+        //console.log(text.length)
+        var letters = /^[0-9a-zA-Z]+$/
+        if(text ==null){
+            return false
+        }
+        else if(text.length == 1 && text.match(letters)){
             return true
         }
-        else if (text >= 'a' && text <= 'z') {
-            return true
-        }
-        else if (text >= '0' && text <= '9') {
-            return true
-        }
+        // if (text >= 'A' && text <= 'Z') {
+        //     return true
+        // }
+        // else if (text >= 'a' && text <= 'z') {
+        //     return true
+        // }
+        // else if (text >= '0' && text <= '9') {
+        //     return true
+        // }
         else {
             return false
         }
@@ -65,42 +74,47 @@ export default function register({ navigation }) {
 
     const checkFirst = (textF) => {
         if (textF >= '0' && textF <= '9') {
-            setShow({hide : false, color: '#FF0000', text: "ขออภัย Username ต้องขึ้นต้นด้วยตัวอักษร" })
-            setShowUserNA(true)
-            console.log(checkF)
+            setShowUser({hide : false, color: '#FF0000', text: "ขออภัย Username ต้องขึ้นต้นด้วยตัวอักษร" })
+            //setShowUserNA(true)
+            
         }
     }
     const checkUser = (text) => {
         //Username สามารถใช้ อักษรภาษาอังกฤษ, 0-9, เท่านั้น  โดยมี 6-15 ตัว
         checktext = false
-        text == '' ?
-            (
-                //console.log("text"),
-                setShow({ hide : false,color: '#1D1414', text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข" }),
-                setShowStUser(true),
-                setShowUserNA(false)
-                //checkF = true
-                //setShow({...show,showUserST:true,showUserNA:false})
-            )
-            :
-            (
-                setShowStUser(false)
-
-            )
+        if(text == ''){
+            setShowUser({ hide : false,color: '#1D1414', text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข" })
+        }
+        // text == '' ?
+        //     (
+        //         //console.log("text"),
+        //         //setShowUser({ hide : false,color: '#1D1414', text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข" })
+        //         //setShowStUser(true),
+        //        // setShowUserNA(false)
+        //         //checkF = true
+        //         //setShow({...show,showUserST:true,showUserNA:false})
+        //     )
+        //     :
+        //     (
+        //         setShowStUser(false)
+        //     )
 
 
         //console.log(text[0])
+        
         if (text.length < 16) {
+            console.log(text.length)
+            console.log(text)
 
             //console.log(text[text.length - 1])
             checktext = checkInput(text[text.length - 1])
             if (checktext || text.length == 0) {
                 //console.log(checkF)
                 if (text.length > 0 && text.length < 6) {
-                    setShow({ hide : false,color: '#FF0000', text: "ขออภัย Username ต้องมีความยาวระหว่าง 6 ถึง 15 ตัวอักษร" })
+                    setShowUser({ hide : false,color: '#FF0000', text: "ขออภัย Username ต้องมีความยาวระหว่าง 6 ถึง 15 ตัวอักษร" })
                 }
                 if(text.length > 5){
-                    setShow({...show,hide:true })
+                    setShowUser({...showUser,hide:true })
                 }
 
                 setInput({ ...input, username: text })
@@ -185,8 +199,8 @@ export default function register({ navigation }) {
                                 />
                             </View>
 
-                            {!show.hide ?
-                                <Text style={{ color: show.color, fontSize: hp('1.5%') }}>{show.text}</Text>
+                            {!showUser.hide ?
+                                <Text style={{ color: showUser.color, fontSize: hp('1.5%') }}>{showUser.text}</Text>
                                 :
                                 <View></View>
                             }
