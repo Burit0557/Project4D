@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { useSafeArea } from 'react-native-safe-area-context';
 import { and } from 'react-native-reanimated';
@@ -9,27 +9,37 @@ export default function register({ navigation }) {
     const [input, setInput] = useState({
         username: '',
         password: '',
+        cfpassword: '',
         email: '',
     })
 
-    // const [show, setShow] = useState(false)
-    // const [showStUser, setShowStUser] = useState(true)
-    // const [showUserNA, setShowUserNA] = useState(false)
-    // const [showUserNE, setShowUserNE] = useState(false)
 
-    // const [show, setShow] = useState({
-    //     showUserST: true,
-    //     showUserNA: false,
-    //     showUserNE: false,
-    // })
 
     const [showUser, setShowUser] = useState({
-        text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข",
+        text: "สามารถใช้อักษรภาษาอังกฤษ,ตัวเลข โดย Username ต้องขึ้นต้นด้วยตัวอักษรและมีจำนวน 6-15 ตัว",
         color: '#1D1414',
-        hide : false
+        hide: true
     })
 
-    //var letters = /^[0-9a-zA-Z]+$/;
+    const [showPass, setShowPass] = useState({
+        text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
+        color: '#1D1414',
+        hide: true
+    })
+
+    const [showcfPass, setShowcfPass] = useState({
+        text: "Password ไม่ตรงกัน กรุณาลองใหม่อีกครั้ง",
+        color: '#FF0000',
+        hide: true
+    })
+
+    const [showEmail, setShowEmail] = useState({
+        text: "กรุณากรอก Email ที่ใช้งานจริง",
+        color: '#1D1414',
+        hide: true
+    })
+
+
 
     renderLeftComponent = () => {
         return (
@@ -47,13 +57,11 @@ export default function register({ navigation }) {
     }
 
     const checkInput = (text) => {
-        console.log(text)
-        //console.log(text.length)
         var letters = /^[0-9a-zA-Z]+$/
-        if(text ==null){
+        if (text == null) {
             return false
         }
-        else if(text.length == 1 && text.match(letters)){
+        else if (text.length == 1 && text.match(letters)) {
             return true
         }
         // if (text >= 'A' && text <= 'Z') {
@@ -71,105 +79,191 @@ export default function register({ navigation }) {
 
     }
 
-
-    const checkFirst = (textF) => {
-        if (textF >= '0' && textF <= '9') {
-            setShowUser({hide : false, color: '#FF0000', text: "ขออภัย Username ต้องขึ้นต้นด้วยตัวอักษร" })
-            //setShowUserNA(true)
-            
+    const checkInputE = (text) => {
+        var letters = /^[0-9a-zA-Z]+$/
+        var format = /[-.@_]/
+        //var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+        //var format = /[_-\[\].\]/
+        if (text == null) {
+            return false
         }
+        else if (text.length == 1 && text.match(letters) || text.match(format)) {
+            return true
+        }
+        else {
+            return false
+        }
+
     }
-    const checkUser = (text) => {
+
+    const validateAll = () => {
+        if (input.username === '' || input.password === '' || input.cfpassword === '' || input.email === '') {
+            Alert.alert(
+                "ลงทะเบียนไม่สำเร็จ",
+                "กรุณากรอกข้อมูลให้ครบทุกช่อง",
+                [
+                    { text: "ตกลง" }
+                ],
+                { cancelable: true }
+            );
+            return
+        }
+
+        let conditionUser = checkUser()
+        let conditionPass = checkPass()
+        let conditioncfPass = checkcfPass()
+        let conditionEmail = checkEmail()
+        let {username,password,cfpassword,email} = input
+
+        if(!conditionUser){
+            username = ''
+        }
+        if(!conditionPass){
+            password = ''
+            cfpassword = ''
+        }
+        if(!conditioncfPass){
+            cfpassword = ''
+        }
+        if(!conditionEmail){
+            email = ''
+        }
+
+        if (conditionUser && conditionPass && conditioncfPass && conditionEmail) {
+            console.log('success')
+        }
+        setInput({
+            username: username,
+            password: password,
+            cfpassword: cfpassword,
+            email: email,
+        })
+
+    }
+
+    const checkUser = () => {
+        if (input.username.length < 6) {
+            setShowUser({ hide: false, color: '#FF0000', text: "ขออภัย Username ต้องมีความยาวระหว่าง 6 ถึง 15 ตัวอักษร" })
+            return false
+        }
+        if (input.username[0] >= '0' && input.username[0] <= '9') {
+            setShowUser({ hide: false, color: '#FF0000', text: "ขออภัย Username ต้องขึ้นต้นด้วยตัวอักษร" })
+            return false
+        }
+        return true
+    }
+
+    const checkPass = () => {
+        var letters = /[a-zA-Z]/
+        var number = /[0-9]/
+        if (input.password.length < 8) {
+            setShowPass({ hide: false, color: '#FF0000', text: "ขออภัย Password ต้องมีความยาว 8 ตัวขึ้นไป" })
+            return false
+        }
+        console.log('l', input.password.match(letters), 'n', input.password.match(number))
+        if (!input.password.match(letters) || !input.password.match(number)) {
+            setShowPass({ hide: false, color: '#FF0000', text: "ขออภัย Password ต้องมีตัวอักษรและตัวเลข" })
+            return false
+        }
+        return true
+    }
+
+    const checkcfPass = () => {
+        if (input.cfpassword !== input.password) {
+            setShowcfPass({ ...showcfPass, hide: false })
+            return false
+        }
+        return true
+    }
+
+    const checkEmail = () => {
+        var emailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+
+        if (!input.email.match(emailformat)) {
+            setShowEmail({ hide: false, color: '#FF0000', text: "ขออภัยรูปแบบ Email ไม่ถูกต้อง" })
+            return false
+        }
+        return true
+    }
+
+
+
+
+    const inputUser = (text) => {
         //Username สามารถใช้ อักษรภาษาอังกฤษ, 0-9, เท่านั้น  โดยมี 6-15 ตัว
         checktext = false
-        if(text == ''){
-            setShowUser({ hide : false,color: '#1D1414', text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข" })
-        }
-        // text == '' ?
-        //     (
-        //         //console.log("text"),
-        //         //setShowUser({ hide : false,color: '#1D1414', text: "คุณสามารถใช้อักษรภาษาอังกฤษ , ตัวเลข" })
-        //         //setShowStUser(true),
-        //        // setShowUserNA(false)
-        //         //checkF = true
-        //         //setShow({...show,showUserST:true,showUserNA:false})
-        //     )
-        //     :
-        //     (
-        //         setShowStUser(false)
-        //     )
-
-
-        //console.log(text[0])
-        
         if (text.length < 16) {
-            console.log(text.length)
-            console.log(text)
+            if (text.length == 0) {
+                setInput({ ...input, username: text })
+            }
+            else {
+                checktext = checkInput(text[text.length - 1])
+                if (checktext) {
+                    //console.log(checkF)
+                    setInput({ ...input, username: text })
+                }
+            }
+        }
+    }
+
+    const inputPass = (text) => {
+        // Password สามารถใช้ a-z, A-Z, 0-9,  เท่านั้น pass  และต้องผสมกัน โดยมี 8-50 ตัว
+        checktext = false
+
+        if (text.length < 50) {
+
 
             //console.log(text[text.length - 1])
-            checktext = checkInput(text[text.length - 1])
-            if (checktext || text.length == 0) {
-                //console.log(checkF)
-                if (text.length > 0 && text.length < 6) {
-                    setShowUser({ hide : false,color: '#FF0000', text: "ขออภัย Username ต้องมีความยาวระหว่าง 6 ถึง 15 ตัวอักษร" })
+            if (text.length == 0) {
+                setInput({ ...input, password: text })
+            }
+            else {
+                checktext = checkInput(text[text.length - 1])
+                if (checktext) {
+                    //console.log(checkF)
+                    setInput({ ...input, password: text })
                 }
-                if(text.length > 5){
-                    setShowUser({...showUser,hide:true })
-                }
-
-                setInput({ ...input, username: text })
-                checkFirst(text[0])
-                // if(checkF){
-                //     console.log('hello2')
-                //     checkF = checkFirst(text[0])
-                //     console.log(checkF)
-                // }
             }
 
         }
-
-        // (
-        //     console.log('over')
-        // )
-
-
-        // text.length >5 ?
-        //     (
-        //         setShow(true),
-        //         setShow(false),
-        //         setShow(true),
-        //         console.log('3'+1+2)
-        //     )
-        //     :
-        //     (
-        //         setShow(false)
-        //     )
-
-        //setInput({ ...input, username: text })
     }
 
-    const checkPass = (text) => {
-        // Password สามารถใช้ a-z, A-Z, 0-9, เท่านั้น pass ต้องเริ่มต้นและจบด้วยตัวอักษรหรือตัวเลข และต้องมีตัวอักษรอย่างน้อยหนึ่งตัว โดยมี 8-100 ตัว
-        // if(text.length > 5){
-        //     setShow(true)
-        // }
-        // else{
-        //     setShow(false)
-        // }
-        text.length > 5 ?
-            (
-                setShow(true),
-                setShow(false),
-                setShow(true)
-                //console.log('3' + 1 + 2)
-            )
-            :
-            (
-                setShow(false)
-            )
+    const inputcfPass = (text) => {
+        checktext = false
 
-        setInput({ ...input, password: text })
+        if (text.length < 50) {
 
+
+            //console.log(text[text.length - 1])
+            if (text.length == 0) {
+                setInput({ ...input, cfpassword: text })
+            }
+            else {
+                checktext = checkInput(text[text.length - 1])
+                if (checktext) {
+                    //console.log(checkF)
+                    setInput({ ...input, cfpassword: text })
+                }
+            }
+
+        }
+    }
+
+    const inputEmail = (text) => {
+        checktext = false
+
+        if (text.length < 50) {
+
+
+            //console.log(text[text.length - 1])
+            checktext = checkInputE(text[text.length - 1])
+            if (checktext || text.length == 0) {
+
+                setInput({ ...input, email: text })
+
+            }
+
+        }
     }
 
     return (
@@ -193,7 +287,14 @@ export default function register({ navigation }) {
                                 <TextInput
                                     style={styles.textInput}
                                     value={input.username}
-                                    onChangeText={checkUser}
+                                    onFocus={() => setShowUser({ ...showUser, hide: false })}
+                                    onBlur={() => setShowUser({
+                                        text: "สามารถใช้อักษรภาษาอังกฤษ,ตัวเลข โดย Username ต้องขึ้นต้นด้วยตัวอักษรและมีจำนวน 6-15 ตัว",
+                                        color: '#1D1414',
+                                        hide: true
+                                    })}
+                                    //onFocus ={ ()=>{console.log('wow')}}
+                                    onChangeText={inputUser}
                                     //onChangeText={(text) => setInput({ ...input, username: text })}                                    
                                     placeholder="Username"
                                 />
@@ -204,27 +305,7 @@ export default function register({ navigation }) {
                                 :
                                 <View></View>
                             }
-                            
 
-
-                            {/* {showStUser ?
-                                <Text style={{ color: '#1D1414', fontSize: hp('1.5%') }}>สามารถใช้อักษรภาษาอังกฤษ , 0-9 โดยต้องขึ้นต้นด้วยตัวอักษร และมีความยาว 6-15 ตัว </Text>
-                                :
-                                <View>
-                                    {showUserNA ?
-                                        <Text style={styles.textAlert}>ต้องขึ้นต้นด้วยตัวอักษร</Text>
-                                        :
-                                        <View></View>
-                                    }
-
-                                </View>
-                            } */}
-
-                            {/* {showUserFNA ?
-                                <Text style={styles.textAlert}>ต้องขึ้นต้นด้วยตัวอักษร</Text>
-                                :
-                                <View></View>
-                            } */}
                         </View>
 
 
@@ -236,13 +317,45 @@ export default function register({ navigation }) {
                                 <TextInput
                                     style={styles.textInput}
                                     value={input.password}
-                                    secureTextEntry={true}
-                                    onChangeText={checkPass}
+                                    //secureTextEntry={true}
+                                    onFocus={() => setShowPass({ ...showPass, hide: false })}
+                                    onBlur={() => setShowPass({
+                                        text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
+                                        color: '#1D1414',
+                                        hide: true
+                                    })}
+                                    onChangeText={inputPass}
                                     placeholder="Password"
                                 />
 
                             </View>
+                            {!showPass.hide ?
+                                <Text style={{ color: showPass.color, fontSize: hp('1.5%') }}>{showPass.text}</Text>
+                                :
+                                <View></View>
+                            }
+                        </View>
 
+                        <View style={styles.content}>
+                            <View style={styles.Input}>
+                                <View style={{ width: wp('8%'), height: wp('8%') }}>
+                                    <Image source={require('../assets/padlock.png')} style={styles.smallIcon} />
+                                </View>
+                                <TextInput
+                                    style={styles.textInput}
+                                    value={input.cfpassword}
+                                    secureTextEntry={true}
+                                    onFocus={() => setShowcfPass({ ...showcfPass, hide: true })}
+                                    onChangeText={inputcfPass}
+                                    placeholder="ยืนยัน Password"
+                                />
+
+                            </View>
+                            {!showcfPass.hide ?
+                                <Text style={{ color: showcfPass.color, fontSize: hp('1.5%') }}>{showcfPass.text}</Text>
+                                :
+                                <View></View>
+                            }
 
                         </View>
 
@@ -254,17 +367,30 @@ export default function register({ navigation }) {
                                 <TextInput
                                     style={styles.textInput}
                                     value={input.email}
-                                    onChangeText={(text) => setInput({ ...input, email: text })}
+                                    keyboardType={'email-address'}
+                                    onFocus={() => setShowEmail({ ...showEmail, hide: false })}
+                                    onBlur={() => setShowEmail({
+                                        text: "กรุณากรอก Email ที่ใช้งานจริง",
+                                        color: '#1D1414',
+                                        hide: true
+                                    })}
+                                    onChangeText={inputEmail}
                                     placeholder="E-mail"
                                 />
                             </View>
-                            <Button
-                                title="ยืนยัน"
-                                buttonStyle={[styles.btcf, styles.Shadow, { marginTop: hp('2.5%') }]}
-                                onPress={() => { cfregister() }}
-                                titleStyle={{ fontSize: hp('2%') }}
-                            />
+                            {!showEmail.hide ?
+                                <Text style={{ color: showEmail.color, fontSize: hp('1.5%') }}>{showEmail.text}</Text>
+                                :
+                                <View></View>
+                            }
                         </View>
+
+                        <Button
+                            title="ยืนยัน"
+                            buttonStyle={[styles.btcf, styles.Shadow, { marginTop: hp('2.5%') }]}
+                            onPress={validateAll}
+                            titleStyle={{ fontSize: hp('2%') }}
+                        />
                     </View>
                 </View>
                 <View style={{ height: hp('10%') }}>
