@@ -4,7 +4,7 @@ import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, 
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { useSafeArea } from 'react-native-safe-area-context';
 import { and } from 'react-native-reanimated';
-import axios from 'axios' ;
+import {API} from './axios' ;
 
 export default function register({ navigation }) {
     const [input, setInput] = useState({
@@ -132,8 +132,9 @@ export default function register({ navigation }) {
 
         if (conditionUser && conditionPass && conditioncfPass && conditionEmail) {
             console.log('success')
-            axios.post('http://192.168.26.2:3000/register',data={
-                username : input.username,
+            let tempusername = input.username.toLowerCase()
+            API.post('/register',data={
+                username : tempusername,
                 password: input.password,
                 email: input.email,
             })

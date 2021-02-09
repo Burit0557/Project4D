@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
+import { Alert } from 'react-native';
+import { API } from './axios';
 
 export default function login({ navigation }) {
     const [input, setInput] = useState({
@@ -9,7 +11,28 @@ export default function login({ navigation }) {
         password: ''
     })
     loginFunction = () => {
-        navigation.navigate('Home')
+       if (input.username === '' || input.password === ''){
+           Alert.alert('ผิดพลาด','กรุณากรอกข้อมูลให้ครบทุกช่อง')
+           return
+       }
+       API.post('/Login',data = {
+        username : input.username.toLowerCase(),
+        password : input.password,
+       })
+       .then(res => {
+        navigation.reset({
+            index: 0,
+            routes: [
+                {
+                    name: 'Home'
+                }
+            ]
+        })
+       })
+       .catch(error => {
+           console.log(error)
+           Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+       })
     }
 
     return (
