@@ -14,13 +14,14 @@ import Device_EARScreen from './Page/device_EAR';
 import Device_wifiScreen from './Page/device_wifi';
 
 
-// import { MyContext } from './context-api/myContext';
+
+import { MyContext } from './context_api/myContext';
 // -------------- Navigation Stack -----------------
 
 const Stack = createStackNavigator();
 function router() {
     return (
-        // <MyContext>
+        <MyContext>
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="Login">
                     <Stack.Screen name="Home" component={HomeScreen}  options={{ headerShown: false }}/>
@@ -35,7 +36,7 @@ function router() {
                     <Stack.Screen name="Device_wifi" component={Device_wifiScreen}  options={{ headerShown: false }}/>
                 </Stack.Navigator>
             </NavigationContainer>
-        // </MyContext>
+        </MyContext>
     )
 }
 

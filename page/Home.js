@@ -52,12 +52,12 @@ export default function home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Button
+                {/* <Button
                     title="test"
                     buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
                     onPress={() => navigation.navigate('Login')}
                     titleStyle={{ fontSize: hp('2%') }}
-                />
+                /> */}
             </View>
 
 

@@ -1,7 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput,Alert } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
+import AsyncStorage from '@react-native-community/async-storage';
+import { CategoryContext } from '../context_api/myContext';
 
 
 
@@ -12,26 +14,41 @@ export default function setting({ navigation }) {
     renderLeftComponent = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <View style={{  width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('4%') }}>
+                <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('4%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.iconbt} />
                 </View>
             </TouchableOpacity>)
     }
 
+    const setlogin = async () => {
+        //dataUser = JSON.stringify(dataUser)
+        try {
+            await AsyncStorage.setItem('@login', 'false')
+            console.log('saveData successfully saved')
+        } catch (e) {
+            console.log('Failed to save the saveData to the storage')
+        }
+    }
+
     const cflogout = () =>
-    Alert.alert(
-      "ออกจากระบบ",
-      "ต้องออกจากระบบใช่หรือไม่",
-      [
-        {
-          text: "ยกเลิก",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "ยืนยัน", onPress: () => navigation.navigate('Login') }
-      ],
-      { cancelable: false }
-    );
+        Alert.alert(
+            "ออกจากระบบ",
+            "ต้องออกจากระบบใช่หรือไม่",
+            [
+                {
+                    text: "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "ยืนยัน", onPress: () => {
+                        setlogin()
+                        navigation.navigate('Login')
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
 
     return (
         <View style={styles.container}>
@@ -46,8 +63,8 @@ export default function setting({ navigation }) {
             <ScrollView>
                 <View style={styles.body}>
 
-                    <View style={{marginTop : hp('5%')}}>
-                        <TouchableOpacity onPress={ () =>navigation.navigate('Setting_profile')}>
+                    <View style={{ marginTop: hp('5%') }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Setting_profile')}>
                             <View style={styles.bgbutton}>
                                 <View style={{ width: wp('8%'), height: wp('8%'), marginRight: '3%' }}>
                                     <Image source={require('../assets/User_setting.png')} style={styles.iconbt} />
@@ -65,7 +82,7 @@ export default function setting({ navigation }) {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => {cflogout()}} >
+                        <TouchableOpacity onPress={() => { cflogout() }} >
                             <View style={styles.bgbutton}>
                                 <View style={{ width: wp('8%'), height: wp('8%'), marginRight: '3%' }}>
                                     <Image source={require('../assets/logout.png')} style={styles.iconbt} />

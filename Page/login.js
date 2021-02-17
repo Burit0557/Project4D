@@ -1,18 +1,76 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext ,useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { Alert } from 'react-native';
 import { API } from './axios';
+import { PermissionsAndroid, Platform } from "react-native";
+import CameraRoll from "@react-native-community/cameraroll";
+import AsyncStorage from '@react-native-community/async-storage';
+import { CategoryContext } from '../context_api/myContext';
+
+async function hasAndroidPermission() {
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+  
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      return true;
+    }
+  
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
+  }
 
 export default function login({ navigation }) {
+    const Context = useContext(CategoryContext)
+
     const [input, setInput] = useState({
         username: '',
         password: ''
     })
+
+    useEffect( () => {
+        hasAndroidPermission()
+        console.log('hi')
+        readlogin()
+    },([]))
+
+    readlogin = async () =>  {
+        try{
+            let checklogin = await AsyncStorage.getItem('@login')
+            checklogin = (checklogin === 'true')
+            if (checklogin){
+                navigation.reset({
+                    index : 0,
+                    routes : [{
+                        name : "Home"
+                    }]
+                })
+            }
+        }
+        catch(e){
+            console.log(e)
+        }  
+    }
+
+    const setlogin = async () => {
+        //dataUser = JSON.stringify(dataUser)
+        try {
+            await AsyncStorage.setItem('@login', 'true')
+            console.log('saveData successfully saved')
+        } catch (e) {
+            console.log('Failed to save the saveData to the storage')
+        }
+    }
+
+
     loginFunction = () => {
        if (input.username === '' || input.password === ''){
            Alert.alert('ผิดพลาด','กรุณากรอกข้อมูลให้ครบทุกช่อง')
+           setInput({
+            username: '',
+            password: ''
+        })
            return
        }
        API.post('/Login',data = {
@@ -20,6 +78,7 @@ export default function login({ navigation }) {
         password : input.password,
        })
        .then(res => {
+           setlogin()
         navigation.reset({
             index: 0,
             routes: [
@@ -32,8 +91,60 @@ export default function login({ navigation }) {
        .catch(error => {
            console.log(error)
            Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+           setInput({
+            username: '',
+            password: ''
+        })
        })
     }
+
+    const checkInput = (text) => {
+        var letters = /^[0-9a-zA-Z]+$/
+        if (text == null) {
+            return false
+        }
+        else if (text.length == 1 && text.match(letters)) {
+            return true
+        }
+        else {
+            return false
+        }
+
+    }
+
+    const inputUser = (text) => {
+        checktext = false
+        if (text.length < 16) {
+            if (text.length == 0) {
+                setInput({ ...input, username: text })
+            }
+            else {
+                checktext = checkInput(text[text.length - 1])
+                if (checktext) {
+                    setInput({ ...input, username: text })
+                }
+            }
+        }
+    }
+
+    const inputPass = (text) => {
+        checktext = false
+
+        if (text.length < 50) {
+            if (text.length == 0) {
+                setInput({ ...input, password: text })
+            }
+            else {
+                checktext = checkInput(text[text.length - 1])
+                if (checktext) {
+                    setInput({ ...input, password: text })
+                }
+            }
+
+        }
+    }
+
+
 
     return (
         <View style={styles.container}>
@@ -44,7 +155,7 @@ export default function login({ navigation }) {
                 <TextInput
                     style={styles.textInput}
                     value={input.username}
-                    onChangeText={(text) => setInput({ ...input, username: text })}
+                    onChangeText={inputUser}
                     placeholder="Username"
                     
                 />
@@ -55,7 +166,7 @@ export default function login({ navigation }) {
                     style={styles.textInput}
                     secureTextEntry={true}
                     value={input.password}
-                    onChangeText={(text) => setInput({ ...input, password: text })}
+                    onChangeText={inputPass}
                     placeholder="Password"
                     secureTextEntry
                 />
@@ -66,7 +177,7 @@ export default function login({ navigation }) {
                 onPress={() => loginFunction()}
                 titleStyle={{ fontSize: hp('2%') }}
             />
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
+            <TouchableOpacity style={styles.touchtext} onPress={() => navigation.navigate('ForgotPass')}>
                 <Text style={styles.textForgot}>ลืมรหัสผ่าน</Text>
             </TouchableOpacity>
             <View style={[styles.line, { marginTop: hp('1.5%') }]} />
@@ -139,14 +250,20 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     textForgot: {
-        margin: '1%',
+        //margin: '1%',
         color: '#12283D',
         fontSize: hp('2%'),
         borderBottomWidth: 1,
         borderColor: '#12283D',
         alignSelf: 'center',
-        marginTop: hp('5%'),
+        //marginTop: hp('5%'),
         paddingBottom: 0,
+        
+    },
+    touchtext: {   
+        alignSelf: 'center',
+        marginTop: hp('5%'),
+        
     },
     line: {
         width: wp('70%'),
