@@ -1,4 +1,4 @@
-import React, { useState, useContext ,useEffect} from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Button, Image, Icon, Header, Overlay } from 'react-native-elements';
@@ -29,7 +29,7 @@ export default function register({ navigation }) {
     const [state, setState] = useState({
         edit: false,
         temp64: '',
-        name : 'Burit1234'
+        name: 'Burit1234'
     })
 
     const [visible, setVisible] = useState({
@@ -40,116 +40,182 @@ export default function register({ navigation }) {
         visble2: false
     });
 
+    const [showNewPass, setShowNewPass] = useState({
+        text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
+        color: '#1D1414',
+        hide: true
+    })
+
+    const [showcfNewPass, setShowcfNewPass] = useState({
+        text: "Password ไม่ตรงกัน กรุณาลองใหม่อีกครั้ง",
+        color: '#FF0000',
+        hide: true
+    })
+
+    const [showPass, setShowPass] = useState({
+        text: "ขออภัย password เดิมไม่ถูกต้อง",
+        color: '#FF0000',
+        hide: true
+    })
 
 
-    useEffect(() =>{
-        API.get('/get_image',body = {
-            params:{
-                username : 'Burit1234'
-                }
-        })
-        .then(res =>{
-            //console.log(res.data[0].image)
-            if(res.data[0].image === undefined){
-                return;
+
+    useEffect(() => {
+        API.get('/get_image', body = {
+            params: {
+                username: 'Burit1234'
             }
-            if(res.data[0].image !== "" ){
+        })
+            .then(res => {
+                //console.log(res.data[0].image)
+                if (res.data[0].image === undefined) {
+                    return;
+                }
+                if (res.data[0].image !== "") {
+                    setImage({
+                        ...profileImage,
+                        imagesrc: { uri: `data:image/jpg;base64,${res.data[0].image}` }
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+            })
+
+        API.get('/get_name', body = {
+            params: {
+                username: 'Burit1234'
+            }
+        })
+            .then(res => {
+                console.log(res.data[0].name)
+                if (res.data[0].name === undefined) {
+                    return;
+                }
+                if (res.data[0].name !== "") {
+                    setState({
+                        ...state,
+                        name: res.data[0].name
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+            })
+
+    }, ([]))
+
+
+    const saveimage = () => {
+        API.post('/add_image', body = {
+            username: 'Burit1234',
+            image: state.temp64,
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    console.log(res.status)
+                    setImage({
+                        ...profileImage,
+                        imagesrc: profileImage.imgEdit
+                    })
+
+                    setVisible({
+                        ...visible,
+                        optionEditimg: false,
+                        optionEditimg_cf: false
+                    })
+                    //Alert.alert('บันทึกสำเร็จ', 'เปลี่ยนรูปสำเร็จ', [{ text: "ตกลง" }], { cancelable: true })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+            })
+    }
+
+    const API_Deleteimage = () => {
+        API.post('/add_image', body = {
+            username: 'Burit1234',
+            image: '',
+        })
+            .then(res => {
                 setImage({
-                    ...profileImage,
-                    imagesrc : {uri: `data:image/jpg;base64,${res.data[0].image}`}
+                    imagesrc: require('../assets/profile-user2.png'),
+                    imgEdit: ''
                 })
-            }
-        })
-        .catch(error => {
-            console.log(error)
-            //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
-        })
 
-        API.get('/get_name',body = {
-            params:{
-                username : 'Burit1234'
+                setVisible({
+                    ...visible,
+                    optionEditimg: false,
+                    optionEditimg_cf: false
+                })
+
+            })
+            .catch(error => {
+                console.log(error)
+                //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+            })
+    }
+
+
+
+
+    const savename = () => {
+        API.post('/add_name', body = {
+            username: 'Burit1234',
+            name: input.name,
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    console.log(res.status)
+                    setState({
+                        ...state,
+                        name: input.name
+                    })
+                    toggleOverlayEditname()
+                    Alert.alert('บันทึกสำเร็จ', 'เปลี่ยนชื่อสำเร็จ', [{ text: "ตกลง" }], { cancelable: true })
                 }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    const saveNewpass = () => {
+        API.post('/new_password', body = {
+            username: 'Burit1234',
+            password: input.password,
+            new_password: input.new_password
         })
-        .then(res =>{
-            console.log(res.data[0].name)
-            if(res.data[0].name === undefined){
-                return;
-            }
-            if(res.data[0].name !== "" ){
-                setState({
-                    ...state,
-                    name : res.data[0].name
+            .then(res => {
+                console.log(res)
+                if (res.status !== 200) {
+                    console.log('Wrong password')
+                }
+                else {
+                    Alert.alert('บันทึกสำเร็จ', 'เปลี่ยนรหัสผ่านสำเร็จ', [{ text: "ตกลง" }], { cancelable: true })
+                    toggleOverlayEditpass()
+                }
+
+            })
+            .catch(error => {
+                console.log(error)
+                // Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+
+                setShowPass({ ...showPass, hide: false })
+                setInput({
+                    ...input,
+                    password: '',
+                    new_password: '',
+                    cfnew_password: ''
                 })
-            }
-        })
-        .catch(error => {
-            console.log(error)
-            //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
-        })
-
-    },([]))
 
 
-    const saveimage = () =>{
-        API.post('/add_image',body ={
-            username : 'Burit1234',
-            image : state.temp64,
-        })
-        .catch(error => {
-            console.log(error)
-            //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
-        })
+            })
     }
 
-    const savename = () =>{
-        API.post('/add_name',body ={
-            username : 'Burit1234',
-            name : input.name,
-        })
-        .then(res =>{
-            console.log(res.data[0].name)
-            if(res.data[0].name === undefined){
-                return;
-            }
-            if(res.data[0].name !== "" ){
-                setState({
-                    ...state,
-                    name : res.data[0].name
-                })
-            }
-        })
-        .catch(error => {
-            console.log(error)
-            //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
-        })
-    }
-
-    const saveNewpass = () =>{
-        API.post('/new_password',body ={
-            username : 'Burit1234',
-            password : input.password,
-            new_password : input.new_password
-        })
-        .then(res =>{
-            console.log(res)
-            if(res.status !== 200){
-                console.log('Wrong password')
-            }
- 
-        })
-        .catch(error => {
-            console.log(error)
-            //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
-        })
-    }
-
-
-    const toggleOverlay1 = () => {
-        setVisible({
-            ...visible,
-            visble1: !visible.visble1
-        });
-    };
 
     const toggleOverlayoptionEditimg = () => {
         setVisible({
@@ -177,13 +243,26 @@ export default function register({ navigation }) {
             ...visible,
             editpass: !visible.editpass
         });
+        setInput({
+            ...input,
+            password: '',
+            new_password: '',
+            cfnew_password: ''
+        })
+        setShowPass({ ...showPass, hide: true })
+        setShowNewPass({
+            text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
+            color: '#1D1414',
+            hide: true
+        })
+        setShowcfNewPass({ ...showcfNewPass, hide: true })
     };
 
 
     changeImage = () => {
         //toggleOverlayoptionEditimg()
         const options = {
-            quality: 0.8, maxWidth: 300, maxHeight: 300, mediaType: 'photo', includeBase64: true,
+            quality: 0.8, maxWidth: 270, maxHeight: 270, mediaType: 'photo', includeBase64: true,
             // storageOptions: {
             //     skipBackup: true, waitUntilSaved: true, path: 'images', CameraRoll: true
             // }
@@ -225,11 +304,12 @@ export default function register({ navigation }) {
                 },
                 {
                     text: "ยืนยัน", onPress: () => {
-                        setImage({
-                            imagesrc: require('../assets/profile-user2.png'),
-                            imgEdit : ''
-                        })
                         toggleOverlayoptionEditimg()
+                        setState({
+                            ...state,
+                            temp64: ''
+                        })
+                        API_Deleteimage()
                     }
                 }
             ],
@@ -240,10 +320,62 @@ export default function register({ navigation }) {
 
     const checkcfPass = () => {
         if (input.cfnew_password !== input.new_password) {
-            //setShowcfPass({ ...showcfPass, hide: false })
+            setShowcfNewPass({ ...showcfNewPass, hide: false })
             return false
         }
         return true
+    }
+
+    const checkPass = () => {
+        var letters = /[a-zA-Z]/
+        var number = /[0-9]/
+        if (input.new_password.length < 8) {
+            setShowNewPass({ hide: false, color: '#FF0000', text: "ขออภัย Password ต้องมีความยาว 8 ตัวขึ้นไป" })
+            return false
+        }
+        //console.log('l', input.new_password.match(letters), 'n', input.new_password.match(number))
+        if (!input.new_password.match(letters) || !input.new_password.match(number)) {
+            setShowNewPass({ hide: false, color: '#FF0000', text: "ขออภัย Password ต้องมีตัวอักษรและตัวเลข" })
+            return false
+        }
+        return true
+    }
+
+    const vaildateNewpass = () => {
+        if (input.password === '' || input.new_password === '' || input.cfnew_password === '') {
+            Alert.alert(
+                "เปลี่ยนรหัสผ่านไม่สำเร็จ",
+                "กรุณากรอกข้อมูลให้ครบทุกช่อง",
+                [
+                    { text: "ตกลง" }
+                ],
+                { cancelable: true }
+            );
+            setInput({
+                ...input,
+                password: '',
+                new_password: '',
+                cfnew_password: ''
+            })
+            return
+        }
+
+        let conditionPass = checkPass()
+        let conditioncfPass = checkcfPass()
+
+        if (!conditionPass || !conditioncfPass) {
+            setInput({
+                ...input,
+                password: '',
+                new_password: '',
+                cfnew_password: ''
+            })
+            return
+        }
+
+        if (conditionPass && conditioncfPass) {
+            saveNewpass()
+        }
     }
 
     const checkInput = (text) => {
@@ -360,7 +492,7 @@ export default function register({ navigation }) {
                                 toggleOverlayEditname()
                                 setInput({
                                     ...input,
-                                    name : state.name
+                                    name: state.name
                                 })
                             }} >
                                 <View style={styles.bgtext}>
@@ -390,41 +522,7 @@ export default function register({ navigation }) {
 
 
                     </View>
-                    {/* <View style={{ width: wp('80%'), alignItems: 'flex-end' }}>
-                        <Button
-                            title="บันทึก"
-                            buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('2.5%') }]}
-                            onPress={() => {
-                                setState({
-                                    edit: true
-                                })
 
-                                API.post('/update_info', data = {
-                                    username: "Burit1234",
-                                    password: "Burit1234",
-                                    image: state.temp64,
-                                    name: 'test123',
-                                })
-                                    .then(res => {
-                                        console.log(res.status)
-                                    })
-
-
-                            }}
-                            titleStyle={{ fontSize: hp('2%') }}
-                        />
-                    </View>
-
-                    <View style={{ width: wp('80%'), alignItems: 'flex-end' }}>
-                        <Button
-                            title="12"
-                            buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('2.5%') }]}
-                            onPress={() => {
-                                toggleOverlay1()
-                            }}
-                            titleStyle={{ fontSize: hp('2%') }}
-                        />
-                    </View> */}
 
                 </View>
 
@@ -434,7 +532,6 @@ export default function register({ navigation }) {
                     <View style={{ width: wp('42%'), height: wp('20%'), padding: hp('0.7%'), justifyContent: 'center' }}>
 
                         <TouchableOpacity onPress={() => {
-
                             changeImage()
                         }} >
                             <View style={{ height: '50%', marginBottom: ('5%'), justifyContent: 'center' }}>
@@ -464,17 +561,6 @@ export default function register({ navigation }) {
                                 title="บันทึก"
                                 buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('5%'), marginRight: wp('15%') }]}
                                 onPress={() => {
-                                    setImage({
-                                        ...profileImage,
-                                        imagesrc: profileImage.imgEdit
-                                    })
-                                    
-                                    setVisible({
-                                        ...visible,
-                                        optionEditimg : false,
-                                        optionEditimg_cf : false
-                                    })
-
                                     saveimage()
                                 }}
                                 titleStyle={{ fontSize: hp('2%') }}
@@ -512,11 +598,6 @@ export default function register({ navigation }) {
                             buttonStyle={[styles.btsave, styles.Shadow, { marginTop: '10%' }]}
                             onPress={() => {
                                 savename()
-                                toggleOverlayEditname()
-                                setState({
-                                    ...state,
-                                    name : input.name
-                                })
                             }}
                             titleStyle={{ fontSize: hp('2%') }}
                         />
@@ -526,7 +607,7 @@ export default function register({ navigation }) {
 
                 {/* --------------------------------Editpassword-------------------------------- */}
                 <Overlay key={4} isVisible={visible.editpass} onBackdropPress={toggleOverlayEditpass}>
-                    <View style={{ width: wp('80%'), height: hp('35%'), padding: hp('0.7%'), justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ width: wp('80%'), height: hp('42%'), padding: hp('0.7%'), justifyContent: 'center', alignItems: 'center' }}>
 
                         <View style={{ width: '95%', marginBottom: ('5%') }}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>รหัสผ่านเดิม</Text>
@@ -534,8 +615,14 @@ export default function register({ navigation }) {
                                 style={styles.Input}
                                 value={input.password}
                                 onChangeText={inputPass}
-                            //placeholder="Username"
+                                onFocus={() => setShowPass({ ...showPass, hide: true })}
+                            //placeholder="กรุณากรอกรหัสผ่านเดิม"
                             />
+                            {!showPass.hide ?
+                                <Text style={{ color: showPass.color, fontSize: hp('1.5%') }}>{showPass.text}</Text>
+                                :
+                                <View></View>
+                            }
                         </View>
 
                         <View style={{ width: '95%', marginBottom: ('5%') }}>
@@ -544,8 +631,20 @@ export default function register({ navigation }) {
                                 style={styles.Input}
                                 value={input.new_password}
                                 onChangeText={inputNewPass}
-                            //placeholder="Username"
+                                onFocus={() => setShowNewPass({ ...showNewPass, hide: false })}
+                                onBlur={() => setShowNewPass({
+                                    text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
+                                    color: '#1D1414',
+                                    hide: true
+                                })}
+                            //placeholder="รหัสผ่านใหม่"
                             />
+
+                            {!showNewPass.hide ?
+                                <Text style={{ color: showNewPass.color, fontSize: hp('1.5%') }}>{showNewPass.text}</Text>
+                                :
+                                <View></View>
+                            }
                         </View>
 
                         <View style={{ width: '95%' }}>
@@ -554,49 +653,28 @@ export default function register({ navigation }) {
                                 style={styles.Input}
                                 value={input.cfnew_password}
                                 onChangeText={inputcfNewPass}
-                            //placeholder="Username"
+                                onFocus={() => setShowcfNewPass({ ...showcfNewPass, hide: true })}
+                            //placeholder="ยืนยันรหัสผ่านใหม่"
                             />
+
+                            {!showcfNewPass.hide ?
+                                <Text style={{ color: showcfNewPass.color, fontSize: hp('1.5%') }}>{showcfNewPass.text}</Text>
+                                :
+                                <View></View>
+                            }
                         </View>
 
                         <Button
                             title="บันทึก"
                             buttonStyle={[styles.btsave, styles.Shadow, { marginTop: '5%' }]}
                             onPress={() => {
-                                if(checkcfPass()){
-                                    saveNewpass()
-                                }
-                                else{
-                                    console.log('Not Same')
-                                }
-                                toggleOverlayEditpass()
+                                vaildateNewpass()
                             }}
                             titleStyle={{ fontSize: hp('2%') }}
                         />
 
                     </View>
                 </Overlay>
-
-
-
-                {/* <Overlay key={2} isVisible={visible.visble1} onBackdropPress={toggleOverlay1}>
-                    <View>
-                        <Text>Hello from Overlay!</Text>
-                        <View style={styles.bgInput}>
-                            <View style={{ width: '100%' }}>
-                                <Text style={styles.textInput}>ชื่อเล่น*</Text>
-                                <TextInput
-                                    editable={state.edit}
-                                    style={styles.Input}
-                                    value={input.nickname}
-                                    onChangeText={inputName}
-                                //placeholder="Username"
-                                />
-                            </View>
-                        </View>
-                    </View>
-                </Overlay> */}
-
-
 
                 <View style={{ height: hp('10%') }}>
 
