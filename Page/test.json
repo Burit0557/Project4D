@@ -1,0 +1,70 @@
+{
+    "predictions": [
+        {
+            "description": "คลองหกวาสายล่าง Thailand",
+            "matched_substrings": [Array
+            ],
+            "place_id": "ChIJbbXGq81wHTERH8-SApmHkQo",
+            "reference": "ChIJbbXGq81wHTERH8-SApmHkQo",
+            "structured_formatting": [Object
+            ],
+            "terms": [Array
+            ],
+            "types": [Array
+            ]
+        },
+        {
+            "description": "ซอย 6 Lam Phakchi, Nong Chok, Bangkok, Thailand",
+            "matched_substrings": [Array
+            ],
+            "place_id": "EjXguIvguK3guKIgNiBMYW0gUGhha2NoaSwgTm9uZyBDaG9rLCBCYW5na29rLCBUaGFpbGFuZCIuKiwKFAoSCe2wUoFHbx0xET3Eq9myZdYuEhQKEgmJgdBrHG8dMRHgiOJdsgABBA",
+            "reference": "EjXguIvguK3guKIgNiBMYW0gUGhha2NoaSwgTm9uZyBDaG9rLCBCYW5na29rLCBUaGFpbGFuZCIuKiwKFAoSCe2wUoFHbx0xET3Eq9myZdYuEhQKEgmJgdBrHG8dMRHgiOJdsgABBA",
+            "structured_formatting": [Object
+            ],
+            "terms": [Array
+            ],
+            "types": [Array
+            ]
+        },
+        {
+            "description": "หกห้อง Ram Inthra Road, Min Buri, Bangkok, Thailand",
+            "matched_substrings": [Array
+            ],
+            "place_id": "ChIJM9RLtX5kHTEROixfIk6Vfmo",
+            "reference": "ChIJM9RLtX5kHTEROixfIk6Vfmo",
+            "structured_formatting": [Object
+            ],
+            "terms": [Array
+            ],
+            "types": [Array
+            ]
+        },
+        {
+            "description": "ซอย 6 Khlong Song Ton Nun, Lat Krabang, Bangkok, Thailand",
+            "matched_substrings": [Array
+            ],
+            "place_id": "Ej_guIvguK3guKIgNiBLaGxvbmcgU29uZyBUb24gTnVuLCBMYXQgS3JhYmFuZywgQmFuZ2tvaywgVGhhaWxhbmQiLiosChQKEgkFUGMAH2QdMREvO72L95qeeRIUChIJdUSTublmHTERYIriXbIAAQQ",
+            "reference": "Ej_guIvguK3guKIgNiBLaGxvbmcgU29uZyBUb24gTnVuLCBMYXQgS3JhYmFuZywgQmFuZ2tvaywgVGhhaWxhbmQiLiosChQKEgkFUGMAH2QdMREvO72L95qeeRIUChIJdUSTublmHTERYIriXbIAAQQ",
+            "structured_formatting": [Object
+            ],
+            "terms": [Array
+            ],
+            "types": [Array
+            ]
+        },
+        {
+            "description": "หก-เก้า-บาร์ Soi Chalong Krung 53, Lam Prathew, Lat Krabang, Bangkok, Thailand",
+            "matched_substrings": [Array
+            ],
+            "place_id": "ChIJa8BKowtvHTERPut8t6cezRk",
+            "reference": "ChIJa8BKowtvHTERPut8t6cezRk",
+            "structured_formatting": [Object
+            ],
+            "terms": [Array
+            ],
+            "types": [Array
+            ]
+        }
+    ],
+    "status": "OK"
+}

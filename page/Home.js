@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground,Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements'
 
 export default function home({ navigation }) {
+    const [MyPlaces,setMyPlaces] = useState(0);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
+            console.log("test from home",MyPlaces);
+            setMyPlaces(MyPlaces+1)
+        }, 10000)
+        
+        return () => clearInterval(intervalId); //This is important
+        console.log("test from out");
+    }, [MyPlaces,setMyPlaces])
+
+
     return (
         <View style={styles.container}>
             <Header
@@ -18,18 +31,17 @@ export default function home({ navigation }) {
             <View style={styles.body}>
                 <View style={styles.content}>
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
-                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Jouney')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image
                                     style={styles.iconhome}
-                                    // style={styles.iconhome} 
                                     source={require('../assets/placeholder.png')}
 
                                 />
                                 <Text style={styles.Text}>เดินทางไกล</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Family')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image source={require('../assets/user-1.png')} style={styles.iconhome} />
                                 <Text style={styles.Text}>สมาชิก</Text>
