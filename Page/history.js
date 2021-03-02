@@ -1,51 +1,77 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
+import axios from 'axios';
 
 export default function history({ navigation }) {
     data = [
         {
-            number: 1,
+            time: 1,
             name: 'a'
         },
         {
-            number: 2,
+            time: 2,
             name: 'a'
         },
         {
-            number: 3,
+            time: 3,
             name: 'a'
         },
         {
-            number: 4,
+            time: 4,
             name: 'a'
         },
         {
-            number: 5,
+            time: 5,
             name: 'a'
         },
         {
-            number: 6,
+            time: 6,
             name: 'a'
         },
         {
-            number: 7,
+            time: 7,
             name: 'a'
         },
         {
-            number: 8,
+            time: 8,
             name: 'a'
         },
         {
-            number: 9,
+            time: 9,
             name: 'a'
         },
         {
-            number: 10,
+            time: 10,
             name: 'a'
         },
     ]
+
+    const [Data, setData] = useState(data)
+
+    useEffect(() => {
+        // async function fetchData() {
+        // const result = await axios.get('161.246.5.53/api/history');
+        // console.log(result.data)
+        // setData(result.data);
+        // }
+
+        // fetchData();
+        axios.get('http://161.246.5.138:443/api/history')
+            .then(result => {
+                console.log(result.data)
+                let data = result.data
+                data = data.sort(function(a, b) {
+                    return a.time - b.time
+                })
+                console.log("sortttttttttttttttt")
+                console.log(data)
+                setData(data);
+            })
+            .catch(error => console.log(error));
+
+    }, []);
 
     renderLeftComponent = () => {
         return (
@@ -70,12 +96,12 @@ export default function history({ navigation }) {
                 <View style={styles.body}>
                     <View style={styles.content}>
                         {
-                            data.map((item, index) => {
+                            Data.map((item, index) => {
                                 return (
                                     < View key={index} style={styles.listRow}>
                                         <View style={styles.leftCard}>
                                             <Text style={styles.Text}>วัน-เดือน-ปี</Text>
-                                            <Text style={styles.Text}>{item.number}</Text>
+                                            <Text style={styles.Text}>{item.time}</Text>
                                         </View>
                                         <View style={styles.rightCard}>
                                             <Text style={styles.Text}>รายละเอียด</Text>

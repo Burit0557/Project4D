@@ -4,7 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+
 import com.oblador.vectoricons.VectorIconsPackage;
+
+import com.polidea.reactnativeble.BlePackage;
+import com.reactnativecommunity.cameraroll.CameraRollPackage;
+
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

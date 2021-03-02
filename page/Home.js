@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground,Image, StyleSheet, TouchableOpacity ,Im} from 'react-native';
+import { View, Text, ImageBackground,Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements'
 
 export default function home({ navigation }) {
@@ -56,16 +56,7 @@ export default function home({ navigation }) {
                                 <Text style={styles.Text}>ประวัติ</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            navigation.reset({
-                                index: 0,
-                                routes: [
-                                    {
-                                        name: 'History'
-                                    }
-                                ]
-                            })
-                        }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image source={require('../assets/setting.png')} style={styles.iconhome} />
                                 <Text style={styles.Text}>ตั้งค่า</Text>
@@ -73,12 +64,12 @@ export default function home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Button
+                {/* <Button
                     title="test"
                     buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
                     onPress={() => navigation.navigate('Login')}
                     titleStyle={{ fontSize: hp('2%') }}
-                />
+                /> */}
             </View>
 
 
@@ -109,6 +100,8 @@ const styles = StyleSheet.create({
     },
     content: {
         width: wp('80%'),
+        height : wp('80%'),
+        // alignItems : 'stretch',
         // alignItems: 'center',
         // backgroundColor: '#00ffff',
     },
