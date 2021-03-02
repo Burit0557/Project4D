@@ -1,28 +1,51 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
+import { instance } from '../Server/axios';
+import { set } from 'lodash';
 
 export default function history({ navigation }) {
-    data = [
-        {
-            number: 1,
-            name: 'LetMePlay1'
-        },
-        {
-            number: 2,
-            name: 'LetMePlay2'
-        },
-        {
-            number: 3,
-            name: 'LetMePlay3'
-        },
+    // data = [
+    //     {
+    //         number: 1,
+    //         name: 'LetMePlay1'
+    //     },
+    //     {
+    //         number: 2,
+    //         name: 'LetMePlay2'
+    //     },
+    //     {
+    //         number: 3,
+    //         name: 'LetMePlay3'
+    //     },
 
-    ]
+    // ]
+
+    const [data, setData] = useState([])
     const [passed, setPassed] = useState('')
     const goSetting = () => {
         navigation.navigate('Family-Setting')
     }
+
+    useEffect(() => {
+        instance.get('/friend', body = {
+            params: {
+                username: "suhaimee24"
+            }
+        })
+            .then(res => {
+                console.log(res.data)
+                if (res.data.length !== 0) {
+                    setData(res.data)
+                }
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, []);
+
     renderLeftComponent = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -48,13 +71,13 @@ export default function history({ navigation }) {
                         {
                             data.map((item, index) => {
                                 return (
-                                    passed == item.name
+                                    passed == item.Username
                                         ?
                                         <View key={index} style={styles.box}>
                                             <TouchableOpacity onPress={() => setPassed('')} >
                                                 <View style={{ flexDirection: 'row', }}>
                                                     <View style={[styles.leftCard, { backgroundColor: '#014D81' }]}>
-                                                        <Text style={styles.Text}>{item.name}</Text>
+                                                        <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
                                                     </View>
                                                     <View style={styles.rightCard}>
                                                         <View style={{ width: wp('5%'), height: wp('5%'), color: '#fff', }}>
@@ -71,7 +94,7 @@ export default function history({ navigation }) {
                                                     <Text style={styles.Text}>ประวัติ</Text>
                                                 </View>
                                             </TouchableOpacity>
-                                            <TouchableOpacity >
+                                            <TouchableOpacity onPress={() => navigation.navigate('Family-Location')}>
                                                 <View style={styles.select}>
                                                     <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
                                                         <Image source={require('../assets/placeholder.png')} style={styles.icondown} />
@@ -89,10 +112,10 @@ export default function history({ navigation }) {
                                             </TouchableOpacity>
                                         </View>
                                         :
-                                        <TouchableOpacity key={index} onPress={() => setPassed(item.name)} >
+                                        <TouchableOpacity key={index} onPress={() => setPassed(item.Username)} >
                                             <View style={styles.listRow}>
                                                 <View style={styles.leftCard}>
-                                                    <Text style={styles.Text}>{item.name}</Text>
+                                                    <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
                                                 </View>
                                                 <View style={styles.rightCard}>
                                                     <View style={{ width: wp('5%'), height: wp('5%'), color: '#fff', }}>
