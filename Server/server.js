@@ -21,11 +21,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //     }
 // };
 
+// var config = {
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'db_text',
+// }
+
 var config = {
-    host: 'localhost',
+    host: '161.246.5.138',
     user: 'root',
     password: '',
-    database: 'db_text',
+    database: 'db_drowsiness',
 }
 
 let connection = mysql.createConnection(config);

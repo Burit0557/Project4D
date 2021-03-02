@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
-import { instance } from '../Server/axios';
+import { API } from './axios';
 import { set } from 'lodash';
 
 export default function history({ navigation }) {
@@ -29,7 +29,7 @@ export default function history({ navigation }) {
     }
 
     useEffect(() => {
-        instance.get('/friend', body = {
+        API.get('/friend', body = {
             params: {
                 username: "suhaimee24"
             }
