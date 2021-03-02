@@ -24,6 +24,7 @@ export default function setting({ navigation }) {
         //dataUser = JSON.stringify(dataUser)
         try {
             await AsyncStorage.setItem('@login', 'false')
+            await AsyncStorage.removeItem('@dataUser');
             console.log('saveData successfully saved')
         } catch (e) {
             console.log('Failed to save the saveData to the storage')
@@ -73,7 +74,7 @@ export default function setting({ navigation }) {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('Setting_device')}>
                             <View style={styles.bgbutton}>
                                 <View style={{ width: wp('8%'), height: wp('8%'), marginRight: '3%' }}>
                                     <Image source={require('../assets/device.png')} style={styles.iconbt} />

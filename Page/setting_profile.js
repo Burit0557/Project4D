@@ -10,9 +10,16 @@ import { API } from './axios';
 
 import { PermissionsAndroid, Platform } from "react-native";
 import CameraRoll from "@react-native-community/cameraroll";
+import { CategoryContext } from '../context_api/myContext';
 
 
 export default function register({ navigation }) {
+    const Context = useContext(CategoryContext)
+
+    const [dataUser, setdataUser] = useState(
+        Context.dataUser
+    )
+
     const [input, setInput] = useState({
         name: '',
         new_password: '',
@@ -29,7 +36,7 @@ export default function register({ navigation }) {
     const [state, setState] = useState({
         edit: false,
         temp64: '',
-        name: 'Burit1234'
+        name: ''
     })
 
     const [visible, setVisible] = useState({
@@ -61,56 +68,77 @@ export default function register({ navigation }) {
 
 
     useEffect(() => {
-        API.get('/get_image', body = {
-            params: {
-                username: 'Burit1234'
-            }
-        })
-            .then(res => {
-                //console.log(res.data[0].image)
-                if (res.data[0].image === undefined) {
-                    return;
-                }
-                if (res.data[0].image !== "") {
-                    setImage({
-                        ...profileImage,
-                        imagesrc: { uri: `data:image/jpg;base64,${res.data[0].image}` }
-                    })
-                }
-            })
-            .catch(error => {
-                console.log(error)
-                //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
-            })
 
-        API.get('/get_name', body = {
-            params: {
-                username: 'Burit1234'
-            }
-        })
-            .then(res => {
-                console.log(res.data[0].name)
-                if (res.data[0].name === undefined) {
-                    return;
-                }
-                if (res.data[0].name !== "") {
-                    setState({
-                        ...state,
-                        name: res.data[0].name
-                    })
-                }
+        if (dataUser.image !== '') {
+            setImage({
+                ...profileImage,
+                imagesrc: { uri: `data:image/jpg;base64,${dataUser.image}` }
             })
-            .catch(error => {
-                console.log(error)
-                //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+        }
+        
+        if(dataUser.name !== '') {
+           setState({
+               ...state,
+               name : dataUser.name
+           })
+        }
+        if(dataUser.name === '') {
+            setState({
+                ...state,
+                name : dataUser.Username
             })
+         }
+
+        // API.get('/get_image', body = {
+        //     params: {
+        //         username: 'Burit1234'
+        //     }
+        // })
+        //     .then(res => {
+        //         //console.log(res.data[0].image)
+        //         if (res.data[0].image === undefined) {
+        //             return;
+        //         }
+        //         if (res.data[0].image !== "") {
+        //             setImage({
+        //                 ...profileImage,
+        //                 imagesrc: { uri: `data:image/jpg;base64,${res.data[0].image}` }
+        //             })
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //         //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+        //     })
+
+        // API.get('/get_name', body = {
+        //     params: {
+        //         username: 'Burit1234'
+        //     }
+        // })
+        //     .then(res => {
+        //         console.log(res.data[0].name)
+        //         if (res.data[0].name === undefined) {
+        //             return;
+        //         }
+        //         if (res.data[0].name !== "") {
+        //             setState({
+        //                 ...state,
+        //                 name: res.data[0].name
+        //             })
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //         //Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
+        //     })
 
     }, ([]))
 
 
     const saveimage = () => {
         API.post('/add_image', body = {
-            username: 'Burit1234',
+            username: dataUser.Username,
             image: state.temp64,
         })
             .then(res => {
@@ -120,6 +148,9 @@ export default function register({ navigation }) {
                         ...profileImage,
                         imagesrc: profileImage.imgEdit
                     })
+
+                    Context.setImage(state.temp64)
+                    Context.updateUser()
 
                     setVisible({
                         ...visible,
@@ -137,7 +168,7 @@ export default function register({ navigation }) {
 
     const API_Deleteimage = () => {
         API.post('/add_image', body = {
-            username: 'Burit1234',
+            username: dataUser.Username,
             image: '',
         })
             .then(res => {
@@ -145,6 +176,9 @@ export default function register({ navigation }) {
                     imagesrc: require('../assets/profile-user2.png'),
                     imgEdit: ''
                 })
+
+                Context.setImage('')
+                Context.updateUser()
 
                 setVisible({
                     ...visible,
@@ -164,7 +198,7 @@ export default function register({ navigation }) {
 
     const savename = () => {
         API.post('/add_name', body = {
-            username: 'Burit1234',
+            username: dataUser.Username,
             name: input.name,
         })
             .then(res => {
@@ -174,6 +208,8 @@ export default function register({ navigation }) {
                         ...state,
                         name: input.name
                     })
+                    Context.setName(input.name)
+                    Context.updateUser()
                     toggleOverlayEditname()
                     Alert.alert('บันทึกสำเร็จ', 'เปลี่ยนชื่อสำเร็จ', [{ text: "ตกลง" }], { cancelable: true })
                 }
@@ -185,7 +221,7 @@ export default function register({ navigation }) {
 
     const saveNewpass = () => {
         API.post('/new_password', body = {
-            username: 'Burit1234',
+            username: dataUser.Username,
             password: input.password,
             new_password: input.new_password
         })

@@ -10,6 +10,8 @@ target 'Project4D' do
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
+  pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
+
   target 'Project4DTests' do
     inherit! :complete
     # Pods for testing

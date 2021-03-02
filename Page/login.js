@@ -1,6 +1,6 @@
-import React, { useState, useContext ,useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { Alert } from 'react-native';
 import { API } from './axios';
@@ -9,17 +9,32 @@ import CameraRoll from "@react-native-community/cameraroll";
 import AsyncStorage from '@react-native-community/async-storage';
 import { CategoryContext } from '../context_api/myContext';
 
-async function hasAndroidPermission() {
+
+async function hasAndroidPermission_Storage() {
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-  
+
     const hasPermission = await PermissionsAndroid.check(permission);
     if (hasPermission) {
-      return true;
+        return true;
     }
-  
+
     const status = await PermissionsAndroid.request(permission);
     return status === 'granted';
-  }
+}
+
+// async function hasAndroidPermission_BT() {
+//     const permission = PermissionsAndroid.PERMISSIONS.;
+
+//     const hasPermission = await PermissionsAndroid.check(permission);
+//     if (hasPermission) {
+//         return true;
+//     }
+
+//     const status = await PermissionsAndroid.request(permission);
+//     return status === 'granted';
+// }
+
+
 
 export default function login({ navigation }) {
     const Context = useContext(CategoryContext)
@@ -29,33 +44,46 @@ export default function login({ navigation }) {
         password: ''
     })
 
-    useEffect( () => {
-        hasAndroidPermission()
-        console.log('hi')
-        readlogin()
-    },([]))
+    const [loading, setloading] = useState(true)
 
-    readlogin = async () =>  {
-        try{
+    useEffect(() => {
+        hasAndroidPermission_Storage()
+        console.log('hi')
+
+        setTimeout(() => {  //assign interval to a variable to clear it.
+            readlogin()
+        }, 1200)
+    }, ([]))
+
+    readlogin = async () => {
+        try {
             let checklogin = await AsyncStorage.getItem('@login')
+            let dataUser = await AsyncStorage.getItem('@dataUser')
+            if (dataUser !== null) {
+                Context.setDataUser(JSON.parse(dataUser))
+            }
             checklogin = (checklogin === 'true')
-            if (checklogin){
+            //checklogin = true
+            if (checklogin) {
                 navigation.reset({
-                    index : 0,
-                    routes : [{
-                        name : "Home"
+                    index: 0,
+                    routes: [{
+                        name: "Home"
                     }]
                 })
             }
+            setloading(false)
         }
-        catch(e){
+        catch (e) {
             console.log(e)
-        }  
+        }
     }
 
-    const setlogin = async () => {
-        //dataUser = JSON.stringify(dataUser)
+    const setlogin = async (dataUser) => {
+        dataUser = JSON.stringify(dataUser)
+        //console.log(dataUser)
         try {
+            await AsyncStorage.setItem('@dataUser', dataUser)
             await AsyncStorage.setItem('@login', 'true')
             console.log('saveData successfully saved')
         } catch (e) {
@@ -65,37 +93,40 @@ export default function login({ navigation }) {
 
 
     loginFunction = () => {
-       if (input.username === '' || input.password === ''){
-           Alert.alert('ผิดพลาด','กรุณากรอกข้อมูลให้ครบทุกช่อง')
-           setInput({
-            username: '',
-            password: ''
+        if (input.username === '' || input.password === '') {
+            Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูลให้ครบทุกช่อง')
+            setInput({
+                username: '',
+                password: ''
+            })
+            return
+        }
+        API.post('/Login', data = {
+            username: input.username.toLowerCase(),
+            password: input.password,
         })
-           return
-       }
-       API.post('/Login',data = {
-        username : input.username.toLowerCase(),
-        password : input.password,
-       })
-       .then(res => {
-           setlogin()
-        navigation.reset({
-            index: 0,
-            routes: [
-                {
-                    name: 'Home'
-                }
-            ]
-        })
-       })
-       .catch(error => {
-           console.log(error)
-           Alert.alert('ผิดพลาด','ไม่สามารถเข้าสู่ระบบได้')
-           setInput({
-            username: '',
-            password: ''
-        })
-       })
+            .then(res => {
+                setlogin(res.data[0])
+                Context.setDataUser(res.data[0])
+                console.log(res.data[0])
+
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        {
+                            name: 'Home'
+                        }
+                    ]
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                Alert.alert('ผิดพลาด', 'ไม่สามารถเข้าสู่ระบบได้')
+                setInput({
+                    username: '',
+                    password: ''
+                })
+            })
     }
 
     const checkInput = (text) => {
@@ -145,49 +176,57 @@ export default function login({ navigation }) {
     }
 
 
-
     return (
+
         <View style={styles.container}>
-            <View style={styles.logo} >
-            </View>
-            <View style={[styles.listRow, { marginTop: hp('7%') }]}>
-                <ImageBackground source={require('../assets/profile-user2.png')} style={styles.smallIcon} />
-                <TextInput
-                    style={styles.textInput}
-                    value={input.username}
-                    onChangeText={inputUser}
-                    placeholder="Username"
-                    
-                />
-            </View>
-            <View style={styles.listRow}>
-                <ImageBackground source={require('../assets/padlock2.png')} style={styles.smallIcon} />
-                <TextInput
-                    style={styles.textInput}
-                    secureTextEntry={true}
-                    value={input.password}
-                    onChangeText={inputPass}
-                    placeholder="Password"
-                    secureTextEntry
-                />
-            </View>
-            <Button
-                title="เข้าสู่ระบบ"
-                buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('7%') }]}
-                onPress={() => loginFunction()}
-                titleStyle={{ fontSize: hp('2%') }}
-            />
-            <TouchableOpacity style={styles.touchtext} onPress={() => navigation.navigate('ForgotPass')}>
-                <Text style={styles.textForgot}>ลืมรหัสผ่าน</Text>
-            </TouchableOpacity>
-            <View style={[styles.line, { marginTop: hp('1.5%') }]} />
-            <Text style={[styles.Text, { marginTop: hp('1.5%') }]}>ยังไม่มีบัญชีใช่หรือไม่</Text>
-            <Button
-                title="ลงทะเบียน"
-                buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
-                onPress={() => navigation.navigate('Register')}
-                titleStyle={{ fontSize: hp('2%') }}
-            />
+            {loading ?
+                <View style={[styles.container, { backgroundColor: '#002E4D', alignItems: 'center', justifyContent: 'center' }]}>
+                    <ActivityIndicator size='large' color='#FFF' />
+                </View>
+                :
+                <View style={styles.container}>
+                    <View style={styles.logo} >
+                    </View>
+                    <View style={[styles.listRow, { marginTop: hp('7%') }]}>
+                        <ImageBackground source={require('../assets/profile-user2.png')} style={styles.smallIcon} />
+                        <TextInput
+                            style={styles.textInput}
+                            value={input.username}
+                            onChangeText={inputUser}
+                            placeholder="Username"
+
+                        />
+                    </View>
+                    <View style={styles.listRow}>
+                        <ImageBackground source={require('../assets/padlock2.png')} style={styles.smallIcon} />
+                        <TextInput
+                            style={styles.textInput}
+                            secureTextEntry={true}
+                            value={input.password}
+                            onChangeText={inputPass}
+                            placeholder="Password"
+                            secureTextEntry
+                        />
+                    </View>
+                    <Button
+                        title="เข้าสู่ระบบ"
+                        buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('7%') }]}
+                        onPress={() => loginFunction()}
+                        titleStyle={{ fontSize: hp('2%') }}
+                    />
+                    <TouchableOpacity style={styles.touchtext} onPress={() => navigation.navigate('ForgotPass')}>
+                        <Text style={styles.textForgot}>ลืมรหัสผ่าน</Text>
+                    </TouchableOpacity>
+                    <View style={[styles.line, { marginTop: hp('1.5%') }]} />
+                    <Text style={[styles.Text, { marginTop: hp('1.5%') }]}>ยังไม่มีบัญชีใช่หรือไม่</Text>
+                    <Button
+                        title="ลงทะเบียน"
+                        buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
+                        onPress={() => navigation.navigate('Register')}
+                        titleStyle={{ fontSize: hp('2%') }}
+                    />
+                </View>
+            }
         </View>
 
     )
@@ -233,7 +272,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     textInput: {
-        width: wp('70%') - hp('5%') - 10,
+        width: wp('70%') - hp('6%') - 10,
         color: '#000',
         height: wp('8%'),
         borderBottomWidth: 1,
@@ -258,12 +297,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         //marginTop: hp('5%'),
         paddingBottom: 0,
-        
+
     },
-    touchtext: {   
+    touchtext: {
         alignSelf: 'center',
         marginTop: hp('5%'),
-        
+
     },
     line: {
         width: wp('70%'),
