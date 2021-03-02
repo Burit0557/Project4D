@@ -13,7 +13,7 @@ import { Platform, PermissionsAndroid } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { _ } from "lodash";
 
-import { instance } from '../Server/axios';
+import { API } from './axios';
 
 async function requestPermissions() {
     if (Platform.OS === 'ios') {
@@ -104,7 +104,7 @@ export default function journey({ navigation }) {
         const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
             Geolocation.getCurrentPosition((data) => {
                 console.log("Call API")
-                instance.post('/add_location', body = {
+                API.post('/add_location', body = {
                     username: 'suhaimee24',
                     latitude: data.coords.latitude,
                     longitude: data.coords.longitude,

@@ -12,7 +12,7 @@ import { Platform, PermissionsAndroid } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { _ } from "lodash";
 
-import { instance } from '../Server/axios';
+import { API } from './axios';
 
 async function requestPermissions() {
     if (Platform.OS === 'ios') {
@@ -63,7 +63,7 @@ export default function journey({ navigation }) {
     }
 
     useEffect(() => {
-        instance.get('/friend_location', body = {
+        API.get('/friend_location', body = {
             params: {
                 username: 'suhaimee24'
             }
@@ -86,7 +86,7 @@ export default function journey({ navigation }) {
     useEffect(() => {
         const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
             console.log('Call API friend_location')
-            instance.get('/friend_location', body = {
+            API.get('/friend_location', body = {
                 params: {
                     username: 'suhaimee24'
                 }
