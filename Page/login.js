@@ -59,8 +59,12 @@ export default function login({ navigation }) {
         try {
             let checklogin = await AsyncStorage.getItem('@login')
             let dataUser = await AsyncStorage.getItem('@dataUser')
+            let dataUserSetting = await AsyncStorage.getItem('@dataUserSetting')
             if (dataUser !== null) {
                 Context.setDataUser(JSON.parse(dataUser))
+            }
+            if (dataUserSetting !== null) {
+                Context.setDataUserSetting(JSON.parse(dataUserSetting))
             }
             checklogin = (checklogin === 'true')
             //checklogin = true

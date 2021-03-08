@@ -28,6 +28,7 @@
     "react-native": "0.63.3",
     "react-native-ble-plx": "^2.0.2",
     "react-native-bluetooth-classic": "^1.60.0-rc.12",
+    "react-native-date-picker": "^3.2.10",
     "react-native-elements": "^2.3.2",
     "react-native-geolocation-service": "^5.2.0",
     "react-native-gesture-handler": "^1.8.0",

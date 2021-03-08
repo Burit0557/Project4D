@@ -6,15 +6,15 @@ import { Button, Icon, Header } from 'react-native-elements'
 export default function home({ navigation }) {
     const [MyPlaces,setMyPlaces] = useState(0);
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-            console.log("test from home",MyPlaces);
-            setMyPlaces(MyPlaces+1)
-        }, 10000)
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
+    //         console.log("test from home",MyPlaces);
+    //         setMyPlaces(MyPlaces+1)
+    //     }, 10000)
         
-        return () => clearInterval(intervalId); //This is important
-        console.log("test from out");
-    }, [MyPlaces,setMyPlaces])
+    //     return () => clearInterval(intervalId); //This is important
+    //     console.log("test from out");
+    // }, [MyPlaces,setMyPlaces])
 
 
     return (

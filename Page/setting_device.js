@@ -12,7 +12,37 @@ import { PermissionsAndroid, Platform } from "react-native";
 import CameraRoll from "@react-native-community/cameraroll";
 import { CategoryContext } from '../context_api/myContext';
 
+import RNBluetoothClassic, {
+    BluetoothDevice
+} from 'react-native-bluetooth-classic';
 
+
+data = [
+    {
+        time: 1,
+        name: 'bluetooth123'
+    },
+    {
+        time: 2,
+        name: 'bluetooth1445'
+    },
+    {
+        time: 3,
+        name: 'bluetooth123778'
+    },
+    {
+        time: 4,
+        name: 'bluetooth12345'
+    },
+    {
+        time: 5,
+        name: 'bluetooth12300'
+    },
+    {
+        time: 6,
+        name: 'bluetooth12378'
+    },
+]
 
 
 export default function register({ navigation }) {
@@ -23,75 +53,53 @@ export default function register({ navigation }) {
     )
 
     const [input, setInput] = useState({
+        bluetooth_name: '',
         EAR: '',
         distance: '',
-        time: '',
+        rest_hour: '',
+        rest_min: '',
+        up_min: '',
+        up_sec: '',
     })
 
-    const [profileImage, setImage] = useState({
-        imagesrc: require('../assets/profile-user2.png'),
-        imgEdit: ''
-        //imagesrc: { uri: "../assets/profile-user2.png", }
+    const [defaultSetting, setdefaultSetting] = useState({
+        bluetooth_name: 'raspberrypi',
+        EAR: "0.275",
+        distance: "160",
+        rest_hour: '2',
+        rest_min: '00',
+        up_min: '00',
+        up_sec: '30',
     })
 
-    const [state, setState] = useState({
-        edit: false,
-        temp64: '',
-        name: ''
-    })
+    const [dataUserSetting, setDataUserSetting] = useState(Context.dataUserSetting)
 
     const [visible, setVisible] = useState({
+        bluetooth: false,
         editEAR: false,
-        editRest: false,
-        editpass: false,
+        editRestDis: false,
+        editRestTime: false,
+        editUpLocation: false,
     });
 
-    const [showNewPass, setShowNewPass] = useState({
-        text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
-        color: '#1D1414',
-        hide: true
-    })
+    const [bluetooth, setBluetooth] = useState(data)
 
-    const [showcfNewPass, setShowcfNewPass] = useState({
-        text: "Password ไม่ตรงกัน กรุณาลองใหม่อีกครั้ง",
-        color: '#FF0000',
-        hide: true
-    })
 
-    const [showPass, setShowPass] = useState({
-        text: "ขออภัย password เดิมไม่ถูกต้อง",
-        color: '#FF0000',
-        hide: true
-    })
+
 
 
 
     useEffect(() => {
 
-        if (dataUser.image !== '') {
-            setImage({
-                ...profileImage,
-                imagesrc: { uri: `data:image/jpg;base64,${dataUser.image}` }
-            })
-        }
+    }, [])
 
-        if (dataUser.name !== '') {
-            setState({
-                ...state,
-                name: dataUser.name
-            })
-        }
-        if (dataUser.name === '') {
-            setState({
-                ...state,
-                name: dataUser.Username
-            })
-        }
+    const toggleOverlaybluetooth = () => {
+        setVisible({
+            ...visible,
+            bluetooth: !visible.bluetooth
+        });
 
-
-    }, ([]))
-
-
+    };
 
     const toggleOverlayEditEAR = () => {
         setVisible({
@@ -100,141 +108,30 @@ export default function register({ navigation }) {
         });
     };
 
-    const toggleOverlayEditRest = () => {
+    const toggleOverlayEditRestDis = () => {
         setVisible({
             ...visible,
-            editRest: !visible.editRest
+            editRestDis: !visible.editRestDis
         });
     };
 
-    // const toggleOverlayEditname = () => {
-    //     setVisible({
-    //         ...visible,
-    //         editname: !visible.editname
-    //     });
-    // };
+    const toggleOverlayEditRestTime = () => {
+        setVisible({
+            ...visible,
+            editRestTime: !visible.editRestTime
+        });
+    };
+
+    const toggleOverlayEditUpLocation = () => {
+        setVisible({
+            ...visible,
+            editUpLocation: !visible.editUpLocation
+        });
+    };
 
 
 
 
-    changeImage = () => {
-        //toggleOverlayoptionEditimg()
-        const options = {
-            quality: 0.8, maxWidth: 270, maxHeight: 270, mediaType: 'photo', includeBase64: true,
-            // storageOptions: {
-            //     skipBackup: true, waitUntilSaved: true, path: 'images', CameraRoll: true
-            // }
-        }
-        launchImageLibrary(options, response => {
-            if (response.error) {
-                console.log(error)
-            } else if (!response.didCancel) {
-                console.log(response)
-
-                setState({
-                    ...state,
-                    temp64: response.base64
-                })
-
-                // toggleOverlay1()
-
-                setImage({
-                    ...profileImage,
-                    imgEdit: { uri: response.uri, }
-                })
-
-                toggleOverlayoptionEditimg_cf()
-
-                //Alert.alert('เปลี่ยนรูปโปรไฟล์', 'บันทึกรูปสำเร็จ')
-            }
-        })
-    }
-
-    deletimg = () => {
-        Alert.alert(
-            "แก้ไขรูปโปรไฟล์",
-            "ต้องลบรูปโปรไฟล์ใช่หรือไม่",
-            [
-                {
-                    text: "ยกเลิก",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                {
-                    text: "ยืนยัน", onPress: () => {
-                        toggleOverlayoptionEditimg()
-                        setState({
-                            ...state,
-                            temp64: ''
-                        })
-                        API_Deleteimage()
-                    }
-                }
-            ],
-            { cancelable: false }
-        );
-    }
-
-
-    const checkcfPass = () => {
-        if (input.cfnew_password !== input.new_password) {
-            setShowcfNewPass({ ...showcfNewPass, hide: false })
-            return false
-        }
-        return true
-    }
-
-    const checkPass = () => {
-        var letters = /[a-zA-Z]/
-        var number = /[0-9]/
-        if (input.new_password.length < 8) {
-            setShowNewPass({ hide: false, color: '#FF0000', text: "ขออภัย Password ต้องมีความยาว 8 ตัวขึ้นไป" })
-            return false
-        }
-        //console.log('l', input.new_password.match(letters), 'n', input.new_password.match(number))
-        if (!input.new_password.match(letters) || !input.new_password.match(number)) {
-            setShowNewPass({ hide: false, color: '#FF0000', text: "ขออภัย Password ต้องมีตัวอักษรและตัวเลข" })
-            return false
-        }
-        return true
-    }
-
-    const vaildateNewpass = () => {
-        if (input.password === '' || input.new_password === '' || input.cfnew_password === '') {
-            Alert.alert(
-                "เปลี่ยนรหัสผ่านไม่สำเร็จ",
-                "กรุณากรอกข้อมูลให้ครบทุกช่อง",
-                [
-                    { text: "ตกลง" }
-                ],
-                { cancelable: true }
-            );
-            setInput({
-                ...input,
-                password: '',
-                new_password: '',
-                cfnew_password: ''
-            })
-            return
-        }
-
-        let conditionPass = checkPass()
-        let conditioncfPass = checkcfPass()
-
-        if (!conditionPass || !conditioncfPass) {
-            setInput({
-                ...input,
-                password: '',
-                new_password: '',
-                cfnew_password: ''
-            })
-            return
-        }
-
-        if (conditionPass && conditioncfPass) {
-            saveNewpass()
-        }
-    }
 
     const checkInput = (text) => {
         var letters = /^[0-9a-zA-Z]+$/
@@ -249,47 +146,153 @@ export default function register({ navigation }) {
         }
 
     }
-
-    const inputName = (text) => {
-        if (text.length < 21) {
-            setInput({ ...input, name: text })
-        }
+    saveBluetooth = (name) => {
+        setDataUserSetting({
+            ...dataUserSetting,
+            bluetooth_name: name,
+        })
+        Context.setBluetooth(name)
+        Context.updateUserSetting()
+        toggleOverlaybluetooth()
     }
 
-    const inputPass = (text) => {
-        checktext = false
-
-        if (text.length < 50) {
-            if (text.length == 0) {
-                setInput({ ...input, password: text })
+    saveEAR = () => {
+        console.log(typeof input.EAR)
+        var letters = /^[0-1]{1}.[0-9]{3}$/
+        if (input.EAR.match(letters)) {
+            if (parseFloat(input.EAR) < 1) {
+                console.log("pass")
+                setDataUserSetting({
+                    ...dataUserSetting,
+                    EAR: input.EAR
+                })
+                Context.setEAR(input.EAR)
+                Context.updateUserSetting()
+                toggleOverlayEditEAR()
             }
             else {
-                checktext = checkInput(text[text.length - 1])
-                if (checktext) {
-                    setInput({ ...input, password: text })
-                }
+                console.log("more than");
             }
 
         }
-    }
-
-    const inputNewPass = (text) => {
-        checktext = false
-
-        if (text.length < 50) {
-
-            if (text.length == 0) {
-                setInput({ ...input, new_password: text })
-            }
-            else {
-                checktext = checkInput(text[text.length - 1])
-                if (checktext) {
-                    setInput({ ...input, new_password: text })
-                }
-            }
-
+        else {
+            console.log("miss")
         }
     }
+
+    saveRest_dis = () => {
+        if (parseInt(input.distance) <= 450 && parseInt(input.distance) >= 30) {
+            console.log("pass")
+            setDataUserSetting({
+                ...dataUserSetting,
+                distance: input.distance
+            })
+            Context.setRest_dis(input.distance)
+            Context.updateUserSetting()
+            toggleOverlayEditRestDis()
+        }
+        else {
+            console.log("miss")
+        }
+    }
+
+    saveRest_time = () => {
+        if ((parseInt(input.rest_hour) * 60 + parseInt(input.rest_min)) <= 270 && (parseInt(input.rest_hour) * 60 + parseInt(input.rest_min)) >= 20) {
+            console.log("pass")
+            setDataUserSetting({
+                ...dataUserSetting,
+                rest_hour: input.rest_hour,
+                rest_min: input.rest_min
+            })
+            Context.setRest_time(input.rest_hour, input.rest_min)
+            Context.updateUserSetting()
+            toggleOverlayEditRestTime()
+        }
+        else {
+            console.log("miss")
+        }
+    }
+
+    saveUp_location = () => {
+        if ((parseInt(input.up_min) * 60 + parseInt(input.up_sec)) <= 600 && (parseInt(input.up_min) * 60 + parseInt(input.up_sec)) >= 30) {
+            console.log("pass")
+            setDataUserSetting({
+                ...dataUserSetting,
+                up_min: input.up_min,
+                up_sec: input.up_sec
+            })
+            Context.setUpLocation(input.up_min, input.up_sec)
+            Context.updateUserSetting()
+            toggleOverlayEditUpLocation()
+        }
+        else {
+            console.log("miss")
+        }
+    }
+
+
+
+
+    const inputEAR = (text) => {
+        if (text.length < 6) {
+            setInput({ ...input, EAR: text })
+        }
+    }
+
+    const inputDistance = (text) => {
+        var number = /^[0-9]+$/
+        if (text.length === 0) {
+            setInput({ ...input, distance: text })
+        }
+        else if (text.length > 0 && text.length < 4 && text.match(number)) {
+            setInput({ ...input, distance: text })
+        }
+
+    }
+
+    const inputRest_HH = (text) => {
+        var number = /^[0-9]+$/
+        if (text.length === 0) {
+            setInput({ ...input, rest_hour: text })
+        }
+        else if (text.length > 0 && text.length < 2 && text.match(number)) {
+            setInput({ ...input, rest_hour: text })
+        }
+    }
+
+    const inputRest_MM = (text) => {
+        var number = /^[0-5]{1}[0-9]+$/
+        if (text.length < 2) {
+            setInput({ ...input, rest_min: text })
+        }
+        else if (text.length > 1 && text.length < 3 && text.match(number)) {
+            setInput({ ...input, rest_min: text })
+        }
+    }
+
+    const inputUp_min = (text) => {
+        var number = /^[0-9]+$/
+        if (text.length === 0) {
+            setInput({ ...input, up_min: text })
+        }
+        else if (text.length > 0 && text.length < 3 && text.match(number)) {
+            setInput({ ...input, up_min: text })
+        }
+    }
+
+    const inputUp_sec = (text) => {
+        var number = /^[0-5]{1}[0-9]+$/
+        if (text.length < 2) {
+            setInput({ ...input, up_sec: text })
+        }
+        else if (text.length > 1 && text.length < 3 && text.match(number)) {
+            setInput({ ...input, up_sec: text })
+        }
+    }
+
+
+
+
 
     const inputcfNewPass = (text) => {
         checktext = false
@@ -339,14 +342,14 @@ export default function register({ navigation }) {
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>Bluetooth</Text>
                                 <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditEAR()
+                                    toggleOverlaybluetooth()
                                     setInput({
                                         ...input,
-                                        name: state.name
+                                        bluetooth_name: dataUserSetting.bluetooth_name
                                     })
                                 }} >
                                     <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{state.name}</Text>
+                                        <Text style={styles.textshow}>{dataUserSetting.bluetooth_name}</Text>
                                         <Text style={styles.textedit}>เลือก</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -364,21 +367,44 @@ export default function register({ navigation }) {
                                     toggleOverlayEditEAR()
                                     setInput({
                                         ...input,
-                                        name: state.name
+                                        EAR: dataUserSetting.EAR
                                     })
                                 }} >
                                     <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{state.name}</Text>
+                                        <Text style={styles.textshow}>{dataUserSetting.EAR}</Text>
                                         <Text style={styles.textedit}>แก้ไข</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
 
                             <View style={{ width: '100%' }}>
-                                <Text style={styles.textInput}>ตั้งค่าแจ้งเตือนการพัก</Text>
-                                <TouchableOpacity onPress={() => toggleOverlayEditRest()} >
+                                <Text style={styles.textInput}>ตั้งค่าแจ้งเตือนการพัก (ระยะทาง)</Text>
+                                <TouchableOpacity onPress={() => {
+                                    toggleOverlayEditRestDis()
+                                    setInput({
+                                        ...input,
+                                        distance: dataUserSetting.distance
+                                    })
+                                }} >
                                     <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>เปลี่ยนรหัสผ่านใหม่</Text>
+                                        <Text style={styles.textshow}>{dataUserSetting.distance + ' กิโลเมตร'}</Text>
+                                        <Text style={styles.textedit}>แก้ไข</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={{ width: '100%' }}>
+                                <Text style={styles.textInput}>ตั้งค่าแจ้งเตือนการพัก (เวลา)</Text>
+                                <TouchableOpacity onPress={() => {
+                                    toggleOverlayEditRestTime()
+                                    setInput({
+                                        ...input,
+                                        rest_hour: dataUserSetting.rest_hour,
+                                        rest_min: dataUserSetting.rest_min
+                                    })
+                                }} >
+                                    <View style={styles.bgtext}>
+                                        <Text style={styles.textshow}>{dataUserSetting.rest_hour + ' : ' + dataUserSetting.rest_min + '  ชั่วโมง : นาที'}</Text>
                                         <Text style={styles.textedit}>แก้ไข</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -386,9 +412,16 @@ export default function register({ navigation }) {
 
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>กำหนดเวลาอัพเดตตำแหน่ง</Text>
-                                <TouchableOpacity onPress={() => toggleOverlayEditpass()} >
+                                <TouchableOpacity onPress={() => {
+                                    toggleOverlayEditUpLocation()
+                                    setInput({
+                                        ...input,
+                                        up_min: dataUserSetting.up_min,
+                                        up_sec: dataUserSetting.up_sec
+                                    })
+                                }} >
                                     <View style={[styles.bgtext, { marginBottom: 0 }]}>
-                                        <Text style={styles.textshow}>เปลี่ยนรหัสผ่านใหม่</Text>
+                                        <Text style={styles.textshow}>{dataUserSetting.up_min + ' : ' + dataUserSetting.up_sec + '  นาที : วินาที'}</Text>
                                         <Text style={styles.textedit}>แก้ไข</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -400,42 +433,92 @@ export default function register({ navigation }) {
 
                 </View>
 
+                {/* --------------------------------Edit bluetooth-------------------------------- */}
+                <Overlay key={1} isVisible={visible.bluetooth} onBackdropPress={toggleOverlaybluetooth} overlayStyle={styles.overlay_head}>
+                    <View style={[styles.overlay_body, { marginBottom: hp('1.5%') }]}>
+                        <ScrollView>
+                            <View style={[styles.overlat_show, { width: '100%', marginTop: hp('1%') }]}>
+                                <Text style={{ color: '#000', fontSize: hp('2%'), marginBottom: hp('1%') }}>อุปกรณ์ที่จับคู่แล้ว</Text>
+                                {
+                                    bluetooth.map((item, index) => {
+                                        const length = bluetooth.length - 1;
+                                        return (
+                                            <TouchableOpacity key={index} onPress={() => {
+                                                saveBluetooth(item.name)
+                                            }} >
+                                                {index == 0 ?
+                                                    <View style={[styles.bgtext, { width: wp('76%'), height: hp('5%'), borderRadius: 0, borderTopLeftRadius: 10, borderTopRightRadius: 10, marginBottom: 1 }]}>
+                                                        <Text style={styles.textshow}>{item.name}</Text>
+                                                        <Text style={styles.textedit}>เลือก</Text>
+                                                    </View>
+                                                    : <View>
+                                                        {
+                                                            length == index ?
+                                                                <View style={[styles.bgtext, { width: wp('76%'), height: hp('5%'), borderRadius: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, marginBottom: 1 }]}>
+                                                                    <Text style={styles.textshow}>{item.name}</Text>
+                                                                    <Text style={styles.textedit}>เลือก</Text>
+                                                                </View>
+                                                                :
+                                                                <View style={[styles.bgtext, { width: wp('76%'), height: hp('5%'), borderRadius: 0, marginBottom: 1 }]}>
+                                                                    <Text style={styles.textshow}>{item.name}</Text>
+                                                                    <Text style={styles.textedit}>เลือก</Text>
+                                                                </View>
+                                                        }
+                                                    </View>
+
+
+                                                }
+
+                                            </TouchableOpacity>
+                                        )
+                                    })
+                                }
+                            </View>
+                        </ScrollView>
+                    </View>
+                </Overlay>
 
                 {/* --------------------------------Edit EAR-------------------------------- */}
-                <Overlay key={1} isVisible={visible.editEAR} onBackdropPress={toggleOverlayEditEAR}>
-                    <View style={{ width: wp('80%'), padding: hp('0.7%'), alignItems: 'center', justifyContent: 'center' }}>
+                <Overlay key={2} isVisible={visible.editEAR} onBackdropPress={toggleOverlayEditEAR} overlayStyle={styles.overlay_head}>
+                    <View style={styles.overlay_body}>
                         <View style={{ margin: hp('2%') }}>
                             <Text style={styles.text}>สามารถดูขนาดตาของท่านได้จากจอ</Text>
                         </View>
                         <View style={{ borderWidth: 1, width: wp('70%'), height: wp('40%'), padding: 0 }}>
-                            <Image source={require('../assets/EAR.png')} style={styles.addimage} />
+                            <Image source={require('../assets/EAR.png')} style={[styles.addimage, { resizeMode: 'cover' }]} />
                         </View>
 
-                        <View style={{ width: '95%', margin: hp('2%') }}>
+                        <View style={{ width: '95%', marginTop: hp('2%') }}>
                             {/* <Text style={[styles.text, { marginLeft: 5 }]}>ค่าขนาดดวงตา</Text> */}
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ค่าขนาดดวงตา</Text>
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%'), }]}>มีค่าตั้งแต่ 0.000 ถึง 1.000</Text>
 
                             <TextInput
                                 style={styles.Input}
                                 value={input.EAR}
                                 keyboardType='decimal-pad'
-                                onChangeText={(text) => setInput({ ...input, EAR: text })}
+                                onChangeText={inputEAR}
                             // placeholder="Username"
                             />
                         </View>
 
-                        <View style={{ width: '95%', margin: hp('2%'), flexDirection: 'row', justifyContent: 'center' }}>
+                        <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'center' }}>
                             <Button
                                 title="ค่าเริ่มต้น"
-                                buttonStyle={[styles.btreset, styles.Shadow, { marginTop: hp('2%'), marginRight: wp('12%') }]}
-                                onPress={() => { Resetvalue() }}
+                                buttonStyle={[styles.btreset, styles.Shadow, { marginRight: wp('12%') }]}
+                                onPress={() => {
+                                    setInput({
+                                        ...input,
+                                        EAR: defaultSetting.EAR
+                                    })
+                                }}
                                 titleStyle={{ fontSize: hp('2%') }}
                             />
 
                             <Button
                                 title="บันทึก"
-                                buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('2%') }]}
-                                //onPress={() => {cfregister()}}
+                                buttonStyle={[styles.btsave, styles.Shadow,]}
+                                onPress={() => { saveEAR() }}
                                 titleStyle={{ fontSize: hp('2%') }}
                             />
                         </View>
@@ -443,57 +526,166 @@ export default function register({ navigation }) {
                     </View>
                 </Overlay>
 
-                {/* --------------------------------Edit Rest-------------------------------- */}
-                <Overlay key={2} isVisible={visible.editRest} onBackdropPress={toggleOverlayEditRest}>
-                    <View style={{ width: wp('80%'), padding: hp('0.7%'), alignItems: 'center', justifyContent: 'center' }}>
-                        <View style={{ width: '95%', margin: hp('2%') }}>
+                {/* --------------------------------Edit Rest_dis -------------------------------- */}
+                <Overlay key={3} isVisible={visible.editRestDis} onBackdropPress={toggleOverlayEditRestDis} overlayStyle={styles.overlay_head}>
+                    <View style={styles.overlay_body}>
+
+                        <View style={styles.overlat_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะทางที่ต้องการให้แจ้งเตือน</Text>
-                            <TextInput
-                                style={styles.Input}
-                                value={input.distance}
-                                keyboardType='decimal-pad'
-                                onChangeText={(text) => setInput({ ...input, distance: text })}
-                            // placeholder="Username"
-                            />
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%') }]}>สูงสุด 450 กิโลเมตร</Text>
 
+                            < View style={{ width: '100%', flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginTop: hp('2%') }}>
+                                <Text style={[styles.textInput, { color: '#000', }]}>ระยะทาง</Text>
+                                <TextInput
+                                    style={[styles.Input, { width: '35%', marginLeft: '5%', marginRight: '5%' }]}
+                                    value={input.distance}
+                                    keyboardType='number-pad'
+                                    onChangeText={inputDistance}
+                                // placeholder="Username"
+                                />
+                                <Text style={[styles.textInput, { color: '#000', }]}> กิโลเมตร</Text>
+                            </View>
+
+                            <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'center' }}>
+                                <Button
+                                    title="ค่าเริ่มต้น"
+                                    buttonStyle={[styles.btreset, styles.Shadow, { marginRight: wp('12%') }]}
+                                    onPress={() => {
+                                        setInput({
+                                            ...input,
+                                            distance: defaultSetting.distance
+                                        })
+                                    }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
+
+                                <Button
+                                    title="บันทึก"
+                                    buttonStyle={[styles.btsave, styles.Shadow,]}
+                                    onPress={() => { saveRest_dis() }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                </Overlay>
+
+                {/* --------------------------------Edit Rest_Time -------------------------------- */}
+                <Overlay key={4} isVisible={visible.editRestTime} onBackdropPress={toggleOverlayEditRestTime} overlayStyle={styles.overlay_head}>
+                    <View style={styles.overlay_body}>
+
+                        <View style={styles.overlat_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะเวลาที่ต้องการให้แจ้งเตือน</Text>
-                            <TextInput
-                                style={styles.Input}
-                                value={input.EAR}
-                                keyboardType='decimal-pad'
-                                onChangeText={(text) => setInput({ ...input, EAR: text })}
-                            // placeholder="Username"
-                            />
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%') }]}>สูงสุด 4:30 ชั่วโมง:นาที</Text>
 
+                            <View style={{ width: '100%', flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginTop: hp('2%'), }}>
+                                <View style={{ width: '30%', }}>
+                                    <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>เวลา</Text>
+                                </View>
+                                <View style={{ width: '40%', flexDirection: "row", justifyContent: 'center', alignItems: 'center', }}>
+                                    <TextInput
+                                        style={[styles.Input, { width: '40%', }]}
+                                        keyboardType='decimal-pad'
+                                        value={input.rest_hour}
+                                        onChangeText={inputRest_HH}
+                                    />
+                                    <Text style={[styles.textInput, { margin: '2%', color: '#000' }]}>{":"}</Text>
+                                    <TextInput
+                                        style={[styles.Input, { width: '40%' }]}
+                                        keyboardType='decimal-pad'
+                                        value={input.rest_min}
+                                        onChangeText={inputRest_MM}
+                                    />
+                                </View>
+                                <View style={{ width: '30%', }}>
+                                    <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>ชั่วโมง:นาที</Text>
+                                </View>
+                            </View>
+
+                            <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'center' }}>
+                                <Button
+                                    title="ค่าเริ่มต้น"
+                                    buttonStyle={[styles.btreset, styles.Shadow, { marginRight: wp('12%') }]}
+                                    onPress={() => {
+                                        setInput({
+                                            ...input,
+                                            rest_hour: defaultSetting.rest_hour,
+                                            rest_min: defaultSetting.rest_min
+                                        })
+                                    }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
+
+                                <Button
+                                    title="บันทึก"
+                                    buttonStyle={[styles.btsave, styles.Shadow,]}
+                                    onPress={() => { saveRest_time() }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
+                            </View>
 
                         </View>
                     </View>
                 </Overlay>
 
-                {/* --------------------------------Editname-------------------------------- */}
-                {/* <Overlay key={3} isVisible={visible.editname} onBackdropPress={toggleOverlayEditname}>
-                    <View style={{ width: wp('80%'), height: hp('20%'), padding: hp('0.7%'), justifyContent: 'center', alignItems: 'center' }}>
-                        <View style={{ width: '95%' }}>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>แก้ไขชื่อเล่น</Text>
-                            <TextInput
-                                style={styles.Input}
-                                value={input.name}
-                                onChangeText={inputName}
-                            //placeholder="Username"
-                            />
+                {/* --------------------------------Edit update_Location -------------------------------- */}
+                <Overlay key={5} isVisible={visible.editUpLocation} onBackdropPress={toggleOverlayEditUpLocation} overlayStyle={styles.overlay_head}>
+                    <View style={styles.overlay_body}>
+
+                        <View style={styles.overlat_show}>
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะเวลาที่ต้องการอัพเดตตำแหน่ง</Text>
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%') }]}>สูงสุด 10:00 นาที:วินาที</Text>
+
+                            <View style={{ width: '100%', flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginTop: hp('2%'), }}>
+                                <View style={{ width: '30%', }}>
+                                    <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>เวลา</Text>
+                                </View>
+                                <View style={{ width: '40%', flexDirection: "row", justifyContent: 'center', alignItems: 'center', }}>
+                                    <TextInput
+                                        style={[styles.Input, { width: '40%', }]}
+                                        keyboardType='decimal-pad'
+                                        value={input.up_min}
+                                        onChangeText={inputUp_min}
+                                    />
+                                    <Text style={[styles.textInput, { margin: '2%', color: '#000' }]}>{":"}</Text>
+                                    <TextInput
+                                        style={[styles.Input, { width: '40%' }]}
+                                        keyboardType='decimal-pad'
+                                        value={input.up_sec}
+                                        onChangeText={inputUp_sec}
+                                    />
+                                </View>
+                                <View style={{ width: '30%', }}>
+                                    <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>นาที:วินาที</Text>
+                                </View>
+                            </View>
+
+                            <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'center' }}>
+                                <Button
+                                    title="ค่าเริ่มต้น"
+                                    buttonStyle={[styles.btreset, styles.Shadow, { marginRight: wp('12%') }]}
+                                    onPress={() => {
+                                        setInput({
+                                            ...input,
+                                            up_min: defaultSetting.up_min,
+                                            up_sec: defaultSetting.up_sec
+                                        })
+                                    }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
+
+                                <Button
+                                    title="บันทึก"
+                                    buttonStyle={[styles.btsave, styles.Shadow,]}
+                                    onPress={() => { saveUp_location() }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
+                            </View>
+
+
                         </View>
-
-                        <Button
-                            title="บันทึก"
-                            buttonStyle={[styles.btsave, styles.Shadow, { marginTop: '10%' }]}
-                            onPress={() => {
-                                savename()
-                            }}
-                            titleStyle={{ fontSize: hp('2%') }}
-                        />
-
                     </View>
-                </Overlay> */}
+                </Overlay>
 
 
 
@@ -536,13 +728,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#0E77BF',
         width: '100%',
         height: hp('4.5%'),
-        //borderRadius: 15,
+        borderRadius: 10,
         alignItems: 'center',
         // justifyContent: 'center',
         justifyContent: 'space-between',
         paddingRight: '5%',
         paddingLeft: '5%'
     },
+
     textshow: {
         fontSize: hp('2%'),
     },
@@ -566,6 +759,7 @@ const styles = StyleSheet.create({
         // marginLeft: wp('2%')
     },
     textInput: {
+        paddingLeft: 5,
         color: '#fff',
         fontSize: hp('2%'),
         paddingBottom: 0,
@@ -581,13 +775,6 @@ const styles = StyleSheet.create({
         fontSize: hp('2%'),
         marginTop: hp('0.2%'),
         alignSelf: 'center'
-    },
-    btsave: {
-        //alignSelf: 'center',
-        backgroundColor: '#49BB21',
-        width: wp('25.5%'),
-        height: hp('5%'),
-        borderRadius: 15,
     },
     profile: {
         borderRadius: 100,
@@ -611,9 +798,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#0E77BF',
         width: '100%',
         height: hp('5%'),
-        //borderRadius: 15,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+
 
     },
     addimage: {
@@ -625,10 +813,36 @@ const styles = StyleSheet.create({
         fontSize: hp('2%'),
         paddingBottom: 0,
     },
+    btsave: {
+        //alignSelf: 'center',
+        backgroundColor: '#49BB21',
+        width: wp('29%'),
+        height: hp('5%'),
+        borderRadius: 15,
+        marginTop: hp('6%')
+    },
     btreset: {
         backgroundColor: '#EA2626',
         width: wp('29%'),
         height: hp('5%'),
         borderRadius: 15,
+        marginTop: hp('6%')
     },
+    overlay_head: {
+        borderRadius: 15,
+    },
+    overlay_body: {
+        width: wp('80%'),
+        padding: hp('0.7%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: hp('2.5%')
+    },
+    overlat_show: {
+        width: '95%',
+        marginTop: hp('2%'),
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
 })
