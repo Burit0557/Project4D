@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@notifee/react-native": "^1.1.1",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/cameraroll": "^4.0.2",
     "@react-native-community/masked-view": "^0.1.10",
@@ -20,6 +21,7 @@
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "express": "^4.17.1",
+    "firebase-admin": "^9.5.0",
     "lodash": "^4.17.20",
     "mssql": "^6.3.1",
     "mysql": "^2.18.1",

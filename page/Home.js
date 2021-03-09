@@ -1,21 +1,36 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, ImageBackground,Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements'
+import messaging from '@react-native-firebase/messaging';
+import notifee, { EventType } from '@notifee/react-native';
 
 export default function home({ navigation }) {
-    const [MyPlaces,setMyPlaces] = useState(0);
+    const [MyPlaces, setMyPlaces] = useState(0);
+
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
+    //         console.log("test from home", MyPlaces);
+    //         setMyPlaces(MyPlaces + 1)
+    //     }, 10000)
+    //     // console.log("test from out");
+    //     return () => clearInterval(intervalId); //This is important
+
+    // }, [MyPlaces, setMyPlaces])
 
     useEffect(() => {
-        const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-            console.log("test from home",MyPlaces);
-            setMyPlaces(MyPlaces+1)
-        }, 10000)
-        
-        return () => clearInterval(intervalId); //This is important
-        console.log("test from out");
-    }, [MyPlaces,setMyPlaces])
-
+        notifee.onForegroundEvent(({ type, detail }) => {
+            switch (type) {
+                case EventType.DISMISSED:
+                    console.log('User dismissed notification', detail.notification);
+                    break;
+                case EventType.PRESS:
+                    console.log('User pressed notification', detail.notification);
+                    navigation.navigate('Family-Location')
+                    break;
+            }
+        });
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -100,7 +115,7 @@ const styles = StyleSheet.create({
     },
     content: {
         width: wp('80%'),
-        height : wp('80%'),
+        height: wp('80%'),
         // alignItems : 'stretch',
         // alignItems: 'center',
         // backgroundColor: '#00ffff',
