@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 const saltRounds = 10;
+const admin = require('firebase-admin');
 
 
 let app = express();
@@ -21,21 +22,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //     }
 // };
 
-// var config = {
-//     host: 'localhost',
-//     user: 'root',
-//     password: '',
-//     database: 'db_text',
-// }
-
 var config = {
-    host: '161.246.5.138',
+    host: 'localhost',
     user: 'root',
     password: '',
     database: 'db_drowsiness',
 }
 
+// var config = {
+//     host: '161.246.5.138',
+//     user: 'root',
+//     password: '',
+//     database: 'db_drowsiness',
+// }
+
 let connection = mysql.createConnection(config);
+
+// Initialize Firebase
+var serviceAccount = require("./project4d-303015-firebase-adminsdk-zf772-20c1b2684e.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
 
 app.get('/', function (req, res) {
     // query to the database and get the records
@@ -394,6 +403,59 @@ app.get('/friend_location', function (req, res) {
             res.send(data);
         }
     })
+})
+
+/* POST localhost:3000/post_noti
+req body    {    
+    username,
+    friend_user,
+}
+---------------------------------------------- add friend -------------------------------------*/
+app.post('/post_noti', function (req, res) {
+    let { username, friend_user } = req.body;
+    // console.log(`username ${username} friend_user ${friend_user}`)
+    // let sql = 'INSERT INTO friend (Username, Friend_user, history_acces, position_acces, friend_alert)VALUES (?,?,1,1,1)';
+    // connection.query(sql, [username, friend_user], function (err, result) {
+    //     if (err) {
+    //         res.status(403);
+    //     } else {
+    //         res.status(200).end();
+    //     }
+    // })
+    try {
+        admin.messaging().sendMulticast({
+            tokens: ['cGVlYMkmTsm9ED1A8AkzFi:APA91bFgIfx4ZYEcq-DiUR7bUP-FQ5BFqRpOvmxPizBFM0atxvAPFTYCXvh_WSgS_wKtpLsMB_bsmxnutWsH7raTPVJ5B7pRaJj_0TsqwRZNv-Nq-mCcm8IU1Q3Jq2HsDHIkvTX1AUQJ'],
+            data: {
+                notifee: JSON.stringify({
+                    body: 'This message was sent via FCM!',
+                    title: 'แจ้งเตื่อนการง่วง',
+                    data: { Username: "suhaimee24" },
+                    android: {
+                        channelId: 'default',
+                        actions: [
+                            // {
+                            //     title: 'Open',
+                            //     icon: 'https://my-cdn.com/icons/open-chat.png',
+                            //     pressAction: {
+                            //         id: 'open-chat',
+                            //         launchActivity: 'default',
+                            //     },
+                            // },
+                        ],
+                    },
+                    collapseKey: "com.project4d",
+                }),
+            },
+            notification: { android: {}, body: "test", title: "test" },
+        })
+            .then(() => {
+                console.log("send finish..")
+                res.status(200).end()
+            })
+    }
+    catch {
+        res.status(403);
+    }
 })
 
 

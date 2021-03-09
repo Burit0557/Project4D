@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -25,6 +25,9 @@ import Device_wifiScreen from './Page/device_wifi';
 
 import { MyContext } from './context_api/myContext';
 
+import messaging from '@react-native-firebase/messaging';
+import notifee, { EventType } from '@notifee/react-native';
+
 import RNBluetoothClassic, {
     BluetoothDevice
 } from 'react-native-bluetooth-classic';
@@ -34,7 +37,25 @@ import { Alert } from 'react-native';
 
 const Stack = createStackNavigator();
 function router() {
+   _checkPermission = async () => {
+        const enabled = await messaging().hasPermission();
+        if (enabled) {
+            const device = await messaging().getToken()
+            console.log(device)
+        }
+        else this._getPermission()
+    }
 
+    _getPermission = async () => {
+        messaging().requestPermission()
+            .then(() => {
+                this._checkPermission()
+            })
+            .catch(error => {
+                // User has rejected permissions  
+            });
+    }
+    
     useEffect(() => {
         async function connect() {
             try {
@@ -54,6 +75,7 @@ function router() {
             }
         }
         connect()
+       _checkPermission()
     }, [])
 
     const onReceivedData = (data) => {
