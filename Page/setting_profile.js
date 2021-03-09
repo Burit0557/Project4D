@@ -13,7 +13,7 @@ import CameraRoll from "@react-native-community/cameraroll";
 import { CategoryContext } from '../context_api/myContext';
 
 
-export default function register({ navigation }) {
+export default function setting_profile({ navigation }) {
     const Context = useContext(CategoryContext)
 
     const [dataUser, setdataUser] = useState(

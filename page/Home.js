@@ -36,7 +36,7 @@ export default function home({ navigation }) {
             <View style={styles.body}>
                 <View style={styles.content}>
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Jouney')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Jouney_home')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image
                                     style={styles.iconhome}

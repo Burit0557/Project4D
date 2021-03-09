@@ -23,6 +23,8 @@ import Device_addScreen from './Page/device_add';
 import Device_EARScreen from './Page/device_EAR';
 import Device_wifiScreen from './Page/device_wifi';
 
+import Journey_homeScreen from './Page/journey_home';
+
 import { MyContext } from './context_api/myContext';
 
 import messaging from '@react-native-firebase/messaging';
@@ -96,6 +98,7 @@ function router() {
                     <Stack.Screen name="Family-Setting" component={FamilySettingScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Device" component={DeviceScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Jouney" component={JourneyScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="Jouney_home" component={Journey_homeScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Family-Location" component={FamilyLocationScreen} options={{ headerShown: false }} />
 
                     <Stack.Screen name="ForgotPass" component={ForgotPassScreen} options={{ headerShown: false }} />

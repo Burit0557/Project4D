@@ -45,7 +45,7 @@ data = [
 ]
 
 
-export default function register({ navigation }) {
+export default function setting_device({ navigation }) {
     const Context = useContext(CategoryContext)
 
     const [dataUser, setdataUser] = useState(
@@ -341,7 +341,7 @@ export default function register({ navigation }) {
                         <View style={styles.bgInput}>
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>Bluetooth</Text>
-                                <TouchableOpacity onPress={() => {
+                                <TouchableOpacity style={{borderWidth :1}} onPress={() => {
                                     toggleOverlaybluetooth()
                                     setInput({
                                         ...input,
