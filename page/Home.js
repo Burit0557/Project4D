@@ -25,7 +25,7 @@ export default function home({ navigation }) {
                     console.log('User dismissed notification', detail.notification);
                     break;
                 case EventType.PRESS:
-                    console.log('User pressed notification', detail.notification);
+                    console.log('User pressed notifications', detail.notification);
                     navigation.navigate('Family-Location')
                     break;
             }
