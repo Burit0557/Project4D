@@ -341,18 +341,20 @@ export default function setting_device({ navigation }) {
                         <View style={styles.bgInput}>
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>Bluetooth</Text>
-                                <TouchableOpacity style={{borderWidth :1}} onPress={() => {
-                                    toggleOverlaybluetooth()
-                                    setInput({
-                                        ...input,
-                                        bluetooth_name: dataUserSetting.bluetooth_name
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.bluetooth_name}</Text>
-                                        <Text style={styles.textedit}>เลือก</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <View style={styles.space}>
+                                    <TouchableOpacity  onPress={() => {
+                                        toggleOverlaybluetooth()
+                                        setInput({
+                                            ...input,
+                                            bluetooth_name: dataUserSetting.bluetooth_name
+                                        })
+                                    }} >
+                                        <View style={styles.bgtext}>
+                                            <Text style={styles.textshow}>{dataUserSetting.bluetooth_name}</Text>
+                                            <Text style={styles.textedit}>เลือก</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
 
                         </View>
@@ -363,68 +365,76 @@ export default function setting_device({ navigation }) {
                         <View style={styles.bgInput}>
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>กำหนดขนาดดวงตา</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditEAR()
-                                    setInput({
-                                        ...input,
-                                        EAR: dataUserSetting.EAR
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.EAR}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <View style={styles.space}>
+                                    <TouchableOpacity onPress={() => {
+                                        toggleOverlayEditEAR()
+                                        setInput({
+                                            ...input,
+                                            EAR: dataUserSetting.EAR
+                                        })
+                                    }} >
+                                        <View style={styles.bgtext}>
+                                            <Text style={styles.textshow}>{dataUserSetting.EAR}</Text>
+                                            <Text style={styles.textedit}>แก้ไข</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
 
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>ตั้งค่าแจ้งเตือนการพัก (ระยะทาง)</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditRestDis()
-                                    setInput({
-                                        ...input,
-                                        distance: dataUserSetting.distance
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.distance + ' กิโลเมตร'}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <View style={styles.space}>
+                                    <TouchableOpacity onPress={() => {
+                                        toggleOverlayEditRestDis()
+                                        setInput({
+                                            ...input,
+                                            distance: dataUserSetting.distance
+                                        })
+                                    }} >
+                                        <View style={styles.bgtext}>
+                                            <Text style={styles.textshow}>{dataUserSetting.distance + ' กิโลเมตร'}</Text>
+                                            <Text style={styles.textedit}>แก้ไข</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
 
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>ตั้งค่าแจ้งเตือนการพัก (เวลา)</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditRestTime()
-                                    setInput({
-                                        ...input,
-                                        rest_hour: dataUserSetting.rest_hour,
-                                        rest_min: dataUserSetting.rest_min
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.rest_hour + ' : ' + dataUserSetting.rest_min + '  ชั่วโมง : นาที'}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <View style={styles.space}>
+                                    <TouchableOpacity onPress={() => {
+                                        toggleOverlayEditRestTime()
+                                        setInput({
+                                            ...input,
+                                            rest_hour: dataUserSetting.rest_hour,
+                                            rest_min: dataUserSetting.rest_min
+                                        })
+                                    }} >
+                                        <View style={styles.bgtext}>
+                                            <Text style={styles.textshow}>{dataUserSetting.rest_hour + ' : ' + dataUserSetting.rest_min + '  ชั่วโมง : นาที'}</Text>
+                                            <Text style={styles.textedit}>แก้ไข</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
 
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>กำหนดเวลาอัพเดตตำแหน่ง</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditUpLocation()
-                                    setInput({
-                                        ...input,
-                                        up_min: dataUserSetting.up_min,
-                                        up_sec: dataUserSetting.up_sec
-                                    })
-                                }} >
-                                    <View style={[styles.bgtext, { marginBottom: 0 }]}>
-                                        <Text style={styles.textshow}>{dataUserSetting.up_min + ' : ' + dataUserSetting.up_sec + '  นาที : วินาที'}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <View style={styles.space}>
+                                    <TouchableOpacity onPress={() => {
+                                        toggleOverlayEditUpLocation()
+                                        setInput({
+                                            ...input,
+                                            up_min: dataUserSetting.up_min,
+                                            up_sec: dataUserSetting.up_sec
+                                        })
+                                    }} >
+                                        <View style={[styles.bgtext, { marginBottom: 0 }]}>
+                                            <Text style={styles.textshow}>{dataUserSetting.up_min + ' : ' + dataUserSetting.up_sec + '  นาที : วินาที'}</Text>
+                                            <Text style={styles.textedit}>แก้ไข</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
 
                         </View>
@@ -724,7 +734,7 @@ const styles = StyleSheet.create({
     },
     bgtext: {
         flexDirection: 'row',
-        marginBottom: hp('3%'),
+        //marginBottom: hp('3%'),
         backgroundColor: '#0E77BF',
         width: '100%',
         height: hp('4.5%'),
@@ -734,6 +744,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingRight: '5%',
         paddingLeft: '5%'
+    },
+    space: {
+        width: '100%',
+        marginBottom: hp('3%'),
     },
 
     textshow: {
