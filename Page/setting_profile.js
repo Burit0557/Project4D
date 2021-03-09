@@ -13,7 +13,7 @@ import CameraRoll from "@react-native-community/cameraroll";
 import { CategoryContext } from '../context_api/myContext';
 
 
-export default function register({ navigation }) {
+export default function setting_profile({ navigation }) {
     const Context = useContext(CategoryContext)
 
     const [dataUser, setdataUser] = useState(
@@ -75,19 +75,19 @@ export default function register({ navigation }) {
                 imagesrc: { uri: `data:image/jpg;base64,${dataUser.image}` }
             })
         }
-        
-        if(dataUser.name !== '') {
-           setState({
-               ...state,
-               name : dataUser.name
-           })
-        }
-        if(dataUser.name === '') {
+
+        if (dataUser.name !== '') {
             setState({
                 ...state,
-                name : dataUser.Username
+                name: dataUser.name
             })
-         }
+        }
+        if (dataUser.name === '') {
+            setState({
+                ...state,
+                name: dataUser.Username
+            })
+        }
 
         // API.get('/get_image', body = {
         //     params: {
@@ -564,19 +564,19 @@ export default function register({ navigation }) {
 
 
                 {/* --------------------------------optionEditimg-------------------------------- */}
-                <Overlay key={1} isVisible={visible.optionEditimg} onBackdropPress={toggleOverlayoptionEditimg}>
-                    <View style={{ width: wp('42%'), height: wp('20%'), padding: hp('0.7%'), justifyContent: 'center' }}>
+                <Overlay key={1} isVisible={visible.optionEditimg} onBackdropPress={toggleOverlayoptionEditimg} overlayStyle={styles.overlay_head}>
+                    <View style={{ width: wp('42%'), padding: hp('0.7%'), justifyContent: 'center' }}>
 
                         <TouchableOpacity onPress={() => {
                             changeImage()
                         }} >
-                            <View style={{ height: '50%', marginBottom: ('5%'), justifyContent: 'center' }}>
+                            <View style={{ marginBottom: ('10%'), justifyContent: 'center' }}>
                                 <Text style={{ fontSize: hp('2%') }}>เลือกรูปภาพ</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => deletimg()} >
-                            <View style={{ height: '50%', justifyContent: 'center' }}>
+                            <View style={{ justifyContent: 'center' }}>
                                 <Text style={{ fontSize: hp('2%') }}>ลบ</Text>
                             </View>
                         </TouchableOpacity>
@@ -584,42 +584,43 @@ export default function register({ navigation }) {
                 </Overlay>
 
                 {/* --------------------------------optionEditimg_cf-------------------------------- */}
-                <Overlay key={2} isVisible={visible.optionEditimg_cf} >
-                    <View style={{ width: wp('80%'), height: hp('35%'), padding: hp('0.7%'), alignItems: 'center', justifyContent: 'center' }}>
+                <Overlay key={2} isVisible={visible.optionEditimg_cf} overlayStyle={styles.overlay_head}>
+                    <View style={styles.overlay_body}>
 
+                        <View style={styles.overlat_show}>
+                            <View style={{ width: wp('36%'), height: wp('36%') }}>
+                                <Image style={[styles.profile, { resizeMode: 'cover' }]} source={profileImage.imgEdit} />
+                            </View>
 
-                        <View style={{ width: wp('36%'), height: wp('36%') }}>
-                            <Image style={[styles.profile, { resizeMode: 'cover' }]} source={profileImage.imgEdit} />
-                        </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Button
+                                    title="บันทึก"
+                                    buttonStyle={[styles.btsave, styles.Shadow, { marginRight: wp('15%') }]}
+                                    onPress={() => {
+                                        saveimage()
+                                    }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
 
-                        <View style={{ flexDirection: 'row' }}>
-                            <Button
-                                title="บันทึก"
-                                buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('5%'), marginRight: wp('15%') }]}
-                                onPress={() => {
-                                    saveimage()
-                                }}
-                                titleStyle={{ fontSize: hp('2%') }}
-                            />
+                                <Button
+                                    title="ยกเลิก"
+                                    buttonStyle={[styles.btcancel, styles.Shadow,]}
+                                    onPress={() => {
+                                        toggleOverlayoptionEditimg_cf()
 
-                            <Button
-                                title="ยกเลิก"
-                                buttonStyle={[styles.btsave, styles.Shadow, { marginTop: hp('5%'), backgroundColor: "#EA2626" }]}
-                                onPress={() => {
-                                    toggleOverlayoptionEditimg_cf()
+                                    }}
+                                    titleStyle={{ fontSize: hp('2%') }}
+                                />
 
-                                }}
-                                titleStyle={{ fontSize: hp('2%') }}
-                            />
-
+                            </View>
                         </View>
                     </View>
                 </Overlay>
 
                 {/* --------------------------------Editname-------------------------------- */}
-                <Overlay key={3} isVisible={visible.editname} onBackdropPress={toggleOverlayEditname}>
-                    <View style={{ width: wp('80%'), height: hp('20%'), padding: hp('0.7%'), justifyContent: 'center', alignItems: 'center' }}>
-                        <View style={{ width: '95%' }}>
+                <Overlay key={3} isVisible={visible.editname} onBackdropPress={toggleOverlayEditname} overlayStyle={styles.overlay_head}>
+                    <View style={styles.overlay_body}>
+                        <View style={styles.overlat_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>แก้ไขชื่อเล่น</Text>
                             <TextInput
                                 style={styles.Input}
@@ -631,7 +632,7 @@ export default function register({ navigation }) {
 
                         <Button
                             title="บันทึก"
-                            buttonStyle={[styles.btsave, styles.Shadow, { marginTop: '10%' }]}
+                            buttonStyle={[styles.btsave, styles.Shadow,]}
                             onPress={() => {
                                 savename()
                             }}
@@ -642,73 +643,73 @@ export default function register({ navigation }) {
                 </Overlay>
 
                 {/* --------------------------------Editpassword-------------------------------- */}
-                <Overlay key={4} isVisible={visible.editpass} onBackdropPress={toggleOverlayEditpass}>
-                    <View style={{ width: wp('80%'), height: hp('42%'), padding: hp('0.7%'), justifyContent: 'center', alignItems: 'center' }}>
+                <Overlay key={4} isVisible={visible.editpass} onBackdropPress={toggleOverlayEditpass} overlayStyle={styles.overlay_head}>
+                    <View style={styles.overlay_body}>
+                        <View style={styles.overlat_show}>
+                            <View style={{ width: '95%', marginBottom: ('5%') }}>
+                                <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>รหัสผ่านเดิม</Text>
+                                <TextInput
+                                    style={styles.Input}
+                                    value={input.password}
+                                    onChangeText={inputPass}
+                                    onFocus={() => setShowPass({ ...showPass, hide: true })}
+                                //placeholder="กรุณากรอกรหัสผ่านเดิม"
+                                />
+                                {!showPass.hide ?
+                                    <Text style={{ color: showPass.color, fontSize: hp('1.5%') }}>{showPass.text}</Text>
+                                    :
+                                    <View></View>
+                                }
+                            </View>
 
-                        <View style={{ width: '95%', marginBottom: ('5%') }}>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>รหัสผ่านเดิม</Text>
-                            <TextInput
-                                style={styles.Input}
-                                value={input.password}
-                                onChangeText={inputPass}
-                                onFocus={() => setShowPass({ ...showPass, hide: true })}
-                            //placeholder="กรุณากรอกรหัสผ่านเดิม"
+                            <View style={{ width: '95%', marginBottom: ('5%') }}>
+                                <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>รหัสผ่านใหม่</Text>
+                                <TextInput
+                                    style={styles.Input}
+                                    value={input.new_password}
+                                    onChangeText={inputNewPass}
+                                    onFocus={() => setShowNewPass({ ...showNewPass, hide: false })}
+                                    onBlur={() => setShowNewPass({
+                                        text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
+                                        color: '#1D1414',
+                                        hide: true
+                                    })}
+                                //placeholder="รหัสผ่านใหม่"
+                                />
+
+                                {!showNewPass.hide ?
+                                    <Text style={{ color: showNewPass.color, fontSize: hp('1.5%') }}>{showNewPass.text}</Text>
+                                    :
+                                    <View></View>
+                                }
+                            </View>
+
+                            <View style={{ width: '95%' }}>
+                                <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ยืนยันรหัสผ่านใหม่</Text>
+                                <TextInput
+                                    style={styles.Input}
+                                    value={input.cfnew_password}
+                                    onChangeText={inputcfNewPass}
+                                    onFocus={() => setShowcfNewPass({ ...showcfNewPass, hide: true })}
+                                //placeholder="ยืนยันรหัสผ่านใหม่"
+                                />
+
+                                {!showcfNewPass.hide ?
+                                    <Text style={{ color: showcfNewPass.color, fontSize: hp('1.5%') }}>{showcfNewPass.text}</Text>
+                                    :
+                                    <View></View>
+                                }
+                            </View>
+
+                            <Button
+                                title="บันทึก"
+                                buttonStyle={[styles.btsave, styles.Shadow,]}
+                                onPress={() => {
+                                    vaildateNewpass()
+                                }}
+                                titleStyle={{ fontSize: hp('2%') }}
                             />
-                            {!showPass.hide ?
-                                <Text style={{ color: showPass.color, fontSize: hp('1.5%') }}>{showPass.text}</Text>
-                                :
-                                <View></View>
-                            }
                         </View>
-
-                        <View style={{ width: '95%', marginBottom: ('5%') }}>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>รหัสผ่านใหม่</Text>
-                            <TextInput
-                                style={styles.Input}
-                                value={input.new_password}
-                                onChangeText={inputNewPass}
-                                onFocus={() => setShowNewPass({ ...showNewPass, hide: false })}
-                                onBlur={() => setShowNewPass({
-                                    text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",
-                                    color: '#1D1414',
-                                    hide: true
-                                })}
-                            //placeholder="รหัสผ่านใหม่"
-                            />
-
-                            {!showNewPass.hide ?
-                                <Text style={{ color: showNewPass.color, fontSize: hp('1.5%') }}>{showNewPass.text}</Text>
-                                :
-                                <View></View>
-                            }
-                        </View>
-
-                        <View style={{ width: '95%' }}>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ยืนยันรหัสผ่านใหม่</Text>
-                            <TextInput
-                                style={styles.Input}
-                                value={input.cfnew_password}
-                                onChangeText={inputcfNewPass}
-                                onFocus={() => setShowcfNewPass({ ...showcfNewPass, hide: true })}
-                            //placeholder="ยืนยันรหัสผ่านใหม่"
-                            />
-
-                            {!showcfNewPass.hide ?
-                                <Text style={{ color: showcfNewPass.color, fontSize: hp('1.5%') }}>{showcfNewPass.text}</Text>
-                                :
-                                <View></View>
-                            }
-                        </View>
-
-                        <Button
-                            title="บันทึก"
-                            buttonStyle={[styles.btsave, styles.Shadow, { marginTop: '5%' }]}
-                            onPress={() => {
-                                vaildateNewpass()
-                            }}
-                            titleStyle={{ fontSize: hp('2%') }}
-                        />
-
                     </View>
                 </Overlay>
 
@@ -794,9 +795,17 @@ const styles = StyleSheet.create({
     btsave: {
         //alignSelf: 'center',
         backgroundColor: '#49BB21',
-        width: wp('25.5%'),
+        width: wp('29%'),
         height: hp('5%'),
         borderRadius: 15,
+        marginTop: hp('6%')
+    },
+    btcancel: {
+        backgroundColor: '#EA2626',
+        width: wp('29%'),
+        height: hp('5%'),
+        borderRadius: 15,
+        marginTop: hp('6%')
     },
     profile: {
         borderRadius: 100,
@@ -824,5 +833,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
 
+    },
+    overlay_head: {
+        borderRadius: 15,
+    },
+    overlay_body: {
+        width: wp('80%'),
+        padding: hp('0.7%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: hp('2.5%')
+    },
+    overlat_show: {
+        width: '95%',
+        marginTop: hp('2%'),
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 })

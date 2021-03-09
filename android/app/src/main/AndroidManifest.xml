@@ -23,7 +23,7 @@
       <meta-data 
         android:name="com.google.android.geo.API_KEY" 
         android:value="AIzaSyAaZ9OqZiu0Ap4yMwWI1qhGb-8xp71BYzU"/>
-
+      <service android:name="com.example.MyTaskService"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

@@ -7,17 +7,7 @@ import notifee, { EventType } from '@notifee/react-native';
 
 export default function home({ navigation }) {
     const [MyPlaces, setMyPlaces] = useState(0);
-
-    // useEffect(() => {
-    //     const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-    //         console.log("test from home", MyPlaces);
-    //         setMyPlaces(MyPlaces + 1)
-    //     }, 10000)
-    //     // console.log("test from out");
-    //     return () => clearInterval(intervalId); //This is important
-
-    // }, [MyPlaces, setMyPlaces])
-
+  
     useEffect(() => {
         notifee.onForegroundEvent(({ type, detail }) => {
             switch (type) {
@@ -46,7 +36,7 @@ export default function home({ navigation }) {
             <View style={styles.body}>
                 <View style={styles.content}>
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Jouney')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Jouney_home')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image
                                     style={styles.iconhome}

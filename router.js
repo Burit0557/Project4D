@@ -23,19 +23,23 @@ import Device_addScreen from './Page/device_add';
 import Device_EARScreen from './Page/device_EAR';
 import Device_wifiScreen from './Page/device_wifi';
 
+import Journey_homeScreen from './Page/journey_home';
+
 import { MyContext } from './context_api/myContext';
 
 import messaging from '@react-native-firebase/messaging';
 import notifee, { EventType } from '@notifee/react-native';
 
+import RNBluetoothClassic, {
+    BluetoothDevice
+} from 'react-native-bluetooth-classic';
+import { Alert } from 'react-native';
+
 // -------------- Navigation Stack -----------------
 
 const Stack = createStackNavigator();
-
-
 function router() {
-
-    _checkPermission = async () => {
+   _checkPermission = async () => {
         const enabled = await messaging().hasPermission();
         if (enabled) {
             const device = await messaging().getToken()
@@ -53,14 +57,33 @@ function router() {
                 // User has rejected permissions  
             });
     }
-
-
+    
     useEffect(() => {
-        // Assume a message-notification contains a "type" property in the data payload of the screen to open
-        _checkPermission()
-      
-    }, []);
+        async function connect() {
+            try {
+                let bonded = await RNBluetoothClassic.getBondedDevices();
+                // console.log('DeviceListScreen::getBondedDevices found', bonded);
+                let peripheral = bonded.find(element => element.name === "raspberrypi");
+                console.log(peripheral)
+                peripheral.connect()
+                    .then(res => {
+                        peripheral.onDataReceived((data) => onReceivedData(data))
+                        peripheral.write(" test 1 ")
+                        peripheral.write("end")
+                    })
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+        connect()
+       _checkPermission()
+    }, [])
 
+    const onReceivedData = (data) => {
+        console.log(data)
+        Alert.alert('From Bluetooth', data.data)
+    }
 
     return (
         <MyContext>
@@ -75,6 +98,7 @@ function router() {
                     <Stack.Screen name="Family-Setting" component={FamilySettingScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Device" component={DeviceScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Jouney" component={JourneyScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="Jouney_home" component={Journey_homeScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Family-Location" component={FamilyLocationScreen} options={{ headerShown: false }} />
 
                     <Stack.Screen name="ForgotPass" component={ForgotPassScreen} options={{ headerShown: false }} />
