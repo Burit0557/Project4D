@@ -204,19 +204,20 @@ export default function setting_profile({ navigation }) {
             .then(res => {
                 if (res.status === 200) {
                     console.log(res.status)
-                    setState({
-                        ...state,
-                        name: input.name
-                    })
-                    Context.setName(input.name)
-                    Context.updateUser()
-                    toggleOverlayEditname()
+                   
                     Alert.alert('บันทึกสำเร็จ', 'เปลี่ยนชื่อสำเร็จ', [{ text: "ตกลง" }], { cancelable: true })
                 }
             })
             .catch(error => {
                 console.log(error)
             })
+            setState({
+                ...state,
+                name: input.name
+            })
+            Context.setName(input.name)
+            Context.updateUser()
+            toggleOverlayEditname()
     }
 
     const saveNewpass = () => {
