@@ -4,8 +4,9 @@ import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity }
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { API } from './axios';
 import { set } from 'lodash';
+import { CategoryContext } from '../context_api/myContext';
 
-export default function history({ navigation }) {
+export default function family({ navigation }) {
     // data = [
     //     {
     //         number: 1,
@@ -21,8 +22,12 @@ export default function history({ navigation }) {
     //     },
 
     // ]
-
+    const Context = useContext(CategoryContext)
     const [data, setData] = useState([])
+
+    const [dataUser, setdataUser] = useState(
+        Context.dataUser
+    )
     const [passed, setPassed] = useState('')
     const goSetting = () => {
         navigation.navigate('Family-Setting')
@@ -31,7 +36,7 @@ export default function history({ navigation }) {
     useEffect(() => {
         API.get('/friend', body = {
             params: {
-                username: "suhaimee24"
+                username: dataUser.Username
             }
         })
             .then(res => {

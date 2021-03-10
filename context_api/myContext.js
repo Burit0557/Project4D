@@ -8,8 +8,7 @@ class MyContext extends React.Component {
         super()
         this.state = {
             login: false,
-
-
+            
             dataUser: {
                 User_id: 0,
                 Username: '',

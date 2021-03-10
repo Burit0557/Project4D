@@ -352,6 +352,7 @@ app.post('/add_friend', function (req, res) {
         if (err) {
             res.status(403);
         } else {
+            console.log("add_friend success")
             res.status(200).end();
         }
     })
@@ -365,7 +366,7 @@ req params {
 app.get('/friend', function (req, res) {
     let { username } = req.query;
     console.log(`username ${username}`)
-    let sql = 'SELECT friend.Username, profile.Username,profile.name, friend.history_acces, friend.position_acces, friend.friend_alert from friend LEFT JOIN profile ON friend.Friend_user = profile.Username WHERE friend.Username = ?';
+    let sql = 'SELECT friend.Username, profile.Username, profile.name, friend.history_acces, friend.position_acces, friend.friend_alert from friend LEFT JOIN profile ON friend.Friend_user = profile.Username WHERE friend.Username = ?';
     connection.query(sql, username, function (err, data, field) {
         if (err) {
             console.log(err);
@@ -381,7 +382,7 @@ app.get('/friend', function (req, res) {
     })
 })
 
-/* GET localhost:3000/friend
+/* GET localhost:3000/friend_location
 req params {
     username
     }
@@ -463,6 +464,86 @@ app.post('/post_noti', function (req, res) {
     }
 })
 
+/* GET localhost:3000/get_user
+req params {
+    username
+    }
+---------------------------------------------- get user -------------------------------------*/
+app.get('/get_user', function (req, res) {
+    let { username } = req.query;
+    console.log(`get_user username ${username}`)
+    let sql = 'SELECT Username, image, name FROM profile WHERE Username = ?';
+    connection.query(sql, username, function (err, data, field) {
+        if (err) {
+            console.log(err);
+            res.status(403).end();
+        }
+        if (data.length == 0) {
+            console.log('No user')
+            res.status(404).end();
+        }
+        else {
+            res.send(data);
+        }
+    })
+})
+
+/* POST localhost:3000/friend_req
+req body    {    
+    username,
+    friend_user,
+}
+---------------------------------------------- add friend_req -------------------------------------*/
+app.post('/friend_req', function (req, res) {
+    let { username, friend_user } = req.body;
+    console.log(`friend_reg username ${username} friend_user ${friend_user}`)
+    let sql = 'SELECT * FROM request_friend WHERE Username = ? AND Friend_user = ?'
+    connection.query(sql, [username, friend_user], function (err, data, result) {
+        if (err) {
+            console.log(err);
+            res.status(403).end();
+        }
+        if (data.length == 0) {
+            let sql = 'INSERT INTO request_friend (Username, Friend_user)VALUES (?,?)';
+            connection.query(sql, [username, friend_user], function (err, result) {
+                if (err) {
+                    res.status(403);
+                } else {
+                    console.log("friend_req success")
+                    res.status(200).end();
+                }
+            })
+        }
+        else {
+            res.status(409).end();
+        }
+    })
+
+})
+
+/* GET localhost:3000/get_friend_req
+req params {
+    username
+    }
+---------------------------------------------- get friend_req -------------------------------------*/
+app.get('/get_friend_req', function (req, res) {
+    let { username } = req.query;
+    console.log(`get_friend_req username ${username}`)
+    let sql = 'SELECT request_friend.Friend_user, profile.Username, profile.name, profile.image from request_friend LEFT JOIN profile ON request_friend.Username = profile.Username WHERE request_friend.Friend_user = ?';
+    connection.query(sql, username, function (err, data, field) {
+        if (err) {
+            console.log(err);
+            res.status(403).end();
+        }
+        if (data.length == 0) {
+            console.log('No user')
+            res.status(404).end();
+        }
+        else {
+            res.send(data);
+        }
+    })
+})
 
 
 var server = app.listen(8080, function () {
