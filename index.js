@@ -22,7 +22,8 @@ async function onMessageReceived(message) {
   // Do something
   console.log(message)
   if (message.data.notifee) {
-      notifee.displayNotification(JSON.parse(message.data.notifee));
+    console.log('test in noti')
+    await notifee.displayNotification(JSON.parse(message.data.notifee));
   }
   // notifee.displayNotification(JSON.parse(message.data.notifee));
 }

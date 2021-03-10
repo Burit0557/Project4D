@@ -423,9 +423,15 @@ app.post('/post_noti', function (req, res) {
     //         res.status(200).end();
     //     }
     // })
+
+    //pleng genny 'chtiLbqpSAOeG_8AynR3UM:APA91bGw4p7-eDTWMkuk5rsZ0oUReMDwyPaH6PV0H4tZVpIacUzYZyFkfmLcxIMRIGzJLbum-JtOwsgDZ4_AFIPvWkNTJiGTdFBbo5knMO8vnBTCZ4MoWvRbId_M4sJYxE7F2181bWp0'
+    //mee 'cGVlYMkmTsm9ED1A8AkzFi:APA91bFgIfx4ZYEcq-DiUR7bUP-FQ5BFqRpOvmxPizBFM0atxvAPFTYCXvh_WSgS_wKtpLsMB_bsmxnutWsH7raTPVJ5B7pRaJj_0TsqwRZNv-Nq-mCcm8IU1Q3Jq2HsDHIkvTX1AUQJ'
+   //pleng mobile 'dW4d11qOQ0iLDnNDmV75Jw:APA91bFepvqoRWQgomIsKZLFO_qT2NNJjUsFRSrzbrottY6bN0mHTSUgCc_DfdcbJsbXikdwbljJlymU2Ovm1pKHhS4H73aNzwVoBC2_wFRNB21mnCNfyk0KuwvR4UU2bKXqBZ1Q6sd9'
     try {
         admin.messaging().sendMulticast({
-            tokens: ['cGVlYMkmTsm9ED1A8AkzFi:APA91bFgIfx4ZYEcq-DiUR7bUP-FQ5BFqRpOvmxPizBFM0atxvAPFTYCXvh_WSgS_wKtpLsMB_bsmxnutWsH7raTPVJ5B7pRaJj_0TsqwRZNv-Nq-mCcm8IU1Q3Jq2HsDHIkvTX1AUQJ'],
+            tokens: ['chtiLbqpSAOeG_8AynR3UM:APA91bGw4p7-eDTWMkuk5rsZ0oUReMDwyPaH6PV0H4tZVpIacUzYZyFkfmLcxIMRIGzJLbum-JtOwsgDZ4_AFIPvWkNTJiGTdFBbo5knMO8vnBTCZ4MoWvRbId_M4sJYxE7F2181bWp0'
+        ,'cGVlYMkmTsm9ED1A8AkzFi:APA91bFgIfx4ZYEcq-DiUR7bUP-FQ5BFqRpOvmxPizBFM0atxvAPFTYCXvh_WSgS_wKtpLsMB_bsmxnutWsH7raTPVJ5B7pRaJj_0TsqwRZNv-Nq-mCcm8IU1Q3Jq2HsDHIkvTX1AUQJ'
+    ,'dW4d11qOQ0iLDnNDmV75Jw:APA91bFepvqoRWQgomIsKZLFO_qT2NNJjUsFRSrzbrottY6bN0mHTSUgCc_DfdcbJsbXikdwbljJlymU2Ovm1pKHhS4H73aNzwVoBC2_wFRNB21mnCNfyk0KuwvR4UU2bKXqBZ1Q6sd9'],
             data: {
                 notifee: JSON.stringify({
                     body: 'This message was sent via FCM!',
@@ -447,7 +453,6 @@ app.post('/post_noti', function (req, res) {
                     collapseKey: "com.project4d",
                 }),
             },
-            notification: { android: {}, body: "test", title: "test" },
         })
             .then(() => {
                 console.log("send finish..")
@@ -541,6 +546,6 @@ app.get('/get_friend_req', function (req, res) {
 })
 
 
-var server = app.listen(3000, function () {
+var server = app.listen(8080, function () {
     console.log('Server is running..');
 });

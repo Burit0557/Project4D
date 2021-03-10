@@ -135,7 +135,6 @@ class MyContext extends React.Component {
 
 
 
-
     render() {
         return (
             <CategoryContext.Provider
@@ -144,6 +143,8 @@ class MyContext extends React.Component {
                     login: this.state.login,
                     dataUser: this.state.dataUser,
                     dataUserSetting: this.state.dataUserSetting,
+                    bluetooth_name: this.state.dataUserSetting.bluetooth_name,
+                    EAR: this.state.dataUserSetting.EAR,
 
                     setDataUser: this.setDataUser,
                     setImage: this.setImage,
@@ -153,10 +154,11 @@ class MyContext extends React.Component {
 
                     setEAR: this.setEAR,
                     setRest_dis: this.setRest_dis,
-                    setRest_time:this.setRest_time,
-                    setUpLocation:this.setUpLocation,
-                    setBluetooth:this.setBluetooth,
-                    updateUserSetting:this.updateUserSetting
+                    setRest_time: this.setRest_time,
+                    setUpLocation: this.setUpLocation,
+                    setBluetooth: this.setBluetooth,
+                    updateUserSetting: this.updateUserSetting,
+
 
                 }}
             >

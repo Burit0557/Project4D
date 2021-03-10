@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -30,15 +30,16 @@ import { MyContext } from './context_api/myContext';
 import messaging from '@react-native-firebase/messaging';
 import notifee, { EventType } from '@notifee/react-native';
 
-import RNBluetoothClassic, {
-    BluetoothDevice
-} from 'react-native-bluetooth-classic';
-import { Alert } from 'react-native';
+
+
+
 
 // -------------- Navigation Stack -----------------
 
 const Stack = createStackNavigator();
 function router() {
+
+
    _checkPermission = async () => {
         const enabled = await messaging().hasPermission();
         if (enabled) {
@@ -57,38 +58,17 @@ function router() {
                 // User has rejected permissions  
             });
     }
-    
+
     useEffect(() => {
-        async function connect() {
-            try {
-                let bonded = await RNBluetoothClassic.getBondedDevices();
-                // console.log('DeviceListScreen::getBondedDevices found', bonded);
-                let peripheral = bonded.find(element => element.name === "raspberrypi");
-                console.log(peripheral)
-                peripheral.connect()
-                    .then(res => {
-                        peripheral.onDataReceived((data) => onReceivedData(data))
-                        peripheral.write(" test 1 ")
-                        peripheral.write("end")
-                    })
-            }
-            catch (error) {
-                console.log(error)
-            }
-        }
-        connect()
        _checkPermission()
+
     }, [])
 
-    const onReceivedData = (data) => {
-        console.log(data)
-        Alert.alert('From Bluetooth', data.data)
-    }
-
+   
     return (
         <MyContext>
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="Login">
+                <Stack.Navigator initialRouteName='Login'>
                     <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="History" component={HistoryScreen} options={{ headerShown: false }} />

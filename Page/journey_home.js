@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Button, Image, Icon, Header, Overlay } from 'react-native-elements';
+import { RadioButton } from 'react-native-paper';
 
 //import {launchImageLibrary} from 'react-native-image-picker'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -23,9 +24,15 @@ export default function journey_home({ navigation }) {
         Context.dataUser
     )
 
+    const [dataUserSetting, setDataUserSetting] = useState(Context.dataUserSetting)
 
+    const [select, setSelect] = React.useState('distance');
 
-
+    const [input, setInput] = useState({
+        distance: dataUserSetting.distance,
+        rest_hour: dataUserSetting.rest_hour,
+        rest_min: dataUserSetting.rest_min,
+    })
 
 
 
@@ -36,11 +43,73 @@ export default function journey_home({ navigation }) {
 
 
 
+    const inputDistance = (text) => {
+        var number = /^[0-9]+$/
+        if (text.length === 0) {
+            setInput({ ...input, distance: text })
+        }
+        else if (text.length > 0 && text.length < 4 && text.match(number)) {
+            setInput({ ...input, distance: text })
+        }
+
+    }
+
+    const inputRest_HH = (text) => {
+        var number = /^[0-9]+$/
+        if (text.length === 0) {
+            setInput({ ...input, rest_hour: text })
+        }
+        else if (text.length > 0 && text.length < 2 && text.match(number)) {
+            setInput({ ...input, rest_hour: text })
+        }
+    }
+
+    const inputRest_MM = (text) => {
+        var number = /^[0-5]{1}[0-9]+$/
+        if (text.length < 2) {
+            setInput({ ...input, rest_min: text })
+        }
+        else if (text.length > 1 && text.length < 3 && text.match(number)) {
+            setInput({ ...input, rest_min: text })
+        }
+    }
+
+    const start_bt = () => {
+        if (select === 'distance') {
+            distance = parseInt(input.distance)
+            if (input.distance === '') {
+                Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูล')
+                return
+            }
+            if (distance > 450) {
+                Alert.alert('ไม่ควรเดินทางติดต่อกันเกิน 450 กิโลเมตร', 'กรุณากรอกข้อมูลใหม่อีกครั้ง')
+                return
+            }
+            if (distance < 30) {
+                Alert.alert('ระยะทางสั้นกว่าที่กำหนด', 'กรุณากรอกข้อมูลใหม่อีกครั้ง')
+                return
+            }
+
+        }
+        else {
+            time = (parseInt(input.rest_hour) * 60 + parseInt(input.rest_min))
+            if (input.rest_hour === '' || input.rest_min === '') {
+                Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูล')
+                return
+            }
+            if (time > 270) {
+                Alert.alert('ไม่ควรเดินทางติดต่อกันเกิน 4 ชั่วโมง 30 นาที', 'กรุณากรอกข้อมูลใหม่อีกครั้ง')
+                return
+            }
+            if (time < 20) {
+                Alert.alert('ระยะเวลาสั้นกว่าที่กำหนด', 'กรุณากรอกข้อมูลใหม่อีกครั้ง')
+                return
+            }
+        }
+    }
 
 
 
-
-    
 
 
     renderLeftComponent = () => {
@@ -66,102 +135,83 @@ export default function journey_home({ navigation }) {
             <ScrollView>
                 <View style={styles.body}>
                     <View style={{ marginTop: hp('5%') }}>
-                        <Text style={styles.textTopic}>การเชื่อมต่อ</Text>
                         <View style={styles.bgInput}>
-                            <View style={{ width: '100%' }}>
-                                <Text style={styles.textInput}>Bluetooth</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlaybluetooth()
-                                    setInput({
-                                        ...input,
-                                        bluetooth_name: dataUserSetting.bluetooth_name
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.bluetooth_name}</Text>
-                                        <Text style={styles.textedit}>เลือก</Text>
-                                    </View>
-                                </TouchableOpacity>
+
+                            <View style={{ marginBottom: hp('3%'), width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ width: hp('4%'), height: hp('4%'), marginLeft: -hp('1%') }}>
+                                    <Image source={require('../assets/placeholder.png')} style={[styles.smallIcon, { resizeMode: 'cover' }]} />
+                                </View>
+                                <TextInput
+                                    style={[styles.Input, { flex: 1 }]}
+                                    value={{}}
+
+                                    onChangeText={{}}
+                                    placeholder="เลือกจุดหมาย"
+                                />
+                            </View>
+
+
+                            <View style={[styles.viewRadio, { marginBottom: hp('1.5%') }]}>
+                                <RadioButton
+                                    value="distance"
+                                    color="#fff"
+                                    status={select === 'distance' ? 'checked' : 'unchecked'}
+                                    onPress={() => setSelect('distance')}
+                                />
+                                <Text style={styles.textInput}>ระยะทางที่ต้องการให้แจ้งเตือน</Text>
+                            </View>
+
+                            <View style={[styles.viewRadio, { justifyContent: 'center', }]}>
+                                <TextInput
+                                    style={[styles.Input, { width: '30%', marginRight: ('5%') }]}
+                                    value={input.distance}
+                                    onChangeText={inputDistance}
+                                //placeholder="Enter location.."
+                                />
+                                <Text style={styles.textInput}>กิโลเมตร</Text>
+                            </View>
+
+
+                            <View style={[styles.viewRadio, { marginBottom: hp('1.5%') }]}>
+                                <RadioButton
+                                    color="#fff"
+                                    value="time"
+                                    status={select === 'time' ? 'checked' : 'unchecked'}
+                                    onPress={() => setSelect('time')}
+                                />
+                                <Text style={styles.textInput}>ระยะเวลาที่ต้องการให้แจ้งเตือน</Text>
+                            </View>
+
+                            <View style={[styles.viewRadio, { justifyContent: 'center', }]}>
+                                <TextInput
+                                    style={[styles.Input, { width: '20%' }]}
+                                    value={input.rest_hour}
+                                    onChangeText={inputRest_HH}
+                                //placeholder="Enter location.."
+                                />
+
+                                <Text style={[styles.textInput, { marginLeft: '2%', marginRight: '2%' }]}>:</Text>
+
+                                <TextInput
+                                    style={[styles.Input, { width: '20%', marginRight: ('5%') }]}
+                                    value={input.rest_min}
+                                    onChangeText={inputRest_MM}
+                                //placeholder="Enter location.."
+                                />
+                                <Text style={styles.textInput}>ชั่วโมง : นาที</Text>
                             </View>
 
                         </View>
+
+                        <Button
+                            title="เริ่มเดินทาง"
+                            buttonStyle={[styles.btstart, styles.Shadow, { marginTop: hp('6%') }]}
+                            onPress={() => { start_bt() }}
+                            titleStyle={{ fontSize: hp('2%') }}
+                        />
+
                     </View>
-
-                    <View style={{ marginTop: hp('5%') }}>
-                        <Text style={styles.textTopic}>การใช้งาน</Text>
-                        <View style={styles.bgInput}>
-                            <View style={{ width: '100%' }}>
-                                <Text style={styles.textInput}>กำหนดขนาดดวงตา</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditEAR()
-                                    setInput({
-                                        ...input,
-                                        EAR: dataUserSetting.EAR
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.EAR}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={{ width: '100%' }}>
-                                <Text style={styles.textInput}>ตั้งค่าแจ้งเตือนการพัก (ระยะทาง)</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditRestDis()
-                                    setInput({
-                                        ...input,
-                                        distance: dataUserSetting.distance
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.distance + ' กิโลเมตร'}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={{ width: '100%' }}>
-                                <Text style={styles.textInput}>ตั้งค่าแจ้งเตือนการพัก (เวลา)</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditRestTime()
-                                    setInput({
-                                        ...input,
-                                        rest_hour: dataUserSetting.rest_hour,
-                                        rest_min: dataUserSetting.rest_min
-                                    })
-                                }} >
-                                    <View style={styles.bgtext}>
-                                        <Text style={styles.textshow}>{dataUserSetting.rest_hour + ' : ' + dataUserSetting.rest_min + '  ชั่วโมง : นาที'}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={{ width: '100%' }}>
-                                <Text style={styles.textInput}>กำหนดเวลาอัพเดตตำแหน่ง</Text>
-                                <TouchableOpacity onPress={() => {
-                                    toggleOverlayEditUpLocation()
-                                    setInput({
-                                        ...input,
-                                        up_min: dataUserSetting.up_min,
-                                        up_sec: dataUserSetting.up_sec
-                                    })
-                                }} >
-                                    <View style={[styles.bgtext, { marginBottom: 0 }]}>
-                                        <Text style={styles.textshow}>{dataUserSetting.up_min + ' : ' + dataUserSetting.up_sec + '  นาที : วินาที'}</Text>
-                                        <Text style={styles.textedit}>แก้ไข</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-
-                        </View>
-                    </View>
-
-
                 </View>
-
 
                 <View style={{ height: hp('10%') }}>
 
@@ -287,20 +337,12 @@ const styles = StyleSheet.create({
         fontSize: hp('2%'),
         paddingBottom: 0,
     },
-    btsave: {
-        //alignSelf: 'center',
-        backgroundColor: '#49BB21',
+    btstart: {
+        alignSelf: 'center',
+        backgroundColor: '#014D81',
         width: wp('29%'),
         height: hp('5%'),
-        borderRadius: 15,
-        marginTop: hp('6%')
-    },
-    btreset: {
-        backgroundColor: '#EA2626',
-        width: wp('29%'),
-        height: hp('5%'),
-        borderRadius: 15,
-        marginTop: hp('6%')
+        borderRadius: 10,
     },
     overlay_head: {
         borderRadius: 15,
@@ -318,5 +360,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    viewRadio: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: hp('3%')
+    }
 
 })
