@@ -448,7 +448,7 @@ export default function setting_device({ navigation }) {
                     <View style={[styles.overlay_body, { marginBottom: hp('1.5%') }]}>
                         <ScrollView>
                             <View style={[styles.overlat_show, { width: '100%', marginTop: hp('1%') }]}>
-                                <Text style={{ color: '#000', fontSize: hp('2%'), marginBottom: hp('1%') }}>อุปกรณ์ที่จับคู่แล้ว</Text>
+                                <Text style={{ color: '#000', fontSize: hp('2.5%'), marginBottom: hp('1%') }}>อุปกรณ์ที่จับคู่แล้ว</Text>
                                 {
                                     bluetooth.map((item, index) => {
                                         const length = bluetooth.length - 1;
@@ -492,7 +492,7 @@ export default function setting_device({ navigation }) {
                 <Overlay key={2} isVisible={visible.editEAR} onBackdropPress={toggleOverlayEditEAR} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
                         <View style={{ margin: hp('2%') }}>
-                            <Text style={styles.text}>สามารถดูขนาดตาของท่านได้จากจอ</Text>
+                            <Text style={[styles.textInput, { color: '#000'}]}>สามารถดูขนาดตาของท่านได้จากจอ</Text>
                         </View>
                         <View style={{ borderWidth: 1, width: wp('70%'), height: wp('40%'), padding: 0 }}>
                             <Image source={require('../assets/EAR.png')} style={[styles.addimage, { resizeMode: 'cover' }]} />
@@ -501,7 +501,7 @@ export default function setting_device({ navigation }) {
                         <View style={{ width: '95%', marginTop: hp('2%') }}>
                             {/* <Text style={[styles.text, { marginLeft: 5 }]}>ค่าขนาดดวงตา</Text> */}
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ค่าขนาดดวงตา</Text>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%'), }]}>มีค่าตั้งแต่ 0.000 ถึง 1.000</Text>
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('2%'), }]}>มีค่าตั้งแต่ 0.000 ถึง 1.000</Text>
 
                             <TextInput
                                 style={styles.Input}
@@ -522,14 +522,14 @@ export default function setting_device({ navigation }) {
                                         EAR: defaultSetting.EAR
                                     })
                                 }}
-                                titleStyle={{ fontSize: hp('2%') }}
+                                titleStyle={styles.textbt}
                             />
 
                             <Button
                                 title="บันทึก"
                                 buttonStyle={[styles.btsave, styles.Shadow,]}
                                 onPress={() => { saveEAR() }}
-                                titleStyle={{ fontSize: hp('2%') }}
+                                titleStyle={styles.textbt}
                             />
                         </View>
 
@@ -542,12 +542,12 @@ export default function setting_device({ navigation }) {
 
                         <View style={styles.overlat_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะทางที่ต้องการให้แจ้งเตือน</Text>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%') }]}>สูงสุด 450 กิโลเมตร</Text>
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('2%') }]}>ระหว่าง 30 ถึง 450 กิโลเมตร</Text>
 
                             < View style={{ width: '100%', flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginTop: hp('2%') }}>
                                 <Text style={[styles.textInput, { color: '#000', }]}>ระยะทาง</Text>
                                 <TextInput
-                                    style={[styles.Input, { width: '35%', marginLeft: '5%', marginRight: '5%' }]}
+                                    style={[styles.Input, { width: '30%', marginLeft: '5%', marginRight: '5%' }]}
                                     value={input.distance}
                                     keyboardType='number-pad'
                                     onChangeText={inputDistance}
@@ -566,14 +566,14 @@ export default function setting_device({ navigation }) {
                                             distance: defaultSetting.distance
                                         })
                                     }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
 
                                 <Button
                                     title="บันทึก"
                                     buttonStyle={[styles.btsave, styles.Shadow,]}
                                     onPress={() => { saveRest_dis() }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
                             </View>
                         </View>
@@ -586,20 +586,20 @@ export default function setting_device({ navigation }) {
 
                         <View style={styles.overlat_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะเวลาที่ต้องการให้แจ้งเตือน</Text>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%') }]}>สูงสุด 4:30 ชั่วโมง:นาที</Text>
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('2%') }]}>ระหว่าง 0:20 ถึง 4:30 ชั่วโมง:นาที</Text>
 
                             <View style={{ width: '100%', flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginTop: hp('2%'), }}>
-                                <View style={{ width: '30%', }}>
+                                <View style={{ width: '20%', }}>
                                     <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>เวลา</Text>
                                 </View>
                                 <View style={{ width: '40%', flexDirection: "row", justifyContent: 'center', alignItems: 'center', }}>
                                     <TextInput
-                                        style={[styles.Input, { width: '40%', }]}
+                                        style={[styles.Input, { width: '40%'}]}
                                         keyboardType='decimal-pad'
                                         value={input.rest_hour}
                                         onChangeText={inputRest_HH}
                                     />
-                                    <Text style={[styles.textInput, { margin: '2%', color: '#000' }]}>{":"}</Text>
+                                    <Text style={[styles.textInput, { margin: '2%', color: '#000',paddingLeft :0 }]}>:</Text>
                                     <TextInput
                                         style={[styles.Input, { width: '40%' }]}
                                         keyboardType='decimal-pad'
@@ -607,7 +607,7 @@ export default function setting_device({ navigation }) {
                                         onChangeText={inputRest_MM}
                                     />
                                 </View>
-                                <View style={{ width: '30%', }}>
+                                <View style={{ width: '40%', }}>
                                     <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>ชั่วโมง:นาที</Text>
                                 </View>
                             </View>
@@ -623,14 +623,14 @@ export default function setting_device({ navigation }) {
                                             rest_min: defaultSetting.rest_min
                                         })
                                     }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
 
                                 <Button
                                     title="บันทึก"
                                     buttonStyle={[styles.btsave, styles.Shadow,]}
                                     onPress={() => { saveRest_time() }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
                             </View>
 
@@ -644,10 +644,10 @@ export default function setting_device({ navigation }) {
 
                         <View style={styles.overlat_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะเวลาที่ต้องการอัพเดตตำแหน่ง</Text>
-                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('1.5%') }]}>สูงสุด 10:00 นาที:วินาที</Text>
+                            <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('2%') }]}>ระหว่าง 00:30 ถึง 10:00 นาที:วินาที</Text>
 
                             <View style={{ width: '100%', flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginTop: hp('2%'), }}>
-                                <View style={{ width: '30%', }}>
+                                <View style={{ width: '20%', }}>
                                     <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>เวลา</Text>
                                 </View>
                                 <View style={{ width: '40%', flexDirection: "row", justifyContent: 'center', alignItems: 'center', }}>
@@ -657,7 +657,7 @@ export default function setting_device({ navigation }) {
                                         value={input.up_min}
                                         onChangeText={inputUp_min}
                                     />
-                                    <Text style={[styles.textInput, { margin: '2%', color: '#000' }]}>{":"}</Text>
+                                    <Text style={[styles.textInput, { margin: '2%', color: '#000',paddingLeft :0 }]}>:</Text>
                                     <TextInput
                                         style={[styles.Input, { width: '40%' }]}
                                         keyboardType='decimal-pad'
@@ -665,7 +665,7 @@ export default function setting_device({ navigation }) {
                                         onChangeText={inputUp_sec}
                                     />
                                 </View>
-                                <View style={{ width: '30%', }}>
+                                <View style={{ width: '40%', }}>
                                     <Text style={[styles.textInput, { color: '#000', textAlign: 'center' }]}>นาที:วินาที</Text>
                                 </View>
                             </View>
@@ -681,14 +681,14 @@ export default function setting_device({ navigation }) {
                                             up_sec: defaultSetting.up_sec
                                         })
                                     }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
 
                                 <Button
                                     title="บันทึก"
                                     buttonStyle={[styles.btsave, styles.Shadow,]}
                                     onPress={() => { saveUp_location() }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
                             </View>
 
@@ -743,7 +743,8 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
         justifyContent: 'space-between',
         paddingRight: '5%',
-        paddingLeft: '5%'
+        paddingLeft: '5%',
+        
     },
     space: {
         width: '100%',
@@ -751,7 +752,8 @@ const styles = StyleSheet.create({
     },
 
     textshow: {
-        fontSize: hp('2%'),
+        fontSize: hp('2.5%'),
+        color : 'rgba(255, 255, 255, 0.85)'
     },
 
     textedit: {
@@ -775,12 +777,12 @@ const styles = StyleSheet.create({
     textInput: {
         paddingLeft: 5,
         color: '#fff',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         paddingBottom: 0,
     },
     textTopic: {
         color: '#000',
-        fontSize: hp('2.5%'),
+        fontSize: hp('3%'),
         marginLeft: 15,
         paddingBottom: 0,
     },
@@ -805,9 +807,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#014D81',
     },
     Input: {
-        flexDirection: 'row',
-        fontSize: hp('2%'),
-        paddingLeft: ('5%'),
+        //flexDirection: 'row',
+        fontSize: hp('2.5%'),
+        paddingLeft: ('10%'),
         //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',
         width: '100%',
@@ -815,6 +817,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingBottom : ('2.5%'),
+        color : '#fff'
 
 
     },
@@ -824,7 +828,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#12283D',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         paddingBottom: 0,
     },
     btsave: {
@@ -858,5 +862,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    textbt:{
+        fontSize : hp('2.25%')
+    }
 
 })

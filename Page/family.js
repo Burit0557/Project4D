@@ -72,16 +72,57 @@ export default function family({ navigation }) {
             />
             <ScrollView>
                 <View style={styles.body}>
-                    <View style={styles.content}>
+                    <View style={[styles.content, {marginTop: hp('5%')}]}>
                         {
-                            data.map((item, index) => {
-                                return (
-                                    passed == item.Username
-                                        ?
-                                        <View key={index} style={styles.box}>
-                                            <TouchableOpacity onPress={() => setPassed('')} >
-                                                <View style={{ flexDirection: 'row', }}>
-                                                    <View style={[styles.leftCard, { backgroundColor: '#014D81' }]}>
+                            data.length === 0 ?
+                                <View style={{alignSelf : 'center'}}><Text style={styles.textshow}>ไม่มีสมาชิก</Text></View>
+                                :
+                                data.map((item, index) => {
+                                    return (
+                                        passed == item.Username
+                                            ?
+                                            <View key={index} style={styles.box}>
+                                                <TouchableOpacity onPress={() => setPassed('')} >
+                                                    <View style={{ flexDirection: 'row', }}>
+                                                        <View style={[styles.leftCard, { backgroundColor: '#014D81' }]}>
+                                                            <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
+                                                        </View>
+                                                        <View style={styles.rightCard}>
+                                                            <View style={{ width: wp('5%'), height: wp('5%'), color: '#fff', }}>
+                                                                <Image source={require('../assets/down-arrow.png')} style={styles.icondown} />
+                                                            </View>
+                                                        </View>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity >
+                                                    <View style={styles.select}>
+                                                        <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
+                                                            <Image source={require('../assets/history.png')} style={styles.icondown} />
+                                                        </View>
+                                                        <Text style={styles.Text}>ประวัติ</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => navigation.navigate('Family-Location')}>
+                                                    <View style={styles.select}>
+                                                        <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
+                                                            <Image source={require('../assets/placeholder.png')} style={styles.icondown} />
+                                                        </View>
+                                                        <Text style={styles.Text}>ตำแหน่ง</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={goSetting}>
+                                                    <View style={styles.select}>
+                                                        <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
+                                                            <Image source={require('../assets/setting.png')} style={styles.icondown} />
+                                                        </View>
+                                                        <Text style={styles.Text}>ตั้งค่า</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
+                                            :
+                                            <TouchableOpacity key={index} onPress={() => setPassed(item.Username)} >
+                                                <View style={styles.listRow}>
+                                                    <View style={styles.leftCard}>
                                                         <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
                                                     </View>
                                                     <View style={styles.rightCard}>
@@ -91,54 +132,16 @@ export default function family({ navigation }) {
                                                     </View>
                                                 </View>
                                             </TouchableOpacity>
-                                            <TouchableOpacity >
-                                                <View style={styles.select}>
-                                                    <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/history.png')} style={styles.icondown} />
-                                                    </View>
-                                                    <Text style={styles.Text}>ประวัติ</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => navigation.navigate('Family-Location')}>
-                                                <View style={styles.select}>
-                                                    <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/placeholder.png')} style={styles.icondown} />
-                                                    </View>
-                                                    <Text style={styles.Text}>ตำแหน่ง</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={goSetting}>
-                                                <View style={styles.select}>
-                                                    <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/setting.png')} style={styles.icondown} />
-                                                    </View>
-                                                    <Text style={styles.Text}>ตั้งค่า</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                        :
-                                        <TouchableOpacity key={index} onPress={() => setPassed(item.Username)} >
-                                            <View style={styles.listRow}>
-                                                <View style={styles.leftCard}>
-                                                    <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
-                                                </View>
-                                                <View style={styles.rightCard}>
-                                                    <View style={{ width: wp('5%'), height: wp('5%'), color: '#fff', }}>
-                                                        <Image source={require('../assets/down-arrow.png')} style={styles.icondown} />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
 
-                                )
-                            })
+                                    )
+                                })
                         }
                     </View>
                     <Button
                         title="เพิ่มสมาชิก"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('25%') }]}
                         onPress={() => navigation.navigate('Family-Add')}
-                        titleStyle={{ fontSize: hp('2%') }}
+                        titleStyle={{ fontSize: hp('2.25%') }}
                     />
                 </View>
                 <View style={{ height: hp('10%') }}>
@@ -162,6 +165,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff0000',
     },
     body: {
+        
         // height: hp('90%'),
         width: wp('100%'),
         // justifyContent: 'center',
@@ -252,7 +256,14 @@ const styles = StyleSheet.create({
     btnLogin: {
         alignSelf: 'center',
         backgroundColor: '#014D81',
+        width : wp('30%'),
         height: hp('5%'),
-        borderRadius: 10,
+        borderRadius: 15,
+    },
+    textshow: {
+        color: '#000',
+        fontSize: hp('2.25%'),
+        paddingBottom: 0,
+        textAlign : 'center'
     },
 })

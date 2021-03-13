@@ -88,7 +88,7 @@ export default function login({ navigation }) {
     }
 
 
-    
+
 
     readlogin = async () => {
         try {
@@ -131,7 +131,7 @@ export default function login({ navigation }) {
     }
 
 
-    loginFunction = () => {
+    loginFunction =  () => {
         if (input.username === '' || input.password === '') {
             Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูลให้ครบทุกช่อง')
             setInput({
@@ -144,10 +144,15 @@ export default function login({ navigation }) {
             username: input.username.toLowerCase(),
             password: input.password,
         })
-            .then(res => {
+            .then (async(res) => {
                 setlogin(res.data[0])
                 Context.setDataUser(res.data[0])
                 console.log(res.data[0])
+                let dataUserSetting = await AsyncStorage.getItem('@dataUserSetting')
+
+                if (dataUserSetting !== null) {
+                    Context.setDataUserSetting(JSON.parse(dataUserSetting))
+                }
 
                 navigation.reset({
                     index: 0,
@@ -251,7 +256,7 @@ export default function login({ navigation }) {
                         title="เข้าสู่ระบบ"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('7%') }]}
                         onPress={() => loginFunction()}
-                        titleStyle={{ fontSize: hp('2%') }}
+                        titleStyle={{ fontSize: hp('2.25%') }}
                     />
                     <TouchableOpacity style={styles.touchtext} onPress={() => navigation.navigate('ForgotPass')}>
                         <Text style={styles.textForgot}>ลืมรหัสผ่าน</Text>
@@ -262,7 +267,7 @@ export default function login({ navigation }) {
                         title="ลงทะเบียน"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
                         onPress={() => navigation.navigate('Register')}
-                        titleStyle={{ fontSize: hp('2%') }}
+                        titleStyle={{ fontSize: hp('2.25%') }}
                     />
                 </View>
             }
@@ -284,11 +289,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#DBCCCC',
     },
     listRow: {
+        
         flexDirection: 'row',
         // justifyContent: 'space-around',
         alignItems: 'center',
         alignSelf: 'center',
-        marginTop: hp('2%')
+        marginTop: hp('2%'),
+        height: hp('5%'),
+
     },
     Shadow: {
         shadowColor: "#000",
@@ -307,13 +315,14 @@ const styles = StyleSheet.create({
     },
     Text: {
         color: '#12283D',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         alignSelf: 'center',
     },
     textInput: {
+       
         width: wp('70%') - hp('6%') - 10,
         color: '#000',
-        height: wp('8%'),
+        height: hp('5%'),
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.5)',
         fontSize: hp('3%'),
@@ -323,14 +332,14 @@ const styles = StyleSheet.create({
     btnLogin: {
         alignSelf: 'center',
         backgroundColor: '#014D81',
-        width: wp('30%'),
-        height: hp('5%'),
+        width: wp('29%'),
+        height: hp('6%'),
         borderRadius: 10,
     },
     textForgot: {
         //margin: '1%',
         color: '#12283D',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         borderBottomWidth: 1,
         borderColor: '#12283D',
         alignSelf: 'center',

@@ -138,7 +138,7 @@ export default function journey_home({ navigation }) {
                         <View style={styles.bgInput}>
 
                             <View style={{ marginBottom: hp('3%'), width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                <View style={{ width: hp('4%'), height: hp('4%'), marginLeft: -hp('1%') }}>
+                                <View style={{ width: hp('4%'), height: hp('4%'), marginRight : '2%' }}>
                                     <Image source={require('../assets/placeholder.png')} style={[styles.smallIcon, { resizeMode: 'cover' }]} />
                                 </View>
                                 <TextInput
@@ -207,7 +207,7 @@ export default function journey_home({ navigation }) {
                             title="เริ่มเดินทาง"
                             buttonStyle={[styles.btstart, styles.Shadow, { marginTop: hp('6%') }]}
                             onPress={() => { start_bt() }}
-                            titleStyle={{ fontSize: hp('2%') }}
+                            titleStyle={{ fontSize: hp('2.25%') }}
                         />
 
                     </View>
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     textInput: {
         paddingLeft: 5,
         color: '#fff',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         paddingBottom: 0,
     },
     textTopic: {
@@ -315,16 +315,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#014D81',
     },
     Input: {
-        flexDirection: 'row',
-        fontSize: hp('2%'),
-        paddingLeft: ('5%'),
-        //marginBottom: hp('1.5%'),
-        backgroundColor: '#0E77BF',
-        width: '100%',
-        height: hp('5%'),
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
+       //flexDirection: 'row',
+       fontSize: hp('2.5%'),
+       paddingLeft: ('10%'),
+       //marginBottom: hp('1.5%'),
+       backgroundColor: '#0E77BF',
+       width: '100%',
+       height: hp('5%'),
+       borderRadius: 10,
+       alignItems: 'center',
+       justifyContent: 'center',
+       paddingBottom : ('2.5%'),
+       color : '#fff'
 
 
     },
@@ -341,8 +343,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         backgroundColor: '#014D81',
         width: wp('29%'),
-        height: hp('5%'),
-        borderRadius: 10,
+        height: hp('6%'),
+        borderRadius: 15,
     },
     overlay_head: {
         borderRadius: 15,

@@ -7,11 +7,11 @@ import LoginScreen from './Page/login';
 import HistoryScreen from './Page/history';
 
 import FamilyScreen from './Page/family';
-import FamilyAddScreen from './Page/family-add';
-import FamilySettingScreen from './Page/family-setting';
+import FamilyAddScreen from './Page/family_add';
+import FamilySettingScreen from './Page/family_setting';
 import DeviceScreen from './Page/device';
 import JourneyScreen from './Page/journey';
-import FamilyLocationScreen from './Page/family-location';
+import FamilyLocationScreen from './Page/family_location';
 
 import ForgotPassScreen from './Page/forgotpass';
 import SettingScreen from './Page/setting';
