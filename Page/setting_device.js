@@ -809,7 +809,7 @@ const styles = StyleSheet.create({
     Input: {
         //flexDirection: 'row',
         fontSize: hp('2.5%'),
-        paddingLeft: ('10%'),
+        //paddingLeft: ('10%'),
         //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',
         width: '100%',
@@ -817,6 +817,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        textAlign : 'center',
+        textAlignVertical : 'center',
         paddingBottom : ('2.5%'),
         color : '#fff'
 
@@ -835,14 +837,14 @@ const styles = StyleSheet.create({
         //alignSelf: 'center',
         backgroundColor: '#49BB21',
         width: wp('29%'),
-        height: hp('5%'),
+        height: hp('6%'),
         borderRadius: 15,
         marginTop: hp('6%')
     },
     btreset: {
         backgroundColor: '#EA2626',
         width: wp('29%'),
-        height: hp('5%'),
+        height: hp('6%'),
         borderRadius: 15,
         marginTop: hp('6%')
     },

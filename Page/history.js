@@ -3,6 +3,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import axios from 'axios';
+import DatePicker from 'react-native-datepicker'
 
 export default function history({ navigation }) {
     data = [
@@ -49,6 +50,10 @@ export default function history({ navigation }) {
     ]
 
     const [Data, setData] = useState(data)
+    const [Date, setDate] = useState({
+        dateStart: '',
+        dateEnd: ''
+    })
 
     useEffect(() => {
         // async function fetchData() {
@@ -62,7 +67,7 @@ export default function history({ navigation }) {
             .then(result => {
                 console.log(result.data)
                 let data = result.data
-                data = data.sort(function(a, b) {
+                data = data.sort(function (a, b) {
                     return a.time - b.time
                 })
                 console.log("sortttttttttttttttt")
@@ -95,6 +100,94 @@ export default function history({ navigation }) {
             <ScrollView>
                 <View style={styles.body}>
                     <View style={styles.content}>
+                        <View style={{ width: wp('80%'), flexDirection: 'row', marginTop: hp('5%') }} >
+                            <DatePicker
+                                style={styles.dateStyle}
+                                customStyles={{
+                                    dateText: {
+                                        marginLeft : 36,
+                                        fontSize: hp('2.25%'),
+                                        //color: '#fff'
+                                    },
+                                    placeholderText: {
+                                        fontSize: hp('2.25%'),
+                                        color : 'rgba(0, 0, 0, 0.55)'
+                                    },
+                                    dateInput: {
+                                        borderWidth: 0,
+                                    },
+                                    dateIcon: {
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 4,
+                                        marginLeft: 0
+                                      }
+                                }}
+                                allowFontScaling={true}
+                                date={Date.dateStart}
+                                mode="date"
+                                placeholder="เลือกวัน"
+                                format="YYYY-MM-DD"
+                                minDate="2021-01-01"
+                                maxDate="2025-12-31"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={true}
+                                onDateChange={(date) => { setDate({ ...Date, dateStart: date }) }}
+                            />
+                            <View style={{ width: '8%', marginHorizontal: '2%', alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={{ fontSize: hp('2.25'), alignSelf: 'center' }}>ถึง</Text>
+                            </View>
+                            <DatePicker
+                                style={styles.dateStyle}
+                                customStyles={{
+                                    dateText: {
+                                        marginLeft : 36,
+                                        fontSize: hp('2.25%'),
+                                        //color: '#fff'
+                                    },
+                                    placeholderText: {
+                                        fontSize: hp('2.25%'),
+                                        color : 'rgba(0, 0, 0, 0.55)'
+                                    },
+                                    dateInput: {
+                                        borderWidth: 0,
+                                    },
+                                    dateIcon: {
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 4,
+                                        marginLeft: 0
+                                      }
+                                }}
+                                allowFontScaling={false}
+                                date={Date.dateEnd}
+                                mode="date"
+                                placeholder="เลือกวัน"
+                                format="YYYY-MM-DD"
+                                minDate="2021-01-01"
+                                maxDate="2025-12-31"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={true}
+                                onDateChange={(date) => { setDate({ ...Date, dateEnd: date }) }}
+                            />
+                        </View>
+                        <View style={{ width: wp('80%'), flexDirection: 'row', marginTop: hp('2%'), marginBottom: hp('3%'),  }} >
+                            <Button
+                                title="ดูทั้งหมด"
+                                buttonStyle={[styles.btn, styles.Shadow, { }]}
+                                onPress={() => { }}
+                                titleStyle={styles.textbt}
+                            />
+                            <View style={{ width: '8%', marginHorizontal: '2%'}}></View>
+                            <Button
+                                title="ค้นหา"
+                                buttonStyle={[styles.btn, styles.Shadow,]}
+                                onPress={() => { }}
+                                titleStyle={styles.textbt}
+                            />
+                        </View>
                         {
                             Data.map((item, index) => {
                                 return (
@@ -198,4 +291,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    dateStyle: {
+        height: hp('6%'),
+        flex: 1,
+        //backgroundColor: '#fff',
+        color: 'white',
+        borderRadius: 10,
+        borderWidth: 1,
+        justifyContent : 'center',
+        alignContent : 'center',
+        alignItems : 'center'
+    },
+    btn: {
+        //alignSelf: 'center',
+        backgroundColor: '#014D81',
+        width: wp('35.2%'),
+        height: hp('6%'),
+        borderRadius: 10,
+        //borderWidth:1
+    },
+    textbt: {
+        fontSize: hp('2.25%')
+    }
 })

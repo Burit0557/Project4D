@@ -799,14 +799,14 @@ const styles = StyleSheet.create({
         //alignSelf: 'center',
         backgroundColor: '#49BB21',
         width: wp('29%'),
-        height: hp('5%'),
+        height: hp('6%'),
         borderRadius: 15,
         marginTop: hp('6%')
     },
     btcancel: {
         backgroundColor: '#EA2626',
         width: wp('29%'),
-        height: hp('5%'),
+        height: hp('6%'),
         borderRadius: 15,
         marginTop: hp('6%')
     },

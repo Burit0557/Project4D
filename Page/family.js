@@ -256,8 +256,8 @@ const styles = StyleSheet.create({
     btnLogin: {
         alignSelf: 'center',
         backgroundColor: '#014D81',
-        width : wp('30%'),
-        height: hp('5%'),
+        width : wp('29%'),
+        height: hp('6%'),
         borderRadius: 15,
     },
     textshow: {

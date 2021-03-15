@@ -57,36 +57,11 @@ export default function login({ navigation }) {
 
         setTimeout(() => {  //assign interval to a variable to clear it.
             readlogin()
-            connect()
+     
         }, 1200)
     }, ([]))
 
-    async function connect() {
-        try {
-            let bonded = await RNBluetoothClassic.getBondedDevices();
-            // console.log('DeviceListScreen::getBondedDevices found', bonded);
-            let bluetoothname = Context.bluetooth_name
-            let peripheral = bonded.find(element => element.name === bluetoothname);
-            console.log(peripheral)
-            peripheral.connect()
-                .then(res => {
-                    peripheral.onDataReceived((data) => onReceivedData(data))
-                    let EAR = Context.EAR
-                    peripheral.write(` EAR ${EAR}`)
-                    peripheral.write("end")
-                })
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }
-
-    const onReceivedData = (data) => {
-        console.log(data)
-        // Alert.alert('From Bluetooth', data.data)
-        API.post("/post_noti")
-    }
-
+    
 
 
 

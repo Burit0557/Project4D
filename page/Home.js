@@ -4,11 +4,17 @@ import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity, Alert
 import { Button, Icon, Header } from 'react-native-elements'
 import messaging from '@react-native-firebase/messaging';
 import notifee, { EventType } from '@notifee/react-native';
+import RNBluetoothClassic, {
+    BluetoothDevice
+} from 'react-native-bluetooth-classic';
+import BluetoothStateManager from 'react-native-bluetooth-state-manager';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 export default function home({ navigation }) {
     const [MyPlaces, setMyPlaces] = useState(0);
-  
-    useEffect(() => {
+
+
+    useEffect( () => {
         notifee.onForegroundEvent(({ type, detail }) => {
             switch (type) {
                 case EventType.DISMISSED:
@@ -19,8 +25,85 @@ export default function home({ navigation }) {
                     navigation.navigate('Family-Location')
                     break;
             }
-        });
+        })
+        checkOpen()
+        RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
+            interval: 10000,
+            fastInterval: 5000,
+        })
+            .catch((err) => {
+                console.log(err)
+                // The user has not accepted to enable the location services or something went wrong during the process
+                // "err" : { "code" : "ERR00|ERR01|ERR02|ERR03", "message" : "message"}
+                // codes :
+                //  - ERR00 : The user has clicked on Cancel button in the popup
+                //  - ERR01 : If the Settings change are unavailable
+                //  - ERR02 : If the popup has failed to open
+                //  - ERR03 : Internal error
+            });
+
     }, [])
+
+    async function checkOpen() {
+        try {
+            let enabled = await RNBluetoothClassic.isBluetoothEnabled();
+            if (enabled) {
+                connect()
+            }
+            else {
+                Alert.alert(
+                    "กรุณาเปิด Bluetooth",
+                    "เพื่อใช้งานร่วมกับตัวกล้อง",
+                    [
+                        {
+                            text: "ไม่ล่ะ,ขอบคุณ",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                        },
+                        {
+                            text: "เปิด", onPress: () => {
+                                BluetoothStateManager.enable().then((result) => {
+                                    console.log("Bluetooth turn on")
+                                    connect()
+                                });
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            }
+
+        } catch (err) {
+            // Handle accordingly
+        }
+    }
+
+    async function connect() {
+        try {
+            let bonded = await RNBluetoothClassic.getBondedDevices();
+            // console.log('DeviceListScreen::getBondedDevices found', bonded);
+            let bluetoothname = Context.bluetooth_name
+            let peripheral = bonded.find(element => element.name === bluetoothname);
+            console.log(peripheral)
+            peripheral.connect()
+                .then(res => {
+                    peripheral.onDataReceived((data) => onReceivedData(data))
+                    let EAR = Context.EAR
+                    peripheral.write(` EAR ${EAR}`)
+                    peripheral.write("end")
+                })
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const onReceivedData = (data) => {
+        console.log(data)
+        // Alert.alert('From Bluetooth', data.data)
+        API.post("/post_noti")
+    }
+
 
     return (
         <View style={styles.container}>
