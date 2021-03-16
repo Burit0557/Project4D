@@ -7,21 +7,7 @@ import { set } from 'lodash';
 import { CategoryContext } from '../context_api/myContext';
 
 export default function family({ navigation }) {
-    // data = [
-    //     {
-    //         number: 1,
-    //         name: 'LetMePlay1'
-    //     },
-    //     {
-    //         number: 2,
-    //         name: 'LetMePlay2'
-    //     },
-    //     {
-    //         number: 3,
-    //         name: 'LetMePlay3'
-    //     },
 
-    // ]
     const Context = useContext(CategoryContext)
     const [data, setData] = useState([])
 
@@ -29,7 +15,11 @@ export default function family({ navigation }) {
         Context.dataUser
     )
     const [passed, setPassed] = useState('')
-    const goSetting = () => {
+
+
+    const goSetting = (data) => {
+        console.log(data)
+        Context.setFriendSetting(data)
         navigation.navigate('Family-Setting')
     }
 
@@ -107,7 +97,7 @@ export default function family({ navigation }) {
                                                     <Text style={styles.Text}>ตำแหน่ง</Text>
                                                 </View>
                                             </TouchableOpacity>
-                                            <TouchableOpacity onPress={goSetting}>
+                                            <TouchableOpacity onPress={() => { goSetting(item) }}>
                                                 <View style={styles.select}>
                                                     <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
                                                         <Image source={require('../assets/setting.png')} style={styles.icondown} />

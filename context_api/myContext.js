@@ -8,7 +8,7 @@ class MyContext extends React.Component {
         super()
         this.state = {
             login: false,
-            
+
             dataUser: {
                 User_id: 0,
                 Username: '',
@@ -26,9 +26,9 @@ class MyContext extends React.Component {
                 rest_min: '00',
                 up_min: '00',
                 up_sec: '30',
-            }
+            },
 
-
+            friendSetting: {},
         }
     }
 
@@ -133,6 +133,11 @@ class MyContext extends React.Component {
         }
     }
 
+    setFriendSetting = (data) => {
+        this.setState({
+            friendSetting: data
+        })
+    }
 
 
     render() {
@@ -145,6 +150,7 @@ class MyContext extends React.Component {
                     dataUserSetting: this.state.dataUserSetting,
                     bluetooth_name: this.state.dataUserSetting.bluetooth_name,
                     EAR: this.state.dataUserSetting.EAR,
+                    friendSetting: this.state.friendSetting,
 
                     setDataUser: this.setDataUser,
                     setImage: this.setImage,
@@ -158,6 +164,8 @@ class MyContext extends React.Component {
                     setUpLocation: this.setUpLocation,
                     setBluetooth: this.setBluetooth,
                     updateUserSetting: this.updateUserSetting,
+
+                    setFriendSetting: this.setFriendSetting,
 
 
                 }}
