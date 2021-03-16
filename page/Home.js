@@ -14,7 +14,7 @@ export default function home({ navigation }) {
     const [MyPlaces, setMyPlaces] = useState(0);
 
 
-    useEffect( () => {
+    useEffect(() => {
         notifee.onForegroundEvent(({ type, detail }) => {
             switch (type) {
                 case EventType.DISMISSED:
@@ -41,7 +41,7 @@ export default function home({ navigation }) {
                 //  - ERR02 : If the popup has failed to open
                 //  - ERR03 : Internal error
             });
-
+        //var result = new Date().toISOString().slice(0,10);
     }, [])
 
     async function checkOpen() {
