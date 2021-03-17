@@ -323,7 +323,7 @@ export default function register({ navigation }) {
                             </View>
 
                             {!showUser.hide ?
-                                <Text style={{ color: showUser.color, fontSize: hp('1.5%') }}>{showUser.text}</Text>
+                                <Text style={[styles.textdetail ,{ color: showUser.color,  }]}>{showUser.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -352,7 +352,7 @@ export default function register({ navigation }) {
 
                             </View>
                             {!showPass.hide ?
-                                <Text style={{ color: showPass.color, fontSize: hp('1.5%') }}>{showPass.text}</Text>
+                                <Text style={[styles.textdetail ,{ color: showPass.color}]}>{showPass.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -374,7 +374,7 @@ export default function register({ navigation }) {
 
                             </View>
                             {!showcfPass.hide ?
-                                <Text style={{ color: showcfPass.color, fontSize: hp('1.5%') }}>{showcfPass.text}</Text>
+                                <Text style={[styles.textdetail ,{ color: showcfPass.color, }]}>{showcfPass.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -401,7 +401,7 @@ export default function register({ navigation }) {
                                 />
                             </View>
                             {!showEmail.hide ?
-                                <Text style={{ color: showEmail.color, fontSize: hp('1.5%') }}>{showEmail.text}</Text>
+                                <Text style={[styles.textdetail ,{ color: showEmail.color }]}>{showEmail.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -499,4 +499,7 @@ const styles = StyleSheet.create({
         color: '#FF0000',
         fontSize: hp('1.5%'),
     },
+    textdetail:{
+        fontSize : hp('2%')
+    }
 })

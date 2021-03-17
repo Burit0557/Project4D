@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
         margin: '2%',
         marginTop: '4%',
         color: '#ffff',
-        fontSize: hp('2%')
+        fontSize: hp('2.5%')
     },
     bgbutton: {
         width: wp('100%'),

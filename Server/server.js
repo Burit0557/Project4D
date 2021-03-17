@@ -59,7 +59,6 @@ app.get('/', function (req, res) {
 });
 
 /* POST localhost:3000/login 
-
 req body    {    
     username,
     password
@@ -97,13 +96,11 @@ app.post('/login', function (req, res) {
 
 
 /* POST localhost:3000/register 
-
 req body {
     username,
     password,
     email,
 }
-
 ---------------------------------------------- Register --------------------------------------*/
 app.post('/register', function (req, res) {
     let { username, password, email } = req.body;
@@ -128,7 +125,6 @@ app.post('/register', function (req, res) {
 
 
 /* POST localhost:3000/update_info
-
 req body {
     username,
     password,
@@ -175,7 +171,6 @@ app.post('/update_info', function (req, res) {
 
 
 /* POST localhost:3000/add_image
-
 req body {
     username,
     image,
@@ -195,7 +190,6 @@ app.post('/add_image', function (req, res) {
 });
 
 /* GET localhost:3000/get_image
-
 req params {
     username
     }
@@ -220,7 +214,6 @@ app.get('/get_image', function (req, res) {
 });
 
 /* POST localhost:3000/add_name
-
 req body {
     username,
     name,
@@ -240,7 +233,6 @@ app.post('/add_name', function (req, res) {
 });
 
 /* GET localhost:3000/get_name
-
 req params {
     username
     }
@@ -654,13 +646,11 @@ app.post('/delete_friend_req', function (req, res) {
 })
 
 /* POST localhost:3000/update_setting
-
     bluetooth_name, raspberrypi2
     EAR, 0.285
     distance, 160
     rest, 120
     time_update 30
-
 req body {
     username,
 }
@@ -870,19 +860,19 @@ app.post('/add_history', function (req, res) {
 });
 
 /* GET localhost:3000/get_history
-req body {
+req params {
     username,
 }
----------------------------------------------- add_history --------------------------------------*/
-app.post('/add_history', function (req, res) {
-    let { username, latitude, langtitude } = req.body;
-    console.log(`username ${username} latitude ${latitude} langtitude ${langtitude}`)
-    let sql = 'SELECT * FROM detection_history WHARE Username = ?';
-    connection.query(sql, [username], function (err, data, field) {
+---------------------------------------------- get_history --------------------------------------*/
+app.get('/get_history', function (req, res) {
+    let { username } = req.query;
+    console.log(`username ${username}`)
+    let sql = 'SELECT * FROM detection_history WHERE Username = ?';
+    connection.query(sql, username, function (err, data, field) {
         if (err) {
             res.status(403);
         }
-        if(data.length === 0){
+        if (data.length === 0) {
             console.log("NO USER")
             res.status(404).end()
         }

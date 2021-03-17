@@ -16,7 +16,6 @@ export default function hifamily_settingstory({ navigation }) {
     )
 
     const [passed, setPassed] = useState('')
-
     const [isEnabled1, setIsEnabled1] = useState(false);
     const [isEnabled2, setIsEnabled2] = useState(false);
     const [isEnabled3, setIsEnabled3] = useState(false);
@@ -26,6 +25,7 @@ export default function hifamily_settingstory({ navigation }) {
     const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
     const toggleSwitch3 = () => setIsEnabled3(previousState => !previousState);
     const toggleSwitch4 = () => setIsEnabled4(previousState => !previousState);
+
 
     useEffect(() => {
         const backHandler = BackHandler.addEventListener(
@@ -141,9 +141,7 @@ export default function hifamily_settingstory({ navigation }) {
                                     value={isEnabled4}
                                 />
                             </View>
-
                         </View>
-
                     </View>
                     <Button
                         title="ลบสมาชิก"

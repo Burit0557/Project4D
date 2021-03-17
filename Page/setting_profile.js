@@ -572,13 +572,13 @@ export default function setting_profile({ navigation }) {
                             changeImage()
                         }} >
                             <View style={{ marginBottom: ('10%'), justifyContent: 'center' }}>
-                                <Text style={{ fontSize: hp('2%') }}>เลือกรูปภาพ</Text>
+                                <Text style={{ fontSize: hp('2.5%') }}>เลือกรูปภาพ</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => deletimg()} >
                             <View style={{ justifyContent: 'center' }}>
-                                <Text style={{ fontSize: hp('2%') }}>ลบ</Text>
+                                <Text style={{ fontSize: hp('2.5%') }}>ลบ</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -600,7 +600,7 @@ export default function setting_profile({ navigation }) {
                                     onPress={() => {
                                         saveimage()
                                     }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
 
                                 <Button
@@ -610,7 +610,7 @@ export default function setting_profile({ navigation }) {
                                         toggleOverlayoptionEditimg_cf()
 
                                     }}
-                                    titleStyle={{ fontSize: hp('2%') }}
+                                    titleStyle={styles.textbt}
                                 />
 
                             </View>
@@ -637,7 +637,7 @@ export default function setting_profile({ navigation }) {
                             onPress={() => {
                                 savename()
                             }}
-                            titleStyle={{ fontSize: hp('2%') }}
+                            titleStyle={styles.textbt}
                         />
 
                     </View>
@@ -657,7 +657,7 @@ export default function setting_profile({ navigation }) {
                                 //placeholder="กรุณากรอกรหัสผ่านเดิม"
                                 />
                                 {!showPass.hide ?
-                                    <Text style={{ color: showPass.color, fontSize: hp('1.5%') }}>{showPass.text}</Text>
+                                    <Text style={[ styles.textdetail,{ color: showPass.color }]}>{showPass.text}</Text>
                                     :
                                     <View></View>
                                 }
@@ -679,7 +679,7 @@ export default function setting_profile({ navigation }) {
                                 />
 
                                 {!showNewPass.hide ?
-                                    <Text style={{ color: showNewPass.color, fontSize: hp('1.5%') }}>{showNewPass.text}</Text>
+                                    <Text style={ [styles.textdetail,{ color: showNewPass.color }]}>{showNewPass.text}</Text>
                                     :
                                     <View></View>
                                 }
@@ -696,7 +696,7 @@ export default function setting_profile({ navigation }) {
                                 />
 
                                 {!showcfNewPass.hide ?
-                                    <Text style={{ color: showcfNewPass.color, fontSize: hp('1.5%') }}>{showcfNewPass.text}</Text>
+                                    <Text style={ [styles.textdetail,{ color: showcfNewPass.color}]}>{showcfNewPass.text}</Text>
                                     :
                                     <View></View>
                                 }
@@ -708,7 +708,7 @@ export default function setting_profile({ navigation }) {
                                 onPress={() => {
                                     vaildateNewpass()
                                 }}
-                                titleStyle={{ fontSize: hp('2%') }}
+                                titleStyle={styles.textbt}
                             />
                         </View>
                     </View>
@@ -753,7 +753,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0E77BF',
         width: '100%',
         height: hp('4.5%'),
-        //borderRadius: 15,
+        borderRadius: 10,
         alignItems: 'center',
         // justifyContent: 'center',
         justifyContent: 'space-between',
@@ -761,7 +761,8 @@ const styles = StyleSheet.create({
         paddingLeft: '5%'
     },
     textshow: {
-        fontSize: hp('2%'),
+        fontSize: hp('2.5%'),
+        color : 'rgba(255, 255, 255, 0.85)'
     },
 
     textedit: {
@@ -783,13 +784,14 @@ const styles = StyleSheet.create({
         // marginLeft: wp('2%')
     },
     textInput: {
+        paddingLeft: 5,
         color: '#fff',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         paddingBottom: 0,
     },
     textprofile: {
         color: '#0E77BF',
-        fontSize: hp('2%'),
+        fontSize: hp('2.5%'),
         marginTop: hp('0.2%'),
         alignSelf: 'center'
     },
@@ -797,14 +799,14 @@ const styles = StyleSheet.create({
         //alignSelf: 'center',
         backgroundColor: '#49BB21',
         width: wp('29%'),
-        height: hp('5%'),
+        height: hp('6%'),
         borderRadius: 15,
         marginTop: hp('6%')
     },
     btcancel: {
         backgroundColor: '#EA2626',
         width: wp('29%'),
-        height: hp('5%'),
+        height: hp('6%'),
         borderRadius: 15,
         marginTop: hp('6%')
     },
@@ -823,16 +825,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#014D81',
     },
     Input: {
-        flexDirection: 'row',
-        fontSize: hp('2%'),
-        paddingLeft: ('5%'),
+        //flexDirection: 'row',
+        fontSize: hp('2.5%'),
+        paddingLeft: ('10%'),
         //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',
         width: '100%',
         height: hp('5%'),
-        //borderRadius: 15,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingBottom : ('2.5%'),
+        color : '#fff'
 
     },
     overlay_head: {
@@ -851,4 +855,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    textdetail:{
+        fontSize : hp('2%')
+    },
+    textbt:{
+        fontSize : hp('2.25%')
+    }
 })

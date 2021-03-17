@@ -2,53 +2,24 @@ import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
-import axios from 'axios';
+import { API } from './axios';
+import DatePicker from 'react-native-datepicker'
+
+import { CategoryContext } from '../context_api/myContext';
 
 export default function history({ navigation }) {
-    data = [
-        {
-            time: 1,
-            name: 'a'
-        },
-        {
-            time: 2,
-            name: 'a'
-        },
-        {
-            time: 3,
-            name: 'a'
-        },
-        {
-            time: 4,
-            name: 'a'
-        },
-        {
-            time: 5,
-            name: 'a'
-        },
-        {
-            time: 6,
-            name: 'a'
-        },
-        {
-            time: 7,
-            name: 'a'
-        },
-        {
-            time: 8,
-            name: 'a'
-        },
-        {
-            time: 9,
-            name: 'a'
-        },
-        {
-            time: 10,
-            name: 'a'
-        },
-    ]
+    const Context = useContext(CategoryContext)
 
-    const [Data, setData] = useState(data)
+    const [dataUser, setdataUser] = useState(
+        Context.dataUser
+    )
+
+    const [Data, setData] = useState([])
+    const [allData, setallData] = useState([])
+    const [date, setDate] = useState({
+        dateStart: '',
+        dateEnd: ''
+    })
 
     useEffect(() => {
         // async function fetchData() {
@@ -58,20 +29,88 @@ export default function history({ navigation }) {
         // }
 
         // fetchData();
-        axios.get('http://161.246.5.138:443/api/history')
+        API.get('/get_history', data = {
+            params: {
+                username: dataUser.Username
+            }
+        })
             .then(result => {
                 console.log(result.data)
                 let data = result.data
-                data = data.sort(function(a, b) {
-                    return a.time - b.time
-                })
-                console.log("sortttttttttttttttt")
-                console.log(data)
-                setData(data);
+                if (result.data) {
+                    data = data.sort(function (a, b) {
+                        return stringtonum(getdate_string(b.time)) - stringtonum(getdate_string(a.time))
+                    })
+                    setData(data);
+                    setallData(data);
+                }
+
             })
             .catch(error => console.log(error));
 
     }, []);
+
+    getAll = () => {
+        setData(allData)
+        setDate({
+            dateStart: '',
+            dateEnd: ''
+        })
+        // for (i = 1; i <= 12; i++) {
+        //     var temp =  new Date(2021, 2,i)
+        //     API.post('/add_history', data = {
+        //         username : dataUser.Username,
+        //         latitude : 13.7286,
+        //         langtitude : 100.774,
+        //         time : temp
+        //     })
+        // }
+    }
+
+    searchData = () => {
+        let temp1 = []
+        if (date.dateStart === '' && date.dateEnd !== '') {
+            temp1 = allData.filter(item => stringtonum(getdate_string(item.time)) <= stringtonum(date.dateEnd))
+        }
+        if (date.dateStart !== '' && date.dateEnd === '') {
+            temp1 = allData.filter(item => stringtonum(getdate_string(item.time)) >= stringtonum(date.dateStart))
+        }
+        if (date.dateStart !== '' && date.dateEnd !== '') {
+            temp1 = allData.filter(item => stringtonum(getdate_string(item.time)) >= stringtonum(date.dateStart))
+            temp1 = temp1.filter(item => stringtonum(getdate_string(item.time)) <= stringtonum(date.dateEnd))
+        }
+        setData(temp1);
+    }
+    stringtonum = (str) => {
+        let year = str.slice(7, 10)
+        let month = str.slice(3, 5)
+        let day = str.slice(0, 2)
+        return parseInt(year) * 10000 + parseInt(month) * 100 + parseInt(day)
+    }
+
+    getdate_string = (str) => {
+
+        let date = new Date(str)
+        let time = Date.parse(date);
+        time = time + (7 * 3600 * 1000)
+        date = new Date(time)
+        // let year = str.slice(0, 4)
+        // let month = str.slice(5, 7)
+        // let day = str.slice(8, 10)
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let day = date.getDate()
+        if (day < 10) {
+            day = '0' + day
+        }
+        if (month < 10) {
+            month = '0' + month
+        }
+        // let year = date.slice(0, 4)
+        // let month = date.slice(5, 7)
+        // let day = date.slice(8, 10)
+        return `${day}-${month}-${year}`
+    }
 
     renderLeftComponent = () => {
         return (
@@ -92,30 +131,134 @@ export default function history({ navigation }) {
                 // barStyle="dark-content"
                 backgroundColor='#014D81'
             />
+            {/* <ScrollView> */}
+            <View style={styles.body}>
+                <View style={styles.content}>
+                    <View style={{ width: wp('80%'), flexDirection: 'row', marginTop: hp('5%') }} >
+                        <DatePicker
+                            style={styles.dateStyle}
+                            customStyles={{
+                                dateText: {
+                                    marginLeft: 36,
+                                    fontSize: hp('2.25%'),
+                                    //color: '#fff'
+                                },
+                                placeholderText: {
+                                    fontSize: hp('2.25%'),
+                                    color: 'rgba(0, 0, 0, 0.55)'
+
+                                },
+                                dateInput: {
+                                    borderWidth: 0,
+                                },
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 4,
+                                    marginLeft: 0
+                                }
+                            }}
+                            allowFontScaling={true}
+                            date={date.dateStart}
+                            mode="date"
+                            placeholder="เลือกวัน"
+                            format="DD-MM-YYYY"
+                            minDate="01-01-2021"
+                            maxDate="31-12-2031"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            showIcon={true}
+                            onDateChange={(temp) => { setDate({ ...date, dateStart: temp }) }}
+                        />
+                        <View style={{ width: '8%', marginHorizontal: '2%', alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: hp('2.25'), alignSelf: 'center' }}>ถึง</Text>
+                        </View>
+                        <DatePicker
+                            style={styles.dateStyle}
+                            customStyles={{
+                                dateText: {
+                                    marginLeft: 36,
+                                    fontSize: hp('2.25%'),
+                                    //color: '#fff'
+                                },
+                                placeholderText: {
+                                    fontSize: hp('2.25%'),
+                                    color: 'rgba(0, 0, 0, 0.55)'
+                                },
+                                dateInput: {
+                                    borderWidth: 0,
+                                },
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 4,
+                                    marginLeft: 0
+                                }
+                            }}
+                            allowFontScaling={false}
+                            date={date.dateEnd}
+                            mode="date"
+                            placeholder="เลือกวัน"
+                            format="DD-MM-YYYY"
+                            minDate="01-01-2021"
+                            maxDate="31-12-2031"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            showIcon={true}
+                            onDateChange={(temp) => { setDate({ ...date, dateEnd: temp }) }}
+                        />
+
+                    </View>
+                    <View style={{ width: wp('80%'), flexDirection: 'row', marginTop: hp('2%'), marginBottom: hp('3%'), }} >
+                        <Button
+                            title="ดูทั้งหมด"
+                            buttonStyle={[styles.btn, styles.Shadow, {}]}
+                            onPress={() => { getAll() }}
+                            titleStyle={styles.textbt}
+                        />
+                        <View style={{ width: '8%', marginHorizontal: '2%' }}></View>
+                        <Button
+                            title="ค้นหา"
+                            buttonStyle={[styles.btn, styles.Shadow,]}
+                            onPress={() => { searchData() }}
+                            titleStyle={styles.textbt}
+                        />
+                    </View>
+
+                </View>
+            </View>
             <ScrollView>
                 <View style={styles.body}>
                     <View style={styles.content}>
                         {
-                            Data.map((item, index) => {
-                                return (
-                                    < View key={index} style={styles.listRow}>
-                                        <View style={styles.leftCard}>
-                                            <Text style={styles.Text}>วัน-เดือน-ปี</Text>
-                                            <Text style={styles.Text}>{item.time}</Text>
+                            Data.length === 0 ?
+                                <View style={{ alignSelf: 'center' }}><Text style={styles.textshow}>ไม่มีประวัติการง่วงนอน</Text></View>
+                                :
+                                Data.map((item, index) => {
+                                    return (
+                                        < View key={index} style={styles.listRow}>
+                                            <View style={styles.leftCard}>
+                                                <Text style={styles.Text}>วัน-เดือน-ปี</Text>
+                                                <Text style={styles.Text}>{getdate_string(item.time)}</Text>
+                                            </View>
+                                            <View style={styles.rightCard}>
+                                                <Text style={styles.Text}>รายละเอียด</Text>
+                                            </View>
                                         </View>
-                                        <View style={styles.rightCard}>
-                                            <Text style={styles.Text}>รายละเอียด</Text>
-                                        </View>
-                                    </View>
-                                )
-                            })
+                                    )
+                                })
                         }
+
                     </View>
                 </View>
+
+                {/* </View>
+                </View> */}
                 <View style={{ height: hp('10%') }}>
 
                 </View>
             </ScrollView>
+            {/* </ScrollView> */}
 
         </View >
     )
@@ -197,5 +340,33 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    dateStyle: {
+        height: hp('6%'),
+        flex: 1,
+        //backgroundColor: '#fff',
+        color: 'white',
+        borderRadius: 10,
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    btn: {
+        //alignSelf: 'center',
+        backgroundColor: '#014D81',
+        width: wp('35.2%'),
+        height: hp('6%'),
+        borderRadius: 10,
+        //borderWidth:1
+    },
+    textbt: {
+        fontSize: hp('2.25%')
+    },
+    textshow: {
+        color: '#000',
+        fontSize: hp('2.25%'),
+        paddingBottom: 0,
+        textAlign: 'center'
     },
 })

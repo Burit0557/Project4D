@@ -99,7 +99,6 @@ export default function family_add({ navigation }) {
                     console.log("test")
                     Alert.alert('ผิดพลาด', 'เป็นเพื่อนกันแล้ว')
                 }
-
             })
 
     }
@@ -166,7 +165,6 @@ export default function family_add({ navigation }) {
 
             })
     }
-
     renderLeftComponent = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('Family')}>
@@ -200,7 +198,6 @@ export default function family_add({ navigation }) {
                                                 source={item.image === "" ?
                                                     require('../assets/profile-user.png')
                                                     : { uri: `data:image/jpg;base64,${item.image}` }} />
-
                                         </View>
                                         <Text style={styles.Text}>{item.name === "" ? item.Username : item.name}</Text>
                                     </View>

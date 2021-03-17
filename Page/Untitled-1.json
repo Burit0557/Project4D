@@ -1,232 +1,132 @@
-[
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "30:E3:7A:EF:28:D2",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "30:E3:7A:EF:28:D2",
-            "name": "DESKTOP-58ITO9M"
-        },
-        "address": "30:E3:7A:EF:28:D2",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "30:E3:7A:EF:28:D2",
-        "name": "DESKTOP-58ITO9M",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "00:58:56:60:1F:81",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "00:58:56:60:1F:81",
-            "name": "BT-SPEAKER"
-        },
-        "address": "00:58:56:60:1F:81",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "00:58:56:60:1F:81",
-        "name": "BT-SPEAKER",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "DC:A6:32:0C:C1:0E",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "DC:A6:32:0C:C1:0E",
-            "name": "raspberrypi"
-        },
-        "address": "DC:A6:32:0C:C1:0E",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "DC:A6:32:0C:C1:0E",
-        "name": "raspberrypi",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "B4:31:61:31:2A:08",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "B4:31:61:31:2A:08",
-            "name": "realme 7 Pro"
-        },
-        "address": "B4:31:61:31:2A:08",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "B4:31:61:31:2A:08",
-        "name": "realme 7 Pro",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "30:21:51:34:A4:47",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "30:21:51:34:A4:47",
-            "name": "K52B"
-        },
-        "address": "30:21:51:34:A4:47",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "30:21:51:34:A4:47",
-        "name": "K52B",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "DA:82:8E:97:6B:22",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "DA:82:8E:97:6B:22",
-            "name": "Mi Smart Band 4"
-        },
-        "address": "DA:82:8E:97:6B:22",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "DA:82:8E:97:6B:22",
-        "name": "Mi Smart Band 4",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "F0:13:C3:46:7F:4F",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "F0:13:C3:46:7F:4F",
-            "name": "AN-SP558"
-        },
-        "address": "F0:13:C3:46:7F:4F",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "F0:13:C3:46:7F:4F",
-        "name": "AN-SP558",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "60:F4:45:63:F5:9D",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "60:F4:45:63:F5:9D",
-            "name": "iPhone"
-        },
-        "address": "60:F4:45:63:F5:9D",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "60:F4:45:63:F5:9D",
-        "name": "iPhone",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "8C:5A:F8:2B:DE:48",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "8C:5A:F8:2B:DE:48",
-            "name": "MI BT18"
-        },
-        "address": "8C:5A:F8:2B:DE:48",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "8C:5A:F8:2B:DE:48",
-        "name": "MI BT18",
-        "rssi": undefined
-    },
-    {
-        "_bluetoothModule": {
-            "_eventEmitter": [NativeEventEmitter
-            ],
-            "_nativeModule": [Object
-            ]
-        },
-        "_nativeDevice": {
-            "address": "98:D3:41:F5:DA:27",
-            "bonded": true,
-            "extra": [Object
-            ],
-            "id": "98:D3:41:F5:DA:27",
-            "name": "GO_Heng"
-        },
-        "address": "98:D3:41:F5:DA:27",
-        "bonded": true,
-        "deviceClass": undefined,
-        "extra": {},
-        "id": "98:D3:41:F5:DA:27",
-        "name": "GO_Heng",
-        "rssi": undefined
-    }
-]
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-16T09:23:04.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-02-28T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-01T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-02T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-03T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-04T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-05T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-06T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-07T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-08T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-09T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-10T22:00:00.000Z"
+},
+{
+    "Username": "Burit1234",
+    "latitude": 13.7286,
+    "longtitude": 100.774,
+    "time": "2021-03-11T22:00:00.000Z"
+}
