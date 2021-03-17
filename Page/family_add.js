@@ -95,7 +95,10 @@ export default function family_add({ navigation }) {
                 if (error.response.status === 409) {
                     Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
                 }
-
+                if (error.response.status === 459) {
+                    console.log("test")
+                    Alert.alert('ผิดพลาด', 'เป็นเพื่อนกันแล้ว')
+                }
             })
 
     }
@@ -126,6 +129,42 @@ export default function family_add({ navigation }) {
         setIsLoad(false)
     }, [])
 
+    Friend_confirm = (friend_user) => {
+        API.post('/add_friend', data = {
+            username: dataUser.Username,
+            friend_user: friend_user,
+        })
+            .then(res => {
+                setDataFriendReq(dataFriendReq.filter(item => item.Username !== friend_user))
+                Alert.alert('สำเร็จ', 'เป็นเพื่อนสำเร็จ')
+
+            })
+            .catch(error => {
+                console.log(error)
+                // if (error.response.status === 409) {
+                //     Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
+                // }
+
+            })
+    }
+    Friend_cancel = (friend_user) => {
+        API.post('/delete_friend_req', data = {
+            username: dataUser.Username,
+            friend_user: friend_user,
+        })
+            .then(res => {
+                setDataFriendReq(dataFriendReq.filter(item => item.Username !== friend_user))
+                // Alert.alert('สำเร็จ', 'เป็นเพื่อนสำเร็จ')
+
+            })
+            .catch(error => {
+                console.log(error)
+                // if (error.response.status === 409) {
+                //     Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
+                // }
+
+            })
+    }
     renderLeftComponent = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('Family')}>
@@ -158,8 +197,7 @@ export default function family_add({ navigation }) {
                                             <Image style={styles.profile}
                                                 source={item.image === "" ?
                                                     require('../assets/profile-user.png')
-                                                    : { uri: `data:image/jpg;base64,${item.image}`}} />
-
+                                                    : { uri: `data:image/jpg;base64,${item.image}` }} />
                                         </View>
                                         <Text style={styles.Text}>{item.name === "" ? item.Username : item.name}</Text>
                                     </View>
@@ -167,12 +205,12 @@ export default function family_add({ navigation }) {
                                         <Button
                                             title="ยอมรับ"
                                             buttonStyle={[styles.btnCF, { backgroundColor: '#49BB21', }]}
-                                            // onPress={() => navigation.navigate('Login')}
+                                            onPress={() => Friend_confirm(item.Username)}
                                             titleStyle={{ fontSize: hp('1.5%') }}
                                         /><Button
                                             title="ปฏิเสธ"
                                             buttonStyle={[styles.btnCF, { backgroundColor: '#EA2626', }]}
-                                            // onPress={() => navigation.navigate('Login')}
+                                            onPress={() => Friend_cancel(item.Username)}
                                             titleStyle={{ fontSize: hp('1.5%') }}
                                         />
                                     </View>

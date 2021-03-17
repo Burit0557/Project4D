@@ -1,0 +1,78 @@
+POST localhost:3000/login 
+    req body { username, password }
+
+POST localhost:3000/register 
+    req body { username, password, email }
+
+POST localhost:3000/update_info 
+    req body { username, password, image, name }
+
+POST localhost:3000/add_image 
+    req body { username, image, }
+
+GET localhost:3000/get_image
+    req params { username }
+
+POST localhost:3000/add_name
+    req body { username, name }
+
+GET localhost:3000/get_name
+    req params { username }
+
+POST localhost:3000/new_password 
+    req body { username, password, new_password }
+
+POST localhost:3000/add_location
+    req body { username, latitude, longitude }
+
+POST localhost:3000/add_friend
+    req body { username, friend_user }    
+
+GET localhost:3000/friend
+    req params { username }
+
+GET localhost:3000/friend_location
+    req params { username }
+
+POST localhost:3000/post_noti
+    req body { username, friend_user }
+
+GET localhost:3000/get_user
+    req params { username }
+
+POST localhost:3000/friend_req
+    req body { username, friend_user }
+
+GET localhost:3000/get_friend_req
+    req params { username }
+
+POST localhost:3000/delete_friend_req
+    req body { username, friend_user }
+
+POST localhost:3000/update_setting    
+    req body { username }
+
+POST localhost:3000/set_bluetooth_name
+    req body { username, bluetooth_name }
+
+POST localhost:3000/set_EAR
+    req body { username, EAR } 
+
+POST localhost:3000/set_distance
+    req body { username, distance }
+
+POST localhost:3000/set_rest
+    req body { username, rest }
+
+POST localhost:3000/set_time_update
+    req body { username, time_update }  
+
+GET localhost:3000/get_setting
+    req params { username }
+
+POST localhost:3000/set_acces
+    req body { username, friend_user, position_acces, history_acces, alert_acces, friend_alert }
+
+GET localhost:3000/get_acces
+    req params {username, friend_user }
+

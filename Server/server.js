@@ -846,10 +846,10 @@ req body {
 }
 ---------------------------------------------- add_history --------------------------------------*/
 app.post('/add_history', function (req, res) {
-    let { username, latitude, langtitude,time } = req.body;
+    let { username, latitude, langtitude } = req.body;
     console.log(`username ${username} latitude ${latitude} langtitude ${langtitude}`)
-    let sql = 'INSERT INTO detection_history (Username, latitude, longtitude,time) VALUES (?,?,?,?)';
-    connection.query(sql, [username, latitude, langtitude,time], function (err, data, field) {
+    let sql = 'INSERT INTO detection_history (Username, latitude, longtitude) VALUES (?,?,?)';
+    connection.query(sql, [username, latitude, langtitude], function (err, data, field) {
         if (err) {
             res.status(403);
         }

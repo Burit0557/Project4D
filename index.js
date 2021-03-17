@@ -25,11 +25,20 @@ async function onMessageReceived(message) {
     console.log('test in noti')
     await notifee.displayNotification(JSON.parse(message.data.notifee));
   }
+  else{
+
+  }
   // notifee.displayNotification(JSON.parse(message.data.notifee));
 }
 
+async function BackgroundMessageHandler(message) {
+  // Do something
+  console.log(message)
+ 
+}
+
 messaging().onMessage(onMessageReceived);
-messaging().setBackgroundMessageHandler(onMessageReceived);
+messaging().setBackgroundMessageHandler(BackgroundMessageHandler);
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
   const { notification, pressAction } = detail;
