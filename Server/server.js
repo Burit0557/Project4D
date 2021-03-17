@@ -539,6 +539,7 @@ app.get('/get_user', function (req, res) {
             res.status(404).end();
         }
         else {
+            console.log('get_user succes')
             res.send(data);
         }
     })
@@ -645,7 +646,7 @@ app.post('/delete_friend_req', function (req, res) {
     res.status(200).end();
 })
 
-/* POST localhost:3000/update_setting
+/* POST localhost:3000/add_setting
     bluetooth_name, raspberrypi2
     EAR, 0.285
     distance, 160
@@ -654,8 +655,8 @@ app.post('/delete_friend_req', function (req, res) {
 req body {
     username,
 }
----------------------------------------------- update_setting --------------------------------------*/
-app.post('/update_setting', function (req, res) {
+---------------------------------------------- add_setting --------------------------------------*/
+app.post('/add_setting', function (req, res) {
     let { username } = req.body;
     console.log(`username ${username}`)
     let sql = 'INSERT INTO setting (Username, bluetooth_name, EAR, distance, rest, time_update)VALUES (?,\'raspberrypi\',0.285,160,120,30)';
@@ -670,8 +671,30 @@ app.post('/update_setting', function (req, res) {
     });
 });
 
-
-
+/* POST localhost:3000/update_setting
+   req body {
+    username,
+    bluetooth_name, raspberrypi2
+    EAR, 0.285
+    distance, 160
+    rest, 120
+    time_update 30
+}
+---------------------------------------------- update_setting --------------------------------------*/
+app.post('/update_setting', function (req, res) {
+    let { username, bluetooth_name, EAR, distance, rest, time_update } = req.body;
+    console.log(`username ${username} bluetooth_name ${bluetooth_name} EAR ${EAR} distance ${distance} rest ${rest} rest ${time_update}`)
+    let sql = 'UPDATE setting  SET bluetooth_name = ? , EAR = ? , distance = ? , rest = ? , time_update = ? WHERE Username = ?';
+    connection.query(sql, [bluetooth_name, EAR, distance, rest, time_update, username], function (err, data, field) {
+        if (err) {
+            console.log(err);
+            res.status(403).end();
+        }
+        else {
+            res.status(200).end();
+        }
+    });
+});
 
 /* POST localhost:3000/set_bluetooth_name
 req body {
@@ -842,14 +865,14 @@ app.get('/get_acces', function (req, res) {
 req body {
     username,
     latitude,
-    langtitude
+    longitude
 }
 ---------------------------------------------- add_history --------------------------------------*/
 app.post('/add_history', function (req, res) {
-    let { username, latitude, langtitude } = req.body;
-    console.log(`username ${username} latitude ${latitude} langtitude ${langtitude}`)
-    let sql = 'INSERT INTO detection_history (Username, latitude, longtitude) VALUES (?,?,?)';
-    connection.query(sql, [username, latitude, langtitude], function (err, data, field) {
+    let { username, latitude, longitude } = req.body;
+    console.log(`username ${username} latitude ${latitude} longitude ${longitude}`)
+    let sql = 'INSERT INTO detection_history (Username, latitude, longitude) VALUES (?,?,?)';
+    connection.query(sql, [username, latitude, longitude], function (err, data, field) {
         if (err) {
             res.status(403);
         }
@@ -882,6 +905,61 @@ app.get('/get_history', function (req, res) {
     });
 });
 
-var server = app.listen(3000, function () {
+/* POST localhost:3000/delete_friend
+req body    {    
+    username,
+    friend_user,
+}
+---------------------------------------------- delete_friend -------------------------------------*/
+app.post('/delete_friend', function (req, res) {
+    let { username, friend_user } = req.body;
+    console.log(`delete_friend username ${username} friend_user ${friend_user}`)
+    let sql = 'DELETE FROM `friend` WHERE Username = ? and Friend_user = ?';
+    connection.query(sql, [username, friend_user], function (err, data, field) {
+        if (err) {
+            console.log(err);
+            res.status(403).end();
+        }
+        else {
+            // res.status(200).end();
+        }
+    })
+    connection.query(sql, [friend_user, username], function (err, data, field) {
+        if (err) {
+            console.log(err);
+            res.status(403).end();
+        }
+        else {
+            // res.status(200).end();
+        }
+    })
+    res.status(200).end();
+})
+
+/* GET localhost:3000/get_friend_acces
+req params {
+    username,
+    friend_user,
+}
+---------------------------------------------- get_friend_acces --------------------------------------*/
+app.get('/get_friend_acces', function (req, res) {
+    let { username, friend_user } = req.query;
+    console.log(`username ${username} friend_user ${friend_user} `)
+    let sql = 'SELECT history_acces, position_acces FROM friend WHERE Username = ? AND Friend_user = ?';
+    connection.query(sql, [friend_user, username], function (err, data, field) {
+        if (err) {
+            res.status(403);
+        }
+        if (data.length === 0) {
+            console.log("No User")
+            res.status(404).end();
+        }
+        else {
+            res.send(data)
+        }
+    });
+});
+
+var server = app.listen(8080, function () {
     console.log('Server is running..');
 });

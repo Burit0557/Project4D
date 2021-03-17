@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity, BackHandler } from 'react-native';
+import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity, BackHandler, Alert } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { API } from './axios';
 import { CategoryContext } from '../context_api/myContext';
@@ -75,6 +75,37 @@ export default function hifamily_settingstory({ navigation }) {
         console.log("Back test")
         saveAPI()
     }
+
+    const deleteFriend = () => {
+        Alert.alert(
+            "แจ้งเตือน",
+            "ต้องการลบเพื่อนหรือไม่",
+            [
+                {
+                    text: "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "ยืนยัน", onPress: () => {
+                        API.post('/delete_friend', data = {
+                            username: dataUser.Username,
+                            friend_user: friendSetting.Username,
+                        })
+                            .then(res => {
+                                navigation.replace('Family')
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
+
+    }
+
     renderLeftComponent = () => {
         return (
             <TouchableOpacity onPress={() => {
@@ -146,7 +177,9 @@ export default function hifamily_settingstory({ navigation }) {
                     <Button
                         title="ลบสมาชิก"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('25%') }]}
-                        // onPress={() => navigation.navigate('Family-Add')}
+                        onPress={() => {
+                            deleteFriend()
+                        }}
                         titleStyle={{ fontSize: hp('2%') }}
                     />
                 </View>

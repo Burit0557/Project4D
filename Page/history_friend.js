@@ -13,6 +13,9 @@ export default function history({ navigation }) {
     const [dataUser, setdataUser] = useState(
         Context.dataUser
     )
+    const [friendSetting, setFriendSetting] = useState(
+        Context.friendSetting
+    )
 
     const [Data, setData] = useState([])
     const [allData, setallData] = useState([])
@@ -22,32 +25,41 @@ export default function history({ navigation }) {
     })
 
     useEffect(() => {
-        // async function fetchData() {
-        // const result = await axios.get('161.246.5.53/api/history');
-        // console.log(result.data)
-        // setData(result.data);
-        // }
-
-        // fetchData();
-        API.get('/get_history', data = {
+        API.get('/get_friend_acces', data = {
             params: {
-                username: dataUser.Username
+                username: dataUser.Username,
+                friend_user: friendSetting.Username,
             }
         })
             .then(result => {
                 console.log(result.data)
-                let data = result.data
-                if (result.data) {
-                    data = data.sort(function (a, b) {
-                        return stringtonum(getdate_string(b.time)) - stringtonum(getdate_string(a.time))
+                let data = result.data[0]
+                if (data.history_acces === 1) {
+                    API.get('/get_history', data = {
+                        params: {
+                            username: friendSetting.Username
+                        }
                     })
-                    setData(data);
-                    setallData(data);
-                }
+                        .then(result => {
+                            console.log(result.data)
+                            let data = result.data
+                            if (result.data) {
+                                data = data.sort(function (a, b) {
+                                    return stringtonum(getdate_string(b.time)) - stringtonum(getdate_string(a.time))
+                                })
+                                setData(data);
+                                setallData(data);
+                            }
 
+                        })
+                        .catch(error => console.log(error));
+                }
+                else {
+                    setData([]);
+                    setallData([]);
+                }
             })
             .catch(error => console.log(error));
-
     }, []);
 
     getAll = () => {
@@ -61,7 +73,7 @@ export default function history({ navigation }) {
         //     API.post('/add_history', data = {
         //         username : dataUser.Username,
         //         latitude : 13.7286,
-        //         langitude : 100.774,
+        //         langtitude : 100.774,
         //         time : temp
         //     })
         // }
@@ -94,6 +106,7 @@ export default function history({ navigation }) {
         // let time = Date.parse(date);
         // time = time + (7 * 3600 * 1000)
         // date = new Date(time)
+       
         let year = date.getFullYear()
         let month = date.getMonth() + 1
         let day = date.getDate()
@@ -111,16 +124,15 @@ export default function history({ navigation }) {
         Context.setHistoryDetail(data)
         navigation.navigate('History_detail')
     }
-
+    
     renderLeftComponent = () => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Family')}>
                 <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.iconhome} />
                 </View>
             </TouchableOpacity>)
     }
-
     return (
         <View style={styles.container}>
             <Header
@@ -134,6 +146,14 @@ export default function history({ navigation }) {
             {/* <ScrollView> */}
             <View style={styles.body}>
                 <View style={styles.content}>
+                    <View style={{
+                        width: wp('80%'), height: hp('10%'), marginTop: hp('5%'),
+                        alignItems: 'center', justifyContent: 'center', backgroundColor: '#014D81',
+                        borderRadius: 10
+                    }}>
+                        <Text style={[styles.Text, { fontSize: hp('2.5%') }]}>ประวัติของ</Text>
+                        <Text style={[styles.Text, { fontSize: hp('2.5%') }]}>{friendSetting.name === '' ? friendSetting.Username : friendSetting.name}</Text>
+                    </View>
                     <View style={{ width: wp('80%'), flexDirection: 'row', marginTop: hp('5%') }} >
                         <DatePicker
                             style={styles.dateStyle}

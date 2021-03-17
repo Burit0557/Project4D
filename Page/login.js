@@ -57,11 +57,11 @@ export default function login({ navigation }) {
 
         setTimeout(() => {  //assign interval to a variable to clear it.
             readlogin()
-     
+
         }, 1200)
     }, ([]))
 
-    
+
 
 
 
@@ -104,9 +104,55 @@ export default function login({ navigation }) {
             console.log('Failed to save the saveData to the storage')
         }
     }
+    const setsetting = async (dataUserSetting) => {
+        dataUserSetting = JSON.stringify(dataUserSetting)
+        //console.log(dataUserSetting)
+        try {
+            await AsyncStorage.setItem('@dataUserSetting', dataUserSetting)
+            console.log('save dataUserSetting successfully saved')
+        } catch (e) {
+            console.log('Failed to save the saveData to the storage')
+        }
+    }
+
+    const getSetting = async (dataUser) => {
+        API.get('/get_setting', data = {
+            params: {
+                username: input.username.toLowerCase(),
+            }
+        })
+            .then((res) => {
+                data = res.data[0]
+                if (data) {
+                    rest_hour = parseInt(data.rest / 60)
+                    rest_min = (data.rest % 60)
+                    if (rest_min < 10) {
+                        rest_min = '0' + rest_min
+                    }
+                    up_min = parseInt(data.time_update / 60)
+                    up_sec = (data.time_update % 60)
+                    if (up_sec < 10) {
+                        up_sec = '0' + up_sec
+                    }
+                    dataUserSetting = {
+                        bluetooth_name: data.bluetooth_name,
+                        EAR: data.EAR.toString(),
+                        distance: data.distance.toString(),
+                        rest_hour: rest_hour.toString(),
+                        rest_min: rest_min.toString(),
+                        up_min: up_min.toString(),
+                        up_sec: up_sec.toString(),
+
+                    }
+                    Context.setDataUserSetting(dataUserSetting)
+                    setsetting(dataUserSetting)
+                }
+            })
+            .catch(error => console.log(error))
+    }
 
 
-    loginFunction =  () => {
+    loginFunction = () => {
         if (input.username === '' || input.password === '') {
             Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูลให้ครบทุกช่อง')
             setInput({
@@ -119,16 +165,11 @@ export default function login({ navigation }) {
             username: input.username.toLowerCase(),
             password: input.password,
         })
-            .then (async(res) => {
+            .then(async (res) => {
                 setlogin(res.data[0])
                 Context.setDataUser(res.data[0])
                 console.log(res.data[0])
-                let dataUserSetting = await AsyncStorage.getItem('@dataUserSetting')
-
-                if (dataUserSetting !== null) {
-                    Context.setDataUserSetting(JSON.parse(dataUserSetting))
-                }
-
+                getSetting()
                 navigation.reset({
                     index: 0,
                     routes: [
@@ -205,6 +246,7 @@ export default function login({ navigation }) {
                 :
                 <View style={styles.container}>
                     <View style={styles.logo} >
+                        <Image source={require('../assets/logo_name1024.png')} style={[styles.addimage, { resizeMode: 'cover' }]} />
                     </View>
                     <View style={[styles.listRow, { marginTop: hp('7%') }]}>
                         <ImageBackground source={require('../assets/profile-user2.png')} style={styles.smallIcon} />
@@ -256,15 +298,15 @@ const styles = StyleSheet.create({
         flex: 1
     },
     logo: {
-        height: hp('25%'),
-        width: wp('70%'),
+        height: wp('55%'),
+        width: wp('55%'),
         alignSelf: 'center',
         borderRadius: 15,
         marginTop: hp('10%'),
-        backgroundColor: '#DBCCCC',
+        //backgroundColor: '#DBCCCC',
     },
     listRow: {
-        
+
         flexDirection: 'row',
         // justifyContent: 'space-around',
         alignItems: 'center',
@@ -294,7 +336,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     textInput: {
-       
+
         width: wp('70%') - hp('6%') - 10,
         color: '#000',
         height: hp('5%'),
@@ -332,5 +374,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.5)',
         alignSelf: 'center',
+    },
+    addimage: {
+        height: '100%',
+        width: '100%',
     },
 })

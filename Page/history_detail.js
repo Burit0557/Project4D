@@ -14,75 +14,54 @@ export default function history_detail({ navigation }) {
     const [dataUser, setdataUser] = useState(
         Context.dataUser
     )
-
-    const [friendSetting, setFriendSetting] = useState(
-        Context.friendSetting
+    const [historyDetail, setHistoryDetail] = useState(
+        Context.historyDetail
     )
 
-    const [dataUserSetting, setdataUserSetting] = useState(
-        Context.dataUserSetting
-    )
-
-    const [MyPlaces, setMyPlaces] = useState({
-        latitude: 13.728567,
-        longitude: 100.774061,
+    const [Data, setData] = useState([])
+    const [allData, setallData] = useState([])
+    const [date, setDate] = useState({
+        dateStart: '',
+        dateEnd: ''
     })
-
-    const [NoAcces, setNoAcces] = useState(true)
-    const [api, setapi] = useState(false)
     const GOOGLE_MAPS_APIKEY = Context.GOOGLE_MAPS_APIKEY;
 
     useEffect(() => {
 
     }, []);
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-            console.log("call API")
-            API.get('/get_friend_acces', data = {
-                params: {
-                    username: dataUser.Username,
-                    friend_user: friendSetting.Username,
-                }
-            })
-                .then(result => {
-                    console.log(result.data)
-                    let data = result.data[0]
-                    if (data.position_acces === 1) {
-                        API.get('/friend_location', data = {
-                            params: {
-                                username: friendSetting.Username
-                            }
-                        })
-                            .then(result => {
-                                console.log(result.data)
-                                let data = result.data[0]
-                                if (data) {
-                                    setMyPlaces({
-                                        latitude: data.latitude ? data.latitude : 13.728567,
-                                        longitude: data.longitude ? data.longitude : 100.774061,
-                                    })
-                                    setNoAcces(false)
-                                }
+    getdate_string = (str) => {
+        let date = new Date(str)
+        // let time = Date.parse(date);
+        // time = time + (7 * 3600 * 1000)
+        // date = new Date(time)
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let day = date.getDate()
+        if (day < 10) {
+            day = '0' + day
+        }
+        if (month < 10) {
+            month = '0' + month
+        }
+        return `${day}-${month}-${year}`
+    }
 
-                            })
-                            .catch(error => {
-                                console.log(error)
-                                setNoAcces(true)
-                            });
-                    }
-                    else {
-                        setNoAcces(true)
-                    }
-                })
-                .catch(error => console.log(error));
-            setapi(true)
-        }, 30000)
-        return () => clearInterval(intervalId); //This is important
-    }, [api, setapi])
-
-    
-
+    gettime_string = (str) => {
+        let date = new Date(str)
+        // let time = Date.parse(date);
+        // time = time + (7 * 3600 * 1000)
+        // date = new Date(time)
+        let hours = date.getHours()
+        let minute = date.getMinutes()
+        if (hours < 10) {
+            hours = '0' + hours
+        }
+        if (minute < 10) {
+            minute = '0' + minute
+        }
+        return `${hours} : ${minute}`
+    }
 
     renderLeftComponent = () => {
         return (
@@ -106,40 +85,46 @@ export default function history_detail({ navigation }) {
             <View style={styles.body}>
                 <View style={styles.content}>
                     <View style={{
+                        width: wp('80%'), flexDirection: 'row', backgroundColor: '#0E77BF',
+                        height: hp('10%'), borderRadius: 10, marginTop: hp('5%')
+                    }} >
+                        <View style={{ width: '50%', alignItems: 'center', justifyContent: 'center', }}>
+                            <Text style={[styles.Text, { fontSize: hp('2.25%') }]}>วัน-เดือน-ปี</Text>
+                            <Text style={[styles.Text, { fontSize: hp('2.25%') }]}>{getdate_string(historyDetail.time)}</Text>
+                        </View>
+                        <View style={{ width: '50%', alignItems: 'center', justifyContent: 'center', }}>
+                            <Text style={[styles.Text, { fontSize: hp('2.25%') }]}>เวลา</Text>
+                            <Text style={[styles.Text, { fontSize: hp('2.25%') }]}>{gettime_string(historyDetail.time)}</Text>
+                        </View>
+
+                    </View>
+                    <View style={{
                         width: wp('80%'), backgroundColor: '#0E77BF', alignItems: 'center',
-                        height: hp('70%'), borderRadius: 10, marginTop: hp('5%')
+                        height: hp('60%'), borderRadius: 10, marginTop: hp('5%')
                     }}>
-                        <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%') }]}>ตำแหน่งปัจจุบันของ</Text>
-                        <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%') }]}>{friendSetting.name === '' ? friendSetting.Username : friendSetting.name}</Text>
-                        {NoAcces ?
-                            <View style={{ height: hp('55%'), width: wp('80%'), marginTop: hp('1%'), alignItems: 'center', justifyContent: 'center',backgroundColor: '#FFFFFF' }}>
-                                <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%'),color: '#000000' }]}>ไม่สามารถดูตำแหน่งปัจจุบันได้</Text>
-                            </View>
-                            :
-                            <View style={{ height: hp('55%'), width: wp('80%'), marginTop: hp('1%') }}>
-                                <MapView
-                                    style={styles.map}
-                                    provider={PROVIDER_GOOGLE}
-                                    region={{
-                                        latitude: MyPlaces.latitude,
-                                        longitude: MyPlaces.longitude,
-                                        latitudeDelta: 0.004,
-                                        longitudeDelta: 0.004,
+                        <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%') }]}>ตำแหน่งที่มีการหลับ</Text>
+                        <View style={{ height: hp('50%'), width: wp('80%'), marginTop: hp('1%') }}>
+                            <MapView
+                                style={styles.map}
+                                provider={PROVIDER_GOOGLE}
+                                region={{
+                                    latitude: historyDetail.latitude, //historyDetail.latitude ? historyDetail.latitude : 0,//historyDetail.latitude, 
+                                    longitude: historyDetail.longitude,//historyDetail.longitude ? historyDetail.longitude : 0,//historyDetail.longitude,
+                                    latitudeDelta: 0.004,
+                                    longitudeDelta: 0.004,
+                                }}
+                            // showsUserLocation={true}
+                            >
+                                <Marker
+                                    coordinate={{
+                                        latitude: historyDetail.latitude,
+                                        longitude: historyDetail.longitude,
                                     }}
-                                // showsUserLocation={true}
-                                >
-                                    <Marker
-                                        coordinate={{
-                                            latitude: MyPlaces.latitude,
-                                            longitude: MyPlaces.longitude,
-                                        }}
 
-                                    />
+                                />
 
-                                </MapView>
-                            </View>
-
-                        }
+                            </MapView>
+                        </View>
                     </View>
 
                 </View>

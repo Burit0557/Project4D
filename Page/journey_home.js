@@ -2,20 +2,13 @@ import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Button, Image, Icon, Header, Overlay } from 'react-native-elements';
-import { RadioButton } from 'react-native-paper';
-
-//import {launchImageLibrary} from 'react-native-image-picker'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { RadioButton, shadow } from 'react-native-paper';
 
 import { API } from './axios';
-
-import { PermissionsAndroid, Platform } from "react-native";
-import CameraRoll from "@react-native-community/cameraroll";
 import { CategoryContext } from '../context_api/myContext';
 
-import RNBluetoothClassic, {
-    BluetoothDevice
-} from 'react-native-bluetooth-classic';
+
+import Geolocation from 'react-native-geolocation-service';
 
 export default function journey_home({ navigation }) {
     const Context = useContext(CategoryContext)
@@ -34,14 +27,81 @@ export default function journey_home({ navigation }) {
         rest_min: dataUserSetting.rest_min,
     })
 
+    const GOOGLE_MAPS_APIKEY = Context.GOOGLE_MAPS_APIKEY;
+
+
+    const [InputText, setInputText] = useState('')
+    const [Show, setShow] = useState(false)
+    const [State, setState] = useState({
+        locationPredictions: [],
+    })
+    const [Destination, setDestination] = useState({})
+    const [MyPlaces, setMyPlaces] = useState({
+        latitude: 13.728567,
+        longitude: 100.774061,
+        title: '',
+        disLocation: '',
+    })
+    const [visible, setVisible] = useState(false);
+
+    const onChangeDestination = async (destination) => {
+        const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${GOOGLE_MAPS_APIKEY}&input={${destination}}&types=establishment`;
+        const result = await fetch(apiUrl);
+        const jsonResult = await result.json();
+        setState({
+            locationPredictions: jsonResult.predictions
+        });
+        console.log(jsonResult);
+        // const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${MyPlaces.latitude},${MyPlaces.longitude}&radius=500&type=restaurant&keyword=${destination}&key=${GOOGLE_MAPS_APIKEY}`;
+        // const result = await fetch(apiUrl);
+        // const jsonResult = await result.json();
+        // setState({
+        //     locationPredictions: jsonResult.results
+        // });
+        // console.log(jsonResult);
+    }
+
+    const pressedPrediction = async (prediction) => {
+        // const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=name,geometry,rating,formatted_phone_number&key=${GOOGLE_MAPS_APIKEY}`;
+        // const result = await fetch(apiUrl);
+        // const jsonResult = await result.json();
+        // console.log(jsonResult.result);
+        // setDestination({
+        //     ...Destination,
+        //     disLocation: jsonResult.result.name,
+        //     latitude: jsonResult.result.geometry.location.lat,
+        //     longitude: jsonResult.result.geometry.location.lng
+        // })
+        // setInput(jsonResult.result.name)
+        // console.log('test', prediction.description)
+        setInputText(prediction.description);
+        setDestination(prediction)
+
+        // setState({
+        //     locationPredictions: [],
+        // })
+        setShow(false)
+        // console.log(jsonResult);
+    }
 
 
 
     useEffect(() => {
-
+        Geolocation.getCurrentPosition((data) => {
+            console.log("latitude", data.coords.latitude);
+            console.log("longitude", data.coords.longitude);
+            setMyPlaces({
+                latitude: data.coords.latitude,
+                longitude: data.coords.longitude,
+                title: 'My Places',
+                disLocation: '',
+            })
+        })
     }, [])
 
-
+    const toggleOverlaySearch = () => {
+        setVisible(!visible);
+    };
 
     const inputDistance = (text) => {
         var number = /^[0-9]+$/
@@ -75,8 +135,12 @@ export default function journey_home({ navigation }) {
     }
 
     const start_bt = () => {
+        let mode = 0
+        let count = 0
         if (select === 'distance') {
             distance = parseInt(input.distance)
+            mode = 0
+            count = distance
             if (input.distance === '') {
                 Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูล')
                 return
@@ -89,10 +153,11 @@ export default function journey_home({ navigation }) {
                 Alert.alert('ระยะทางสั้นกว่าที่กำหนด', 'กรุณากรอกข้อมูลใหม่อีกครั้ง')
                 return
             }
-
         }
         else {
             time = (parseInt(input.rest_hour) * 60 + parseInt(input.rest_min))
+            mode = 1
+            count = time
             if (input.rest_hour === '' || input.rest_min === '') {
                 Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูล')
                 return
@@ -106,6 +171,18 @@ export default function journey_home({ navigation }) {
                 return
             }
         }
+        if (!Destination.description) {
+            console.log('NO')
+            return
+        }
+        let dataJourney = {
+            mode: mode,
+            count: count,
+            Destination: Destination
+        }
+        console.log(dataJourney)
+        Context.setDataJourney(dataJourney)
+        navigation.navigate('Journey')
     }
 
 
@@ -138,18 +215,70 @@ export default function journey_home({ navigation }) {
                         <View style={styles.bgInput}>
 
                             <View style={{ marginBottom: hp('3%'), width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                <View style={{ width: hp('4%'), height: hp('4%'), marginRight : '2%' }}>
+                                <View style={{ width: hp('4%'), height: hp('4%'), marginRight: '2%' }}>
                                     <Image source={require('../assets/placeholder.png')} style={[styles.smallIcon, { resizeMode: 'cover' }]} />
                                 </View>
+                                {/* <TouchableOpacity onPress={() => toggleOverlaySearch()}>
+                                    <View > */}
+
                                 <TextInput
                                     style={[styles.Input, { flex: 1 }]}
-                                    value={{}}
 
-                                    onChangeText={{}}
+                                    onChangeText={(text) => {
+                                        if (Show) {
+                                            setInputText(text);
+                                            onChangeDestination(text);
+                                        }
+                                    }}
                                     placeholder="เลือกจุดหมาย"
+                                    value={InputText}
+                                    selection={Show ? null : { start: 0, end: 0 }}
+                                    onFocus={() => { setShow(true) }}
+                                // onBlur={() => {
+                                //     // setState({
+                                //     //     locationPredictions: [],
+                                //     // })
+                                //     setShow(false)
+                                // }}
                                 />
-                            </View>
 
+                                {/* </View>
+                                </TouchableOpacity> */}
+                                <TouchableOpacity onPress={() => {
+                                    setInputText('')
+                                    setShow(false)
+                                    setState({
+                                        locationPredictions: [],
+                                    })
+                                    setDestination({})
+                                }}
+                                    style={{ marginLeft: '2%' }} >
+                                    <View style={{ width: hp('3%'), height: hp('3%'), marginLeft: '2%' }}>
+                                        <Image source={require('../assets/delete.png')} style={[styles.smallIcon, { resizeMode: 'cover' }]} />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            {Show ?
+                                <View style={{ width: '100%', borderColor: '#fff', borderWidth: 1 }}>
+                                    {
+                                        State.locationPredictions.map(prediction => {
+                                            return (
+                                                <TouchableOpacity
+                                                    key={prediction.place_id}
+                                                    onPress={() => pressedPrediction(prediction)}
+                                                    style={{ borderColor: '#fff', borderWidth: 1 }}
+                                                >
+                                                    <Text style={styles.locationSuggestion}>
+                                                        {prediction.description}
+                                                        {/* {prediction.name} */}
+                                                    </Text>
+                                                </TouchableOpacity>)
+                                        })
+                                    }
+                                </View>
+                                :
+                                <View></View>
+                            }
 
                             <View style={[styles.viewRadio, { marginBottom: hp('1.5%') }]}>
                                 <RadioButton
@@ -212,6 +341,31 @@ export default function journey_home({ navigation }) {
 
                     </View>
                 </View>
+
+                <Overlay key={1} isVisible={visible} onBackdropPress={toggleOverlaySearch} overlayStyle={styles.overlay_head}>
+                    <View style={{ width: wp('42%'), padding: hp('0.7%'), justifyContent: 'center' }}>
+
+                        <TextInput
+                            style={[styles.Input, { flex: 1 }]}
+
+                            onChangeText={(text) => {
+                                if (Show) {
+                                    setInputText(text);
+                                    onChangeDestination(text);
+                                }
+                            }}
+                            placeholder="เลือกจุดหมาย"
+                            value={InputText}
+                            onFocus={() => { setShow(true) }}
+                            onBlur={() => {
+                                setState({
+                                    locationPredictions: [],
+                                })
+                                setShow(false)
+                            }}
+                        />
+                    </View>
+                </Overlay>
 
                 <View style={{ height: hp('10%') }}>
 
@@ -315,20 +469,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#014D81',
     },
     Input: {
-       //flexDirection: 'row',
-       fontSize: hp('2.5%'),
-       //paddingLeft: ('10%'),
-       //marginBottom: hp('1.5%'),
-       backgroundColor: '#0E77BF',
-       width: '100%',
-       height: hp('5%'),
-       borderRadius: 10,
-       alignItems: 'center',
-       justifyContent: 'center',
-       textAlign : 'center',
-       textAlignVertical : 'center',
-       paddingBottom : ('2.5%'),
-       color : '#fff'
+        //flexDirection: 'row',
+        fontSize: hp('2.5%'),
+        //paddingLeft: ('10%'),
+        //marginBottom: hp('1.5%'),
+        backgroundColor: '#0E77BF',
+        width: '100%',
+        height: hp('5%'),
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        paddingBottom: ('2.5%'),
+        color: '#fff'
 
 
     },
@@ -369,6 +523,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: hp('3%')
-    }
+    },
+    locationSuggestion: {
+        color: "#fff",
+        padding: 5,
+        fontSize: hp('2%')
+    },
 
 })

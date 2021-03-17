@@ -23,23 +23,58 @@ export default function family({ navigation }) {
         navigation.navigate('Family-Setting')
     }
 
-    useEffect(() => {
-        API.get('/friend', body = {
-            params: {
-                username: dataUser.Username
-            }
-        })
-            .then(res => {
-                console.log(res.data)
-                if (res.data.length !== 0) {
-                    setData(res.data)
-                }
+    const goHistory = (data) => {
+        // console.log(data)
+        Context.setFriendSetting(data)
+        navigation.navigate('History_friend')
+    }
 
+    const goLocation = (data) => {
+        // console.log(data)
+        Context.setFriendSetting(data)
+        navigation.navigate('Family-Location')
+    }
+
+    // useEffect(() => {
+    //     API.get('/friend', body = {
+    //         params: {
+    //             username: dataUser.Username
+    //         }
+    //     })
+    //         .then(res => {
+    //             console.log(res.data)
+    //             if (res.data.length !== 0) {
+    //                 setData(res.data)
+    //             }
+
+    //         })
+    //         .catch(err => {
+    //             console.log(err)
+    //         })
+    // }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () =>{
+            API.get('/friend', body = {
+                params: {
+                    username: dataUser.Username
+                }
             })
-            .catch(err => {
-                console.log(err)
-            })
-    }, []);
+                .then(res => {
+                    console.log(res.data)
+                    if (res.data.length !== 0) {
+                        setData(res.data)
+                    }
+    
+                })
+                .catch(err => {
+                    console.log(err)
+                    setData([])
+                })
+        })
+
+        return unsubscribe
+    },[navigation])
 
     renderLeftComponent = () => {
         return (
@@ -62,10 +97,10 @@ export default function family({ navigation }) {
             />
             <ScrollView>
                 <View style={styles.body}>
-                    <View style={[styles.content, {marginTop: hp('5%')}]}>
+                    <View style={[styles.content, { marginTop: hp('5%') }]}>
                         {
                             data.length === 0 ?
-                                <View style={{alignSelf : 'center'}}><Text style={styles.textshow}>ไม่มีสมาชิก</Text></View>
+                                <View style={{ alignSelf: 'center' }}><Text style={styles.textshow}>ไม่มีสมาชิก</Text></View>
                                 :
                                 data.map((item, index) => {
                                     return (
@@ -84,7 +119,7 @@ export default function family({ navigation }) {
                                                         </View>
                                                     </View>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity >
+                                                <TouchableOpacity onPress={() => goHistory(item)}>
                                                     <View style={styles.select}>
                                                         <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
                                                             <Image source={require('../assets/history.png')} style={styles.icondown} />
@@ -92,7 +127,7 @@ export default function family({ navigation }) {
                                                         <Text style={styles.Text}>ประวัติ</Text>
                                                     </View>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity onPress={() => navigation.navigate('Family-Location')}>
+                                                <TouchableOpacity onPress={() => goLocation(item)}>
                                                     <View style={styles.select}>
                                                         <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
                                                             <Image source={require('../assets/placeholder.png')} style={styles.icondown} />
@@ -100,7 +135,7 @@ export default function family({ navigation }) {
                                                         <Text style={styles.Text}>ตำแหน่ง</Text>
                                                     </View>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity onPress={goSetting}>
+                                                <TouchableOpacity onPress={() => goSetting(item)}>
                                                     <View style={styles.select}>
                                                         <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
                                                             <Image source={require('../assets/setting.png')} style={styles.icondown} />
@@ -129,7 +164,9 @@ export default function family({ navigation }) {
                     <Button
                         title="เพิ่มสมาชิก"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('25%') }]}
-                        onPress={() => navigation.navigate('Family-Add')}
+                        onPress={() => {
+                            console.log(dataUser.Username)
+                            navigation.navigate('Family-Add')}}
                         titleStyle={{ fontSize: hp('2.25%') }}
                     />
                 </View>
@@ -154,7 +191,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff0000',
     },
     body: {
-        
+
         // height: hp('90%'),
         width: wp('100%'),
         // justifyContent: 'center',
@@ -245,7 +282,7 @@ const styles = StyleSheet.create({
     btnLogin: {
         alignSelf: 'center',
         backgroundColor: '#014D81',
-        width : wp('29%'),
+        width: wp('29%'),
         height: hp('6%'),
         borderRadius: 15,
     },
@@ -253,6 +290,6 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: hp('2.25%'),
         paddingBottom: 0,
-        textAlign : 'center'
+        textAlign: 'center'
     },
 })
