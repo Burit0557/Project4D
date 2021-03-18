@@ -24,12 +24,9 @@ export default function journey({ navigation }) {
         disLocation: '',
     })
 
-    const [Destination, setDestination] = useState({
-        latitude: 13.728567,
-        longitude: 100.774061,
-        title: '',
-        disLocation: '',
-    })
+    const [Destination, setDestination] = useState(
+        Context.Destination
+    )
 
     const [dataJourney, setDataJourney] = useState(Context.dataJourney)
     const [dataUserSetting, setDataUserSetting] = useState(Context.dataUserSetting)
@@ -40,7 +37,9 @@ export default function journey({ navigation }) {
         current: 0,
     })
     const [check, setCheck] = useState(false)
-
+    const [State, setState] = useState({
+        locationPredictions: [],
+    })
 
     const [nearbyPlaces, setNearbyPlaces] = useState([])
     const [nearbyShow, setNearbyShow] = useState(true)
@@ -52,9 +51,7 @@ export default function journey({ navigation }) {
     // const GOOGLE_MAPS_APIKEY = Context.GOOGLE_MAPS_APIKEY;
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyAaZ9OqZiu0Ap4yMwWI1qhGb-8xp71BYzU';
-    const goSetting = () => {
-        navigation.navigate('Family-Setting')
-    }
+
 
     useEffect(() => {
         Geolocation.getCurrentPosition((data) => {
@@ -66,27 +63,8 @@ export default function journey({ navigation }) {
                 title: 'My location',
                 disLocation: '',
             })
-
-            // getNearbyPlaces(data.coords.latitude, data.coords.longitude)
-            setNearbyShow(false)
-
         })
-
-        pressedPrediction(dataJourney.Destination)
-
     }, []);
-
-    getNearbyPlaces = async (latitude, longitude) => {
-        const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=20000&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`;
-        const result = await fetch(apiUrl);
-        const jsonResult = await result.json();
-        console.log(jsonResult);
-        let data = jsonResult.results
-        data = data.sort(function (a, b) {
-            return b.rating - a.rating
-        })
-        setNearbyPlaces(data)
-    }
 
     useEffect(() => {
         const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
@@ -119,67 +97,11 @@ export default function journey({ navigation }) {
         return () => clearInterval(intervalId); //This is important
     }, [api, setapi])
 
-    useEffect(() => {
-        if (dataJourney.mode === 0) {
-            const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-                if (distance.start - distance.current > dataJourney.count) {
-                    getNearbyPlaces(MyPlaces.latitude, MyPlaces.longitude)
-                    setNearbyShow(true)
-                }
-                setCheck(true)
-            }, 600000)
-            return () => clearInterval(intervalId); //This is important
-        }
-        if (dataJourney.mode === 1) {
-            let minute = 1000//60000
-            const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-
-                getNearbyPlaces(MyPlaces.latitude, MyPlaces.longitude)
-                setNearbyShow(true)
-
-                setCheck(true)
-            }, dataJourney.count * minute)
-            return () => clearInterval(intervalId); //This is important
-        }
-
-    }, [check, setCheck])
-
-
-
-
-
-    const pressedPrediction = async (prediction) => {
-        const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=name,geometry,rating,formatted_phone_number&key=${GOOGLE_MAPS_APIKEY}`;
-        const result = await fetch(apiUrl);
-        const jsonResult = await result.json();
-        console.log(jsonResult.result);
-        setDestination({
-            ...Destination,
-            disLocation: jsonResult.result.name,
-            latitude: jsonResult.result.geometry.location.lat,
-            longitude: jsonResult.result.geometry.location.lng
-        })
-    }
-
-    const gotoRest = async (prediction) => {
-        const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=name,geometry,rating,formatted_phone_number&key=${GOOGLE_MAPS_APIKEY}`;
-        const result = await fetch(apiUrl);
-        const jsonResult = await result.json();
-        tempDestination = {
-            disLocation: jsonResult.result.name,
-            latitude: jsonResult.result.geometry.location.lat,
-            longitude: jsonResult.result.geometry.location.lng
-        }
-        Context.setDestination(tempDestination)
-        // setNearbyShow(false)
-        navigation.navigate('Journey_rest')
-    }
-
 
 
     renderLeftComponent = () => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
                 <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.iconhome} />
                 </View>
@@ -192,13 +114,14 @@ export default function journey({ navigation }) {
                 containerStyle={{ height: hp('15%') }}
                 leftComponent={this.renderLeftComponent()}
                 centerComponent={{ text: 'เดินทางไกล', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
+                // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
+                // barStyle="dark-content"
                 backgroundColor='#014D81'
             />
             <ScrollView keyboardShouldPersistTaps="handled" nestedScrollEnabled={true} >
                 <View style={styles.body}>
                     <View style={styles.content}>
                         <View style={{ marginTop: hp('2%') }}>
-
                             <View style={{
                                 width: '100%', backgroundColor: '#0E77BF', alignItems: 'center',
                                 height: hp('70%'), borderRadius: 10, marginTop: hp('0.5%')
@@ -228,18 +151,6 @@ export default function journey({ navigation }) {
                                             onReady={result => {
                                                 console.log(`Distance: ${result.distance} km`)
                                                 console.log(`Duration: ${result.duration} min.`)
-                                                if (distance.start === 0) {
-                                                    setDistance({
-                                                        ...distance,
-                                                        start: result.distance
-                                                    })
-                                                }
-                                                else {
-                                                    setDistance({
-                                                        ...distance,
-                                                        current: result.distance
-                                                    })
-                                                }
 
                                             }}
                                         />
@@ -263,35 +174,6 @@ export default function journey({ navigation }) {
 
 
                     </View>
-                    {
-                        nearbyShow ?
-                            <View style={{
-                                height: hp('50%'), width: wp('80%'), marginTop: '5%', borderWidth: 2,
-                                alignItems: 'center', backgroundColor: '#014D81', borderRadius: 10,
-                            }}>
-                                <Text style={{ color: '#fff', fontSize: hp('2.25%'), marginBottom: '1%' }}>สถานที่พักรถใกล้เคียง</Text>
-                                <ScrollView nestedScrollEnabled={true}>
-                                    {nearbyPlaces.map((item, index) => {
-                                        return (
-                                            <TouchableOpacity key={index} onPress={() => { gotoRest(item) }}>
-                                                <View style={{
-                                                    width: wp('70%'), height: hp('10%'), backgroundColor: '#0E77BF',
-                                                    alignItems: 'center', borderRadius: 10, marginTop: '3%', fontSize: hp('2.25%'), justifyContent: 'center'
-                                                }}>
-                                                    <Text style={{ color: '#fff', textAlign: 'center' }}>
-                                                        {`ชื่อร้าน ${item.name}`}</Text>
-                                                    <Text style={{ color: '#fff', textAlign: 'center' }}>
-                                                        {`คะแนน ${item.rating}`}</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        )
-                                    })
-                                    }
-                                </ScrollView>
-                            </View>
-                            :
-                            <View></View>
-                    }
 
                     <View style={{ width: '95%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Button
@@ -300,22 +182,15 @@ export default function journey({ navigation }) {
                             onPress={() => { }}
                             titleStyle={styles.textbt}
                         />
-                        {
-                            nearbyShow &&
-                            <Button
-                                title="ข้ามการพัก"
-                                buttonStyle={[styles.btsave, styles.Shadow, { marginLeft: wp('12%') }]}
-                                onPress={() => {
-                                    setNearbyShow(false)
-                                    setDistance({
-                                        ...distance,
-                                        start: 0
-                                    })
-                                    setNearbyPlaces([])
-                                }}
-                                titleStyle={styles.textbt}
-                            />
-                        }
+                        <Button
+                            title="เดินทางต่อ"
+                            buttonStyle={[styles.btsave, styles.Shadow, { marginLeft: wp('12%') }]}
+                            onPress={() => {
+                                navigation.replace('Journey')
+                            }}
+                            titleStyle={styles.textbt}
+                        />
+
 
                     </View>
                 </View>

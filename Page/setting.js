@@ -25,6 +25,7 @@ export default function setting({ navigation }) {
         try {
             await AsyncStorage.setItem('@login', 'false')
             await AsyncStorage.removeItem('@dataUser');
+            await AsyncStorage.removeItem('@dataUserSetting');
             console.log('saveData successfully saved')
         } catch (e) {
             console.log('Failed to save the saveData to the storage')
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
         margin: '2%',
         marginTop: '4%',
         color: '#ffff',
-        fontSize: hp('2%')
+        fontSize: hp('2.5%')
     },
     bgbutton: {
         width: wp('100%'),

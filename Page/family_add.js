@@ -1,31 +1,189 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, BackHandler } from 'react-native';
 import { Button, Image, Icon, Header, Avatar } from 'react-native-elements'
+import { API } from './axios';
+import { CategoryContext } from '../context_api/myContext';
 
-export default function history({ navigation }) {
+export default function family_add({ navigation }) {
     data = [
         {
-            number: 4,
-            name: 'LetMePlay4'
+            name: "",
+            Username: 'LetMePlay4',
+            image: ""
         },
         {
-            number: 5,
-            name: 'LetMePlay5'
+            name: "",
+            Username: 'LetMePlay4',
+            image: ""
         },
         {
-            number: 6,
-            name: 'LetMePlay6'
+            name: "",
+            Username: 'LetMePlay4',
+            image: ""
         },
 
     ]
+
+    const Context = useContext(CategoryContext)
     const [input, setInput] = useState({
         username: ''
     })
+
     const [found, setFound] = useState(false)
+    const [isLoad, setIsLoad] = useState(true)
+
+    const [dataUser, setdataUser] = useState(
+        Context.dataUser
+    )
+
+    const [dataFriend, setDataFriend] = useState({
+        name: "",
+        image: "",
+        Username: "Username",
+    })
+
+    const [dataFriendReq, setDataFriendReq] = useState([])
+
+    const [imgScr, setimgScr] = useState(require('../assets/profile-user.png'))
+
+
+    findUser = () => {
+        console.log(input.username)
+        API.get('/get_user', data = {
+            params: {
+                username: input.username.toLowerCase()
+            }
+        })
+            .then(res => {
+                console.log(res.data[0].Username)
+                if (res.data[0]) {
+                    setDataFriend(res.data[0])
+                    if (res.data[0].image !== '') {
+                        setimgScr({ uri: `data:image/jpg;base64,${res.data[0].image}` })
+                    }
+                    setFound(true)
+                }
+
+            })
+            .catch(error => {
+                console.log(error)
+                if (error.response.status === 404) {
+                    Alert.alert('ผิดพลาด', 'ไม่พบ USERNAME ที่ต้องการ')
+                    setFound(false)
+                }
+            })
+
+    }
+
+    addFriend = () => {
+        if (dataUser.Username === dataFriend.Username) {
+            Alert.alert('ผิดพลาด', 'ไม่สามารถเพิ่ม USERNAME คนนี้ได้');
+        }
+        else {
+            API.post('/friend_req', data = {
+                username: dataUser.Username,
+                friend_user: dataFriend.Username,
+            })
+                .then(res => {
+                    setInput({
+                        ...input,
+                        username: ""
+                    })
+                    setFound(false)
+                    Alert.alert('สำเร็จ', 'คำขอเป็นเพื่อนสำเร็จ')
+
+                })
+                .catch(error => {
+                    console.log(error.response.status)
+                    if (error.response.status === 409) {
+                        Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
+                    }
+                    if (error.response.status === 459) {
+                        console.log("test")
+                        Alert.alert('ผิดพลาด', 'เป็นเพื่อนกันแล้ว')
+                    }
+                })
+        }
+    }
+
+    getRequest = () => {
+        API.get('/get_friend_req', data = {
+            params: {
+                username: dataUser.Username
+            }
+        })
+            .then(res => {
+                console.log(res.data.length)
+                if (res.data.length > 0) {
+                    setDataFriendReq(res.data)
+                    console.log("test")
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                if (error.response.status === 404) {
+
+                }
+            })
+
+    }
+
+    const backAction = () => {
+        console.log("test")
+        //   navigation.replace('Family')
+    }
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        getRequest()
+        setIsLoad(false)
+        return () => backHandler.remove();
+    }, [])
+
+    Friend_confirm = (friend_user) => {
+        API.post('/add_friend', data = {
+            username: dataUser.Username,
+            friend_user: friend_user,
+        })
+            .then(res => {
+                setDataFriendReq(dataFriendReq.filter(item => item.Username !== friend_user))
+                Alert.alert('สำเร็จ', 'เป็นเพื่อนสำเร็จ')
+                //navigation.replace('Family')
+
+            })
+            .catch(error => {
+                console.log(error)
+                // if (error.response.status === 409) {
+                //     Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
+                // }
+
+            })
+    }
+    Friend_cancel = (friend_user) => {
+        API.post('/delete_friend_req', data = {
+            username: dataUser.Username,
+            friend_user: friend_user,
+        })
+            .then(res => {
+                setDataFriendReq(dataFriendReq.filter(item => item.Username !== friend_user))
+                // Alert.alert('สำเร็จ', 'เป็นเพื่อนสำเร็จ')
+
+            })
+            .catch(error => {
+                console.log(error)
+                // if (error.response.status === 409) {
+                //     Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
+                // }
+
+            })
+    }
     renderLeftComponent = () => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('Family')}>
+            <TouchableOpacity onPress={() => navigation.replace('Family')}>
                 <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.iconhome} />
                     {/* <Icon name='chevron-back' type='ionicon' color='#fff' size={wp('8%')} /> */}
@@ -48,24 +206,27 @@ export default function history({ navigation }) {
                     <View style={styles.content}>
                         <View style={styles.box}>
                             <Text style={[styles.Text, { alignSelf: 'center', marginTop: '3%', marginBottom: '3%' }]}>คำขอเป็นสมาชิก</Text>
-                            {data.map((itam, index) => {
+                            {dataFriendReq.map((item, index) => {
                                 return (<View key={index} style={styles.select}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <View style={[styles.profile, { backgroundColor: '#c4c4c4', marginRight: '5%' }]}>
-                                            <Image source={require('../assets/profile-user.png')} style={styles.profile} />
+                                            <Image style={styles.profile}
+                                                source={item.image === "" ?
+                                                    require('../assets/profile-user.png')
+                                                    : { uri: `data:image/jpg;base64,${item.image}` }} />
                                         </View>
-                                        <Text style={styles.Text}>{itam.name}</Text>
+                                        <Text style={styles.Text}>{item.name === "" ? item.Username : item.name}</Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', }}>
                                         <Button
                                             title="ยอมรับ"
                                             buttonStyle={[styles.btnCF, { backgroundColor: '#49BB21', }]}
-                                            // onPress={() => navigation.navigate('Login')}
+                                            onPress={() => Friend_confirm(item.Username)}
                                             titleStyle={{ fontSize: hp('1.5%') }}
                                         /><Button
                                             title="ปฏิเสธ"
                                             buttonStyle={[styles.btnCF, { backgroundColor: '#EA2626', }]}
-                                            // onPress={() => navigation.navigate('Login')}
+                                            onPress={() => Friend_cancel(item.Username)}
                                             titleStyle={{ fontSize: hp('1.5%') }}
                                         />
                                     </View>
@@ -83,7 +244,7 @@ export default function history({ navigation }) {
                                 placeholder="Username"
                                 placeholderTextColor='rgba(255, 255, 255, 0.5)'
                             />
-                            <TouchableOpacity style={styles.btnSeachbox} onPress={() => setFound(true)}>
+                            <TouchableOpacity style={styles.btnSeachbox} onPress={() => findUser()}>
                                 <Icon name='search' type='Fontisto' color='#fff' size={hp('5%')} />
                             </TouchableOpacity>
                         </View>
@@ -91,13 +252,13 @@ export default function history({ navigation }) {
                             found ?
                                 <View style={{ alignItems: 'center', marginTop: '10%' }}>
                                     <View style={[styles.profile2, { backgroundColor: '#c4c4c4', }]}>
-                                        {/* <Image source={require('../assets/profile-user.png')} style={styles.profile2} /> */}
+                                        <Image source={imgScr} style={styles.profile2} />
                                     </View>
-                                    <Text style={[styles.Text, { color: '#014D81', marginTop: '5%' }]}>NAME123456789</Text>
+                                    <Text style={[styles.Text, { color: '#014D81', marginTop: '5%' }]}>{dataFriend.name === '' ? dataFriend.Username : dataFriend.name}</Text>
                                     <Button
                                         title="เพิ่มสมาชิก"
                                         buttonStyle={[styles.btnAdd, styles.Shadow, { marginTop: hp('2%'), width: wp('22%') }]}
-                                        onPress={() => loginFunction()}
+                                        onPress={() => addFriend()}
                                         titleStyle={{ fontSize: hp('2%') }}
                                     />
                                 </View>
@@ -110,7 +271,6 @@ export default function history({ navigation }) {
 
                 </View>
             </ScrollView>
-
         </View >
     )
 }

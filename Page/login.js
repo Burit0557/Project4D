@@ -9,6 +9,11 @@ import CameraRoll from "@react-native-community/cameraroll";
 import AsyncStorage from '@react-native-community/async-storage';
 import { CategoryContext } from '../context_api/myContext';
 
+import RNBluetoothClassic, {
+    BluetoothDevice
+} from 'react-native-bluetooth-classic';
+
+
 
 async function hasAndroidPermission_Storage() {
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
@@ -52,15 +57,24 @@ export default function login({ navigation }) {
 
         setTimeout(() => {  //assign interval to a variable to clear it.
             readlogin()
+
         }, 1200)
     }, ([]))
+
+
+
+
 
     readlogin = async () => {
         try {
             let checklogin = await AsyncStorage.getItem('@login')
             let dataUser = await AsyncStorage.getItem('@dataUser')
+            let dataUserSetting = await AsyncStorage.getItem('@dataUserSetting')
             if (dataUser !== null) {
                 Context.setDataUser(JSON.parse(dataUser))
+            }
+            if (dataUserSetting !== null) {
+                Context.setDataUserSetting(JSON.parse(dataUserSetting))
             }
             checklogin = (checklogin === 'true')
             //checklogin = true
@@ -90,6 +104,52 @@ export default function login({ navigation }) {
             console.log('Failed to save the saveData to the storage')
         }
     }
+    const setsetting = async (dataUserSetting) => {
+        dataUserSetting = JSON.stringify(dataUserSetting)
+        //console.log(dataUserSetting)
+        try {
+            await AsyncStorage.setItem('@dataUserSetting', dataUserSetting)
+            console.log('save dataUserSetting successfully saved')
+        } catch (e) {
+            console.log('Failed to save the saveData to the storage')
+        }
+    }
+
+    const getSetting = async (dataUser) => {
+        API.get('/get_setting', data = {
+            params: {
+                username: input.username.toLowerCase(),
+            }
+        })
+            .then((res) => {
+                data = res.data[0]
+                if (data) {
+                    rest_hour = parseInt(data.rest / 60)
+                    rest_min = (data.rest % 60)
+                    if (rest_min < 10) {
+                        rest_min = '0' + rest_min
+                    }
+                    up_min = parseInt(data.time_update / 60)
+                    up_sec = (data.time_update % 60)
+                    if (up_sec < 10) {
+                        up_sec = '0' + up_sec
+                    }
+                    dataUserSetting = {
+                        bluetooth_name: data.bluetooth_name,
+                        EAR: data.EAR.toString(),
+                        distance: data.distance.toString(),
+                        rest_hour: rest_hour.toString(),
+                        rest_min: rest_min.toString(),
+                        up_min: up_min.toString(),
+                        up_sec: up_sec.toString(),
+
+                    }
+                    Context.setDataUserSetting(dataUserSetting)
+                    setsetting(dataUserSetting)
+                }
+            })
+            .catch(error => console.log(error))
+    }
 
 
     loginFunction = () => {
@@ -105,11 +165,11 @@ export default function login({ navigation }) {
             username: input.username.toLowerCase(),
             password: input.password,
         })
-            .then(res => {
+            .then(async (res) => {
                 setlogin(res.data[0])
                 Context.setDataUser(res.data[0])
                 console.log(res.data[0])
-
+                getSetting()
                 navigation.reset({
                     index: 0,
                     routes: [
@@ -186,6 +246,7 @@ export default function login({ navigation }) {
                 :
                 <View style={styles.container}>
                     <View style={styles.logo} >
+                        <Image source={require('../assets/logo_name1024.png')} style={[styles.addimage, { resizeMode: 'cover' }]} />
                     </View>
                     <View style={[styles.listRow, { marginTop: hp('7%') }]}>
                         <ImageBackground source={require('../assets/profile-user2.png')} style={styles.smallIcon} />
@@ -212,7 +273,7 @@ export default function login({ navigation }) {
                         title="เข้าสู่ระบบ"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('7%') }]}
                         onPress={() => loginFunction()}
-                        titleStyle={{ fontSize: hp('2%') }}
+                        titleStyle={{ fontSize: hp('2.25%') }}
                     />
                     <TouchableOpacity style={styles.touchtext} onPress={() => navigation.navigate('ForgotPass')}>
                         <Text style={styles.textForgot}>ลืมรหัสผ่าน</Text>
@@ -223,7 +284,7 @@ export default function login({ navigation }) {
                         title="ลงทะเบียน"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('50%') }]}
                         onPress={() => navigation.navigate('Register')}
-                        titleStyle={{ fontSize: hp('2%') }}
+                        titleStyle={{ fontSize: hp('2.25%') }}
                     />
                 </View>
             }
@@ -237,19 +298,22 @@ const styles = StyleSheet.create({
         flex: 1
     },
     logo: {
-        height: hp('25%'),
-        width: wp('70%'),
+        height: wp('55%'),
+        width: wp('55%'),
         alignSelf: 'center',
         borderRadius: 15,
         marginTop: hp('10%'),
-        backgroundColor: '#DBCCCC',
+        //backgroundColor: '#DBCCCC',
     },
     listRow: {
+
         flexDirection: 'row',
         // justifyContent: 'space-around',
         alignItems: 'center',
         alignSelf: 'center',
-        marginTop: hp('2%')
+        marginTop: hp('2%'),
+        height: hp('5%'),
+
     },
     Shadow: {
         shadowColor: "#000",
@@ -268,13 +332,14 @@ const styles = StyleSheet.create({
     },
     Text: {
         color: '#12283D',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         alignSelf: 'center',
     },
     textInput: {
+
         width: wp('70%') - hp('6%') - 10,
         color: '#000',
-        height: wp('8%'),
+        height: hp('5%'),
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.5)',
         fontSize: hp('3%'),
@@ -284,14 +349,14 @@ const styles = StyleSheet.create({
     btnLogin: {
         alignSelf: 'center',
         backgroundColor: '#014D81',
-        width: wp('30%'),
-        height: hp('5%'),
+        width: wp('29%'),
+        height: hp('6%'),
         borderRadius: 10,
     },
     textForgot: {
         //margin: '1%',
         color: '#12283D',
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         borderBottomWidth: 1,
         borderColor: '#12283D',
         alignSelf: 'center',
@@ -309,5 +374,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.5)',
         alignSelf: 'center',
+    },
+    addimage: {
+        height: '100%',
+        width: '100%',
     },
 })

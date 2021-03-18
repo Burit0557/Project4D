@@ -4,7 +4,7 @@ import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, 
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { useSafeArea } from 'react-native-safe-area-context';
 import { and } from 'react-native-reanimated';
-import {API} from './axios' ;
+import { API } from './axios';
 
 export default function register({ navigation }) {
     const [input, setInput] = useState({
@@ -114,45 +114,51 @@ export default function register({ navigation }) {
         let conditionPass = checkPass()
         let conditioncfPass = checkcfPass()
         let conditionEmail = checkEmail()
-        let {username,password,cfpassword,email} = input
+        let { username, password, cfpassword, email } = input
 
-        if(!conditionUser){
+        if (!conditionUser) {
             username = ''
         }
-        if(!conditionPass){
+        if (!conditionPass) {
             password = ''
             cfpassword = ''
         }
-        if(!conditioncfPass){
+        if (!conditioncfPass) {
             cfpassword = ''
         }
-        if(!conditionEmail){
+        if (!conditionEmail) {
             email = ''
         }
 
         if (conditionUser && conditionPass && conditioncfPass && conditionEmail) {
             console.log('success')
             let tempusername = input.username.toLowerCase()
-            API.post('/register',data={
-                username : tempusername,
+            API.post('/register', data = {
+                username: tempusername,
                 password: input.password,
                 email: input.email,
             })
-            .then(res => {
-                Alert.alert('ลงทะเบียนสำเร็จ')
-                navigation.reset({
-                    index: 0,
-                    routes: [
-                        {
-                            name: 'Login'
-                        }
-                    ]
+                .then(res => {
+                    Alert.alert('ลงทะเบียนสำเร็จ')
+                    API.post('/add_setting', data = {
+                        username: tempusername,
+                    })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                    navigation.reset({
+                        index: 0,
+                        routes: [
+                            {
+                                name: 'Login'
+                            }
+                        ]
+                    })
                 })
-            })
-            .catch(error =>{
-                Alert.alert('ผิดพลาด')
-                console.log('Error')
-            })
+                .catch(error => {
+                    Alert.alert('ผิดพลาด')
+                    console.log('Error')
+                })
         }
         setInput({
             username: username,
@@ -323,7 +329,7 @@ export default function register({ navigation }) {
                             </View>
 
                             {!showUser.hide ?
-                                <Text style={{ color: showUser.color, fontSize: hp('1.5%') }}>{showUser.text}</Text>
+                                <Text style={[styles.textdetail, { color: showUser.color, }]}>{showUser.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -352,7 +358,7 @@ export default function register({ navigation }) {
 
                             </View>
                             {!showPass.hide ?
-                                <Text style={{ color: showPass.color, fontSize: hp('1.5%') }}>{showPass.text}</Text>
+                                <Text style={[styles.textdetail, { color: showPass.color }]}>{showPass.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -374,7 +380,7 @@ export default function register({ navigation }) {
 
                             </View>
                             {!showcfPass.hide ?
-                                <Text style={{ color: showcfPass.color, fontSize: hp('1.5%') }}>{showcfPass.text}</Text>
+                                <Text style={[styles.textdetail, { color: showcfPass.color, }]}>{showcfPass.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -401,7 +407,7 @@ export default function register({ navigation }) {
                                 />
                             </View>
                             {!showEmail.hide ?
-                                <Text style={{ color: showEmail.color, fontSize: hp('1.5%') }}>{showEmail.text}</Text>
+                                <Text style={[styles.textdetail, { color: showEmail.color }]}>{showEmail.text}</Text>
                                 :
                                 <View></View>
                             }
@@ -499,4 +505,7 @@ const styles = StyleSheet.create({
         color: '#FF0000',
         fontSize: hp('1.5%'),
     },
+    textdetail: {
+        fontSize: hp('2%')
+    }
 })

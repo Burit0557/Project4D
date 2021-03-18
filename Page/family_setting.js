@@ -1,36 +1,117 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity, BackHandler, Alert } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements'
+import { API } from './axios';
+import { CategoryContext } from '../context_api/myContext';
 
-export default function history({ navigation }) {
-    data = [
-        {
-            number: 1,
-            name: 'LetMePlay1'
-        },
-        {
-            number: 2,
-            name: 'LetMePlay2'
-        },
-        {
-            number: 3,
-            name: 'LetMePlay3'
-        },
+export default function hifamily_settingstory({ navigation }) {
 
-    ]
+    const Context = useContext(CategoryContext)
+    const [friendSetting, setFriendSetting] = useState(
+        Context.friendSetting
+    )
+    const [dataUser, setDataUser] = useState(
+        Context.dataUser
+    )
+
     const [passed, setPassed] = useState('')
     const [isEnabled1, setIsEnabled1] = useState(false);
     const [isEnabled2, setIsEnabled2] = useState(false);
     const [isEnabled3, setIsEnabled3] = useState(false);
     const [isEnabled4, setIsEnabled4] = useState(false);
+
     const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
     const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
     const toggleSwitch3 = () => setIsEnabled3(previousState => !previousState);
     const toggleSwitch4 = () => setIsEnabled4(previousState => !previousState);
+
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        API.get("/get_acces", data = {
+            params: {
+                username: dataUser.Username,
+                friend_user: friendSetting.Username,
+            }
+        })
+            .then(res => {
+                console.log(res.data[0])
+                if (res.data[0]) {
+                    setIsEnabled1(res.data[0].position_acces === 1)
+                    setIsEnabled2(res.data[0].history_acces === 1)
+                    setIsEnabled3(res.data[0].alert_acces === 1)
+                    setIsEnabled4(res.data[0].friend_alert === 1)
+                }
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        return () => backHandler.remove();
+    }, [])
+
+    const saveAPI = () => {
+        API.post("/set_acces", data = {
+            username: dataUser.Username,
+            friend_user: friendSetting.Username,
+            position_acces: isEnabled1,
+            history_acces: isEnabled2,
+            alert_acces: isEnabled3,
+            friend_alert: isEnabled4
+        })
+            .then(res => {
+                console.log("succes")
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    const backAction = () => {
+        console.log("Back test")
+        saveAPI()
+    }
+
+    const deleteFriend = () => {
+        Alert.alert(
+            "แจ้งเตือน",
+            "ต้องการลบเพื่อนหรือไม่",
+            [
+                {
+                    text: "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "ยืนยัน", onPress: () => {
+                        API.post('/delete_friend', data = {
+                            username: dataUser.Username,
+                            friend_user: friendSetting.Username,
+                        })
+                            .then(res => {
+                                navigation.replace('Family')
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
+
+    }
+
     renderLeftComponent = () => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('Family')}>
+            <TouchableOpacity onPress={() => {
+                backAction()
+                navigation.navigate('Family')
+            }}>
                 <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.iconhome} />
                 </View>
@@ -81,7 +162,7 @@ export default function history({ navigation }) {
                                     value={isEnabled3}
                                 />
                             </View>
-                            <View style={[styles.select,{ borderBottomWidth: 0,}]}>
+                            <View style={[styles.select, { borderBottomWidth: 0, }]}>
                                 <Text style={styles.Text}>รับแจ้งเตือนจากเพื่อน</Text>
                                 <Switch
                                     trackColor={{ false: "#014D81", true: "#42A4E7" }}
@@ -91,14 +172,14 @@ export default function history({ navigation }) {
                                     value={isEnabled4}
                                 />
                             </View>
-
                         </View>
-
                     </View>
                     <Button
                         title="ลบสมาชิก"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('25%') }]}
-                        // onPress={() => navigation.navigate('Family-Add')}
+                        onPress={() => {
+                            deleteFriend()
+                        }}
                         titleStyle={{ fontSize: hp('2%') }}
                     />
                 </View>

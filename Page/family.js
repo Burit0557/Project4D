@@ -4,47 +4,77 @@ import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity }
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import { API } from './axios';
 import { set } from 'lodash';
+import { CategoryContext } from '../context_api/myContext';
 
-export default function history({ navigation }) {
-    // data = [
-    //     {
-    //         number: 1,
-    //         name: 'LetMePlay1'
-    //     },
-    //     {
-    //         number: 2,
-    //         name: 'LetMePlay2'
-    //     },
-    //     {
-    //         number: 3,
-    //         name: 'LetMePlay3'
-    //     },
+export default function family({ navigation }) {
 
-    // ]
-
+    const Context = useContext(CategoryContext)
     const [data, setData] = useState([])
+
+    const [dataUser, setdataUser] = useState(
+        Context.dataUser
+    )
     const [passed, setPassed] = useState('')
-    const goSetting = () => {
+
+
+    const goSetting = (data) => {
+        console.log(data)
+        Context.setFriendSetting(data)
         navigation.navigate('Family-Setting')
     }
 
-    useEffect(() => {
-        API.get('/friend', body = {
-            params: {
-                username: "suhaimee24"
-            }
-        })
-            .then(res => {
-                console.log(res.data)
-                if (res.data.length !== 0) {
-                    setData(res.data)
-                }
+    const goHistory = (data) => {
+        // console.log(data)
+        Context.setFriendSetting(data)
+        navigation.navigate('History_friend')
+    }
 
+    const goLocation = (data) => {
+        // console.log(data)
+        Context.setFriendSetting(data)
+        navigation.navigate('Family-Location')
+    }
+
+    // useEffect(() => {
+    //     API.get('/friend', body = {
+    //         params: {
+    //             username: dataUser.Username
+    //         }
+    //     })
+    //         .then(res => {
+    //             console.log(res.data)
+    //             if (res.data.length !== 0) {
+    //                 setData(res.data)
+    //             }
+
+    //         })
+    //         .catch(err => {
+    //             console.log(err)
+    //         })
+    // }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () =>{
+            API.get('/friend', body = {
+                params: {
+                    username: dataUser.Username
+                }
             })
-            .catch(err => {
-                console.log(err)
-            })
-    }, []);
+                .then(res => {
+                    console.log(res.data)
+                    if (res.data.length !== 0) {
+                        setData(res.data)
+                    }
+    
+                })
+                .catch(err => {
+                    console.log(err)
+                    setData([])
+                })
+        })
+
+        return unsubscribe
+    },[navigation])
 
     renderLeftComponent = () => {
         return (
@@ -67,16 +97,57 @@ export default function history({ navigation }) {
             />
             <ScrollView>
                 <View style={styles.body}>
-                    <View style={styles.content}>
+                    <View style={[styles.content, { marginTop: hp('5%') }]}>
                         {
-                            data.map((item, index) => {
-                                return (
-                                    passed == item.Username
-                                        ?
-                                        <View key={index} style={styles.box}>
-                                            <TouchableOpacity onPress={() => setPassed('')} >
-                                                <View style={{ flexDirection: 'row', }}>
-                                                    <View style={[styles.leftCard, { backgroundColor: '#014D81' }]}>
+                            data.length === 0 ?
+                                <View style={{ alignSelf: 'center' }}><Text style={styles.textshow}>ไม่มีสมาชิก</Text></View>
+                                :
+                                data.map((item, index) => {
+                                    return (
+                                        passed == item.Username
+                                            ?
+                                            <View key={index} style={styles.box}>
+                                                <TouchableOpacity onPress={() => setPassed('')} >
+                                                    <View style={{ flexDirection: 'row', }}>
+                                                        <View style={[styles.leftCard, { backgroundColor: '#014D81' }]}>
+                                                            <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
+                                                        </View>
+                                                        <View style={styles.rightCard}>
+                                                            <View style={{ width: wp('5%'), height: wp('5%'), color: '#fff', }}>
+                                                                <Image source={require('../assets/down-arrow.png')} style={styles.icondown} />
+                                                            </View>
+                                                        </View>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => goHistory(item)}>
+                                                    <View style={styles.select}>
+                                                        <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
+                                                            <Image source={require('../assets/history.png')} style={styles.icondown} />
+                                                        </View>
+                                                        <Text style={styles.Text}>ประวัติ</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => goLocation(item)}>
+                                                    <View style={styles.select}>
+                                                        <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
+                                                            <Image source={require('../assets/placeholder.png')} style={styles.icondown} />
+                                                        </View>
+                                                        <Text style={styles.Text}>ตำแหน่ง</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => goSetting(item)}>
+                                                    <View style={styles.select}>
+                                                        <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
+                                                            <Image source={require('../assets/setting.png')} style={styles.icondown} />
+                                                        </View>
+                                                        <Text style={styles.Text}>ตั้งค่า</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
+                                            :
+                                            <TouchableOpacity key={index} onPress={() => setPassed(item.Username)} >
+                                                <View style={styles.listRow}>
+                                                    <View style={styles.leftCard}>
                                                         <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
                                                     </View>
                                                     <View style={styles.rightCard}>
@@ -86,54 +157,17 @@ export default function history({ navigation }) {
                                                     </View>
                                                 </View>
                                             </TouchableOpacity>
-                                            <TouchableOpacity >
-                                                <View style={styles.select}>
-                                                    <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/history.png')} style={styles.icondown} />
-                                                    </View>
-                                                    <Text style={styles.Text}>ประวัติ</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => navigation.navigate('Family-Location')}>
-                                                <View style={styles.select}>
-                                                    <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/placeholder.png')} style={styles.icondown} />
-                                                    </View>
-                                                    <Text style={styles.Text}>ตำแหน่ง</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={goSetting}>
-                                                <View style={styles.select}>
-                                                    <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
-                                                        <Image source={require('../assets/setting.png')} style={styles.icondown} />
-                                                    </View>
-                                                    <Text style={styles.Text}>ตั้งค่า</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                        :
-                                        <TouchableOpacity key={index} onPress={() => setPassed(item.Username)} >
-                                            <View style={styles.listRow}>
-                                                <View style={styles.leftCard}>
-                                                    <Text style={styles.Text}>{item.name !== '' ? item.name : item.Username}</Text>
-                                                </View>
-                                                <View style={styles.rightCard}>
-                                                    <View style={{ width: wp('5%'), height: wp('5%'), color: '#fff', }}>
-                                                        <Image source={require('../assets/down-arrow.png')} style={styles.icondown} />
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
-
-                                )
-                            })
+                                    )
+                                })
                         }
                     </View>
                     <Button
                         title="เพิ่มสมาชิก"
                         buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('25%') }]}
-                        onPress={() => navigation.navigate('Family-Add')}
-                        titleStyle={{ fontSize: hp('2%') }}
+                        onPress={() => {
+                            console.log(dataUser.Username)
+                            navigation.navigate('Family-Add')}}
+                        titleStyle={{ fontSize: hp('2.25%') }}
                     />
                 </View>
                 <View style={{ height: hp('10%') }}>
@@ -157,6 +191,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff0000',
     },
     body: {
+
         // height: hp('90%'),
         width: wp('100%'),
         // justifyContent: 'center',
@@ -247,7 +282,14 @@ const styles = StyleSheet.create({
     btnLogin: {
         alignSelf: 'center',
         backgroundColor: '#014D81',
-        height: hp('5%'),
-        borderRadius: 10,
+        width: wp('29%'),
+        height: hp('6%'),
+        borderRadius: 15,
+    },
+    textshow: {
+        color: '#000',
+        fontSize: hp('2.25%'),
+        paddingBottom: 0,
+        textAlign: 'center'
     },
 })
