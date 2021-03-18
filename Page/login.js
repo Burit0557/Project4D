@@ -9,10 +9,7 @@ import CameraRoll from "@react-native-community/cameraroll";
 import AsyncStorage from '@react-native-community/async-storage';
 import { CategoryContext } from '../context_api/myContext';
 
-import RNBluetoothClassic, {
-    BluetoothDevice
-} from 'react-native-bluetooth-classic';
-
+import messaging from '@react-native-firebase/messaging';
 
 
 async function hasAndroidPermission_Storage() {
@@ -53,13 +50,38 @@ export default function login({ navigation }) {
 
     useEffect(() => {
         hasAndroidPermission_Storage()
-        console.log('hi')
+        // console.log('hi')
 
         setTimeout(() => {  //assign interval to a variable to clear it.
             readlogin()
 
         }, 1200)
     }, ([]))
+
+    _checkPermission = async () => {
+        const enabled = await messaging().hasPermission();
+        if (enabled) {
+            const device = await messaging().getToken()
+            console.log(device)
+            API.post('/up_token', data = {
+                username: input.username.toLowerCase(),
+                token: device,
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+        else this._getPermission()
+    }
+
+    _getPermission = async () => {
+        messaging().requestPermission()
+            .then(() => {
+                this._checkPermission()
+            })
+            .catch(error => {
+                // User has rejected permissions  
+            });
+    }
 
 
 
@@ -170,6 +192,7 @@ export default function login({ navigation }) {
                 Context.setDataUser(res.data[0])
                 console.log(res.data[0])
                 getSetting()
+                _checkPermission()
                 navigation.reset({
                     index: 0,
                     routes: [

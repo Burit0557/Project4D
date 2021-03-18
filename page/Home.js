@@ -10,9 +10,17 @@ import RNBluetoothClassic, {
 } from 'react-native-bluetooth-classic';
 import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import Geolocation from 'react-native-geolocation-service';
+navigator.geolocation = require('react-native-geolocation-service');
+import { CategoryContext } from '../context_api/myContext';
 
 export default function home({ navigation }) {
-    const [MyPlaces, setMyPlaces] = useState(0);
+    const Context = useContext(CategoryContext)
+    const [dataUser, setdataUser] = useState(
+        Context.dataUser
+    )
+    const [MyPlaces, setMyPlaces] = useState();
+
 
     async function requestPermissions() {
         if (Platform.OS === 'ios') {
@@ -22,13 +30,13 @@ export default function home({ navigation }) {
                 authorizationLevel: 'whenInUse',
             });
         }
-    
+
         if (Platform.OS === 'android') {
             await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             );
         }
-    
+
     }
 
 
@@ -59,7 +67,7 @@ export default function home({ navigation }) {
                 //  - ERR02 : If the popup has failed to open
                 //  - ERR03 : Internal error
             });
-            requestPermissions()
+        requestPermissions()
     }, [])
 
     async function checkOpen() {
@@ -119,7 +127,19 @@ export default function home({ navigation }) {
     const onReceivedData = (data) => {
         console.log(data)
         // Alert.alert('From Bluetooth', data.data)
-        API.post("/post_noti")
+        API.post("/post_noti", data = {
+            username: dataUser.Username
+        })
+            .catch(err => console.log(err))
+        Geolocation.getCurrentPosition((data) => {
+            console.log("Call API")
+            API.post('/add_history', body = {
+                username: dataUser.Username,
+                latitude: data.coords.latitude,
+                longitude: data.coords.longitude,
+            })
+                .catch(err => console.log(err))
+        })
     }
 
 

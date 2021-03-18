@@ -468,64 +468,66 @@ app.get('/friend_location', function (req, res) {
 /* POST localhost:3000/post_noti
 req body    {    
     username,
-    friend_user,
 }
 ---------------------------------------------- post_noti -------------------------------------*/
 app.post('/post_noti', function (req, res) {
     let { username, friend_user } = req.body;
-    // console.log(`username ${username} friend_user ${friend_user}`)
-    // let sql = 'INSERT INTO friend (Username, Friend_user, history_acces, position_acces, friend_alert)VALUES (?,?,1,1,1)';
-    // connection.query(sql, [username, friend_user], function (err, result) {
-    //     if (err) {
-    //         res.status(403);
-    //     } else {
-    //         res.status(200).end();
-    //     }
-    // })
+    console.log(`username ${username}`)
+    let sql = 'SELECT token FROM user_token WHERE Username in (SELECT Username FROM friend WHERE Username in ( SELECT Friend_user as Usernam FROM friend WHERE Username = ? and alert_acces=1) and Friend_user = ? and friend_alert = 1)';
+    connection.query(sql, [username, username], function (err, data, result) {
+        if (err) {
+            res.status(403);
+        }
+        if (data.length === 0) {
+            console.log("NO user")
+            res.status(404).end();
+        }
+        else {
+            try {
+                admin.messaging().sendMulticast({
+                    tokens: data,
+                    data: {
+                        notifee: JSON.stringify({
+                            body: `มีการง่วงของ ${username} เกิดขึ้น`,
+                            title: 'แจ้งเตื่อนการง่วง',
+                            data: { Username: "suhaimee24" },
+                            android: {
+                                channelId: 'default',
+                                actions: [
+                                    // {
+                                    //     title: 'Open',
+                                    //     icon: 'https://my-cdn.com/icons/open-chat.png',
+                                    //     pressAction: {
+                                    //         id: 'open-chat',
+                                    //         launchActivity: 'default',
+                                    //     },
+                                    // },
+                                ],
+                            },
+                            collapseKey: "com.project4d",
+                        }),
+                    },
+                    // collapseKey: "com.project4d",    
+                    notification: {
+                        title: 'แจ้งเตื่อนการง่วง',
+                        body: `มีการง่วงของ ${username} เกิดขึ้น`,
+                    },
+                })
+                    .then(() => {
+                        console.log("send finish..")
+                        res.status(200).end()
+                    })
+            }
+            catch {
+                res.status(403);
+            }
+        }
+    })
 
     //pleng genny 'chtiLbqpSAOeG_8AynR3UM:APA91bGw4p7-eDTWMkuk5rsZ0oUReMDwyPaH6PV0H4tZVpIacUzYZyFkfmLcxIMRIGzJLbum-JtOwsgDZ4_AFIPvWkNTJiGTdFBbo5knMO8vnBTCZ4MoWvRbId_M4sJYxE7F2181bWp0'
     //mee 'cGVlYMkmTsm9ED1A8AkzFi:APA91bFgIfx4ZYEcq-DiUR7bUP-FQ5BFqRpOvmxPizBFM0atxvAPFTYCXvh_WSgS_wKtpLsMB_bsmxnutWsH7raTPVJ5B7pRaJj_0TsqwRZNv-Nq-mCcm8IU1Q3Jq2HsDHIkvTX1AUQJ'
     //pleng mobile 'fbfnfJKoR5Ku7Wk3jlNcNW:APA91bGDxQEMtVS6ANSayEgwZwSBMM_JwT5jsjZ8WsSY3TifTK2pCNJ5FbG-QfpJKRhIHLogkQ0IVnkju4ZZGlvUkxozaVfkXQBU4X6zDYjOLZCUut8rYX5_CeLCSc5csY1TrBh-KtNo'
-    try {
-        admin.messaging().sendMulticast({
-            tokens: ['chtiLbqpSAOeG_8AynR3UM:APA91bGw4p7-eDTWMkuk5rsZ0oUReMDwyPaH6PV0H4tZVpIacUzYZyFkfmLcxIMRIGzJLbum-JtOwsgDZ4_AFIPvWkNTJiGTdFBbo5knMO8vnBTCZ4MoWvRbId_M4sJYxE7F2181bWp0'
-                , 'cGVlYMkmTsm9ED1A8AkzFi:APA91bFgIfx4ZYEcq-DiUR7bUP-FQ5BFqRpOvmxPizBFM0atxvAPFTYCXvh_WSgS_wKtpLsMB_bsmxnutWsH7raTPVJ5B7pRaJj_0TsqwRZNv-Nq-mCcm8IU1Q3Jq2HsDHIkvTX1AUQJ'
-                , 'fbfnfJKoR5Ku7Wk3jlNcNW:APA91bGDxQEMtVS6ANSayEgwZwSBMM_JwT5jsjZ8WsSY3TifTK2pCNJ5FbG-QfpJKRhIHLogkQ0IVnkju4ZZGlvUkxozaVfkXQBU4X6zDYjOLZCUut8rYX5_CeLCSc5csY1TrBh-KtNo'],
-            data: {
-                notifee: JSON.stringify({
-                    body: 'This message was sent via FCM!',
-                    title: 'แจ้งเตื่อนการง่วง',
-                    data: { Username: "suhaimee24" },
-                    android: {
-                        channelId: 'default',
-                        actions: [
-                            // {
-                            //     title: 'Open',
-                            //     icon: 'https://my-cdn.com/icons/open-chat.png',
-                            //     pressAction: {
-                            //         id: 'open-chat',
-                            //         launchActivity: 'default',
-                            //     },
-                            // },
-                        ],
-                    },
-                    collapseKey: "com.project4d",
-                }),
-            },
-            // collapseKey: "com.project4d",    
-            notification: {
-                title: 'Basic Notification',
-                body: 'This is a basic notification sent from the server!',
-            },
-        })
-            .then(() => {
-                console.log("send finish..")
-                res.status(200).end()
-            })
-    }
-    catch {
-        res.status(403);
-    }
+
 })
 
 /* GET localhost:3000/get_user
@@ -668,7 +670,7 @@ req body {
 app.post('/add_setting', function (req, res) {
     let { username } = req.body;
     console.log(`username ${username}`)
-    let sql = 'INSERT INTO setting (Username, bluetooth_name, EAR, distance, rest, time_update)VALUES (?,\'raspberrypi\',0.285,160,120,30)';
+    let sql = 'INSERT INTO setting (Username, bluetooth_name, EAR, distance, rest, time_update)VALUES (?,\'raspberrypi\',0.275,160,120,30)';
     connection.query(sql, username, function (err, data, field) {
         if (err) {
             console.log(err);
@@ -684,7 +686,7 @@ app.post('/add_setting', function (req, res) {
    req body {
     username,
     bluetooth_name, raspberrypi2
-    EAR, 0.285
+    EAR, 0.275
     distance, 160
     rest, 120
     time_update 30
@@ -969,6 +971,48 @@ app.get('/get_friend_acces', function (req, res) {
         }
     });
 });
+
+/* POST localhost:3000/add_token
+req body {
+    username,
+    token,
+}
+---------------------------------------------- add_token --------------------------------------*/
+app.post('/add_token', function (req, res) {
+    let { username, token } = req.body;
+    console.log(`username ${username} token ${token} `)
+    let sql = 'INSERT INTO user_token (Username, token) VALUES (?,?)';
+    connection.query(sql, [username, token], function (err, data, field) {
+        if (err) {
+            res.status(403);
+        }
+        else {
+            res.status(200).end()
+        }
+    });
+});
+
+/* POST localhost:3000/up_token
+req body {
+    username,
+    token,
+}
+---------------------------------------------- up_token --------------------------------------*/
+app.post('/up_token', function (req, res) {
+    let { username, token } = req.body;
+    console.log(`username ${username} token ${token} `)
+    let sql = 'UPDATE user_token SET token = ? WHERE Username = ?';
+    connection.query(sql, [token, username], function (err, data, field) {
+        if (err) {
+            res.status(403);
+        }
+        else {
+            res.status(200).end()
+        }
+    });
+});
+
+
 
 var server = app.listen(8080, function () {
 

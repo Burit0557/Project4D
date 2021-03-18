@@ -58,7 +58,7 @@ function router() {
     }
 
     useEffect(() => {
-        _checkPermission()
+        // _checkPermission()
     }, [])
 
     return (

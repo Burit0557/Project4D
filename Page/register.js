@@ -5,6 +5,7 @@ import { Button, Image, Icon, Header } from 'react-native-elements'
 import { useSafeArea } from 'react-native-safe-area-context';
 import { and } from 'react-native-reanimated';
 import { API } from './axios';
+import messaging from '@react-native-firebase/messaging';
 
 export default function register({ navigation }) {
     const [input, setInput] = useState({
@@ -55,6 +56,32 @@ export default function register({ navigation }) {
         if (check) {
             navigation.navigate('Login')
         }
+    }
+
+    _checkPermission = async () => {
+        const enabled = await messaging().hasPermission();
+        if (enabled) {
+            const device = await messaging().getToken()
+            console.log(device)
+            let tempusername = input.username.toLowerCase()
+            API.post('/add_token', data = {
+                username: tempusername,
+                token: device,
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+        else this._getPermission()
+    }
+
+    _getPermission = async () => {
+        messaging().requestPermission()
+            .then(() => {
+                this._checkPermission()
+            })
+            .catch(error => {
+                // User has rejected permissions  
+            });
     }
 
     const checkInput = (text) => {
@@ -140,12 +167,19 @@ export default function register({ navigation }) {
             })
                 .then(res => {
                     Alert.alert('ลงทะเบียนสำเร็จ')
+                    // _checkPermission()
                     API.post('/add_setting', data = {
                         username: tempusername,
                     })
                         .catch(error => {
                             console.log(error)
                         })
+                    API.post('/add_token', data = {
+                        username: tempusername,
+                        token: '',
+                    }).catch(error => {
+                        console.log(error)
+                    })
                     navigation.reset({
                         index: 0,
                         routes: [
