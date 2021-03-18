@@ -3,6 +3,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements'
 import messaging from '@react-native-firebase/messaging';
+import { Platform, PermissionsAndroid } from 'react-native';
 import notifee, { EventType } from '@notifee/react-native';
 import RNBluetoothClassic, {
     BluetoothDevice
@@ -12,6 +13,23 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 export default function home({ navigation }) {
     const [MyPlaces, setMyPlaces] = useState(0);
+
+    async function requestPermissions() {
+        if (Platform.OS === 'ios') {
+            Geolocation.requestAuthorization();
+            Geolocation.setRNConfiguration({
+                skipPermissionRequests: false,
+                authorizationLevel: 'whenInUse',
+            });
+        }
+    
+        if (Platform.OS === 'android') {
+            await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            );
+        }
+    
+    }
 
 
     useEffect(() => {
@@ -41,7 +59,7 @@ export default function home({ navigation }) {
                 //  - ERR02 : If the popup has failed to open
                 //  - ERR03 : Internal error
             });
-        //var result = new Date().toISOString().slice(0,10);
+            requestPermissions()
     }, [])
 
     async function checkOpen() {
@@ -111,7 +129,7 @@ export default function home({ navigation }) {
                 containerStyle={{ height: hp('15%') }}
                 // leftContainerStyle={{ marginBottom: '5%' }}
                 leftComponent={{ Icon: 'g_translate', color: '#fff', }}
-                centerComponent={{ text: 'DDaS', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
+                centerComponent={{ text: 'หน้าแรก', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
                 // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 // barStyle="dark-content"
                 backgroundColor='#014D81'
@@ -119,7 +137,7 @@ export default function home({ navigation }) {
             <View style={styles.body}>
                 <View style={styles.content}>
                     <View style={[styles.listRow, { marginTop: '10%' }]}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Jouney_home')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Journey_home')}>
                             <View style={[styles.item, styles.Shadow]}>
                                 <Image
                                     style={styles.iconhome}

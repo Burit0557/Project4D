@@ -8,7 +8,7 @@ class MyContext extends React.Component {
         super()
         this.state = {
             login: false,
-
+            GOOGLE_MAPS_APIKEY: 'AIzaSyAaZ9OqZiu0Ap4yMwWI1qhGb-8xp71BYzU',
             dataUser: {
                 User_id: 0,
                 Username: '',
@@ -17,7 +17,6 @@ class MyContext extends React.Component {
                 Email: '',
                 image: '',
             },
-
             dataUserSetting: {
                 bluetooth_name: 'raspberrypi',
                 EAR: "0.275",
@@ -27,8 +26,18 @@ class MyContext extends React.Component {
                 up_min: '00',
                 up_sec: '30',
             },
-
             friendSetting: {},
+            historyDetail: {},
+            dataJourney: {
+                mode: 0,
+                count: 0,
+                Destination: {}
+            },
+            Destination: {
+                disLocation: 'secret',
+                latitude: 13.7290644,
+                longitude: 100.7755085
+            }
         }
     }
 
@@ -40,9 +49,22 @@ class MyContext extends React.Component {
     }
 
     setDataUserSetting = (dataUserSetting) => {
-        console.log('dataUserSetting:')
+        console.log('dataUserSetting')
         this.setState({
             dataUserSetting: dataUserSetting
+        });
+    }
+
+    setDataJourney = (dataJourney) => {
+        console.log('dataJourney')
+        this.setState({
+            dataJourney: dataJourney
+        });
+    }
+    setDestination = (Destination) => {
+        console.log('Destination')
+        this.setState({
+            Destination: Destination
         });
     }
 
@@ -139,6 +161,12 @@ class MyContext extends React.Component {
         })
     }
 
+    setHistoryDetail = (data) => {
+        this.setState({
+            historyDetail: data
+        })
+    }
+
 
     render() {
         return (
@@ -151,12 +179,18 @@ class MyContext extends React.Component {
                     bluetooth_name: this.state.dataUserSetting.bluetooth_name,
                     EAR: this.state.dataUserSetting.EAR,
                     friendSetting: this.state.friendSetting,
+                    historyDetail: this.state.historyDetail,
+                    GOOGLE_MAPS_APIKEY: this.state.GOOGLE_MAPS_APIKEY,
+                    dataJourney: this.state.dataJourney,
+                    Destination: this.state.Destination,
 
                     setDataUser: this.setDataUser,
                     setImage: this.setImage,
                     setName: this.setName,
                     updateUser: this.updateUser,
                     setDataUserSetting: this.setDataUserSetting,
+                    setDataJourney: this.setDataJourney,
+                    setDestination: this.setDestination,
 
                     setEAR: this.setEAR,
                     setRest_dis: this.setRest_dis,
@@ -166,6 +200,7 @@ class MyContext extends React.Component {
                     updateUserSetting: this.updateUserSetting,
 
                     setFriendSetting: this.setFriendSetting,
+                    setHistoryDetail: this.setHistoryDetail,
 
 
                 }}

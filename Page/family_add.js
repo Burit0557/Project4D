@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, BackHandler } from 'react-native';
 import { Button, Image, Icon, Header, Avatar } from 'react-native-elements'
 import { API } from './axios';
 import { CategoryContext } from '../context_api/myContext';
@@ -49,7 +49,7 @@ export default function family_add({ navigation }) {
 
 
     findUser = () => {
-        // console.log(input.username)
+        console.log(input.username)
         API.get('/get_user', data = {
             params: {
                 username: input.username.toLowerCase()
@@ -77,31 +77,36 @@ export default function family_add({ navigation }) {
     }
 
     addFriend = () => {
-        API.post('/friend_req', data = {
-            username: dataUser.Username,
-            friend_user: dataFriend.Username,
-        })
-            .then(res => {
-                setInput({
-                    ...input,
-                    username: ""
+        if (dataUser.Username === dataFriend.Username) {
+            Alert.alert('ผิดพลาด', 'ไม่สามารถเพิ่ม USERNAME คนนี้ได้');
+        }
+        else {
+            API.post('/friend_req', data = {
+                username: dataUser.Username,
+                friend_user: dataFriend.Username,
+            })
+                .then(res => {
+                    setInput({
+                        ...input,
+                        username: ""
+                    })
+                    setFound(false)
+                    Alert.alert('สำเร็จ', 'คำขอเป็นเพื่อนสำเร็จ')
+
                 })
-                setFound(false)
-                Alert.alert('สำเร็จ', 'คำขอเป็นเพื่อนสำเร็จ')
-
-            })
-            .catch(error => {
-                console.log(error.response.status)
-                if (error.response.status === 409) {
-                    Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
-                }
-                if (error.response.status === 459) {
-                    console.log("test")
-                    Alert.alert('ผิดพลาด', 'เป็นเพื่อนกันแล้ว')
-                }
-            })
-
+                .catch(error => {
+                    console.log(error.response.status)
+                    if (error.response.status === 409) {
+                        Alert.alert('ผิดพลาด', 'คำขอได้ถูกขอไปแล้ว')
+                    }
+                    if (error.response.status === 459) {
+                        console.log("test")
+                        Alert.alert('ผิดพลาด', 'เป็นเพื่อนกันแล้ว')
+                    }
+                })
+        }
     }
+
     getRequest = () => {
         API.get('/get_friend_req', data = {
             params: {
@@ -124,9 +129,19 @@ export default function family_add({ navigation }) {
 
     }
 
+    const backAction = () => {
+        console.log("test")
+        //   navigation.replace('Family')
+    }
+
     useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
         getRequest()
         setIsLoad(false)
+        return () => backHandler.remove();
     }, [])
 
     Friend_confirm = (friend_user) => {
@@ -137,6 +152,7 @@ export default function family_add({ navigation }) {
             .then(res => {
                 setDataFriendReq(dataFriendReq.filter(item => item.Username !== friend_user))
                 Alert.alert('สำเร็จ', 'เป็นเพื่อนสำเร็จ')
+                //navigation.replace('Family')
 
             })
             .catch(error => {
@@ -167,7 +183,7 @@ export default function family_add({ navigation }) {
     }
     renderLeftComponent = () => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('Family')}>
+            <TouchableOpacity onPress={() => navigation.replace('Family')}>
                 <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.iconhome} />
                     {/* <Icon name='chevron-back' type='ionicon' color='#fff' size={wp('8%')} /> */}

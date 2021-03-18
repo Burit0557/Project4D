@@ -3,18 +3,15 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Button, Image, Icon, Header, Overlay } from 'react-native-elements';
 
-//import {launchImageLibrary} from 'react-native-image-picker'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-
 import { API } from './axios';
 
-import { PermissionsAndroid, Platform } from "react-native";
-import CameraRoll from "@react-native-community/cameraroll";
+
 import { CategoryContext } from '../context_api/myContext';
 
 import RNBluetoothClassic, {
     BluetoothDevice
 } from 'react-native-bluetooth-classic';
+
 
 
 data = [
@@ -82,12 +79,7 @@ export default function setting_device({ navigation }) {
         editUpLocation: false,
     });
 
-    const [bluetooth, setBluetooth] = useState(data)
-
-
-
-
-
+    const [bluetooth, setBluetooth] = useState([])
 
     useEffect(() => {
 
@@ -130,30 +122,34 @@ export default function setting_device({ navigation }) {
     };
 
 
-
-
-
-    const checkInput = (text) => {
-        var letters = /^[0-9a-zA-Z]+$/
-        if (text == null) {
-            return false
+    async function getBluetooth() {
+        try {
+            let bonded = await RNBluetoothClassic.getBondedDevices();
+            // console.log('DeviceListScreen::getBondedDevices found', bonded);
+            setBluetooth(bonded)
         }
-        else if (text.length == 1 && text.match(letters)) {
-            return true
+        catch (error) {
+            console.log(error)
         }
-        else {
-            return false
-        }
-
     }
+
     saveBluetooth = (name) => {
         setDataUserSetting({
             ...dataUserSetting,
             bluetooth_name: name,
         })
-        Context.setBluetooth(name)
-        Context.updateUserSetting()
-        toggleOverlaybluetooth()
+        API.post('/set_bluetooth_name', data = {
+            username: dataUser.Username,
+            bluetooth_name: name,
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    Context.setBluetooth(name)
+                    toggleOverlaybluetooth()
+                    Context.updateUserSetting()
+                }
+            })
+            .catch(error => console.log(error))
     }
 
     saveEAR = () => {
@@ -166,9 +162,18 @@ export default function setting_device({ navigation }) {
                     ...dataUserSetting,
                     EAR: input.EAR
                 })
-                Context.setEAR(input.EAR)
-                Context.updateUserSetting()
-                toggleOverlayEditEAR()
+                API.post('/set_EAR', data = {
+                    username: dataUser.Username,
+                    EAR: parseFloat(input.EAR),
+                })
+                    .then(res => {
+                        if (res.status === 200) {
+                            Context.setEAR(input.EAR)
+                            toggleOverlayEditEAR()
+                            Context.updateUserSetting()
+                        }
+                    })
+                    .catch(error => console.log(error))
             }
             else {
                 console.log("more than");
@@ -187,9 +192,19 @@ export default function setting_device({ navigation }) {
                 ...dataUserSetting,
                 distance: input.distance
             })
-            Context.setRest_dis(input.distance)
-            Context.updateUserSetting()
-            toggleOverlayEditRestDis()
+
+            API.post('/set_distance', data = {
+                username: dataUser.Username,
+                distance: parseInt(input.distance),
+            })
+                .then(res => {
+                    if (res.status === 200) {
+                        Context.setRest_dis(input.distance)
+                        toggleOverlayEditRestDis()
+                        Context.updateUserSetting()
+                    }
+                })
+                .catch(error => console.log(error))
         }
         else {
             console.log("miss")
@@ -204,9 +219,19 @@ export default function setting_device({ navigation }) {
                 rest_hour: input.rest_hour,
                 rest_min: input.rest_min
             })
-            Context.setRest_time(input.rest_hour, input.rest_min)
-            Context.updateUserSetting()
-            toggleOverlayEditRestTime()
+
+            API.post('/set_rest', data = {
+                username: dataUser.Username,
+                rest: parseInt(input.rest_hour) * 60 + parseInt(input.rest_min),
+            })
+                .then(res => {
+                    if (res.status === 200) {
+                        Context.setRest_time(input.rest_hour, input.rest_min)
+                        toggleOverlayEditRestTime()
+                        Context.updateUserSetting()
+                    }
+                })
+                .catch(error => console.log(error))
         }
         else {
             console.log("miss")
@@ -221,17 +246,24 @@ export default function setting_device({ navigation }) {
                 up_min: input.up_min,
                 up_sec: input.up_sec
             })
-            Context.setUpLocation(input.up_min, input.up_sec)
-            Context.updateUserSetting()
-            toggleOverlayEditUpLocation()
+
+            API.post('/set_time_update', data = {
+                username: dataUser.Username,
+                time_update: parseInt(input.up_min) * 60 + parseInt(input.up_sec),
+            })
+                .then(res => {
+                    if (res.status === 200) {
+                        Context.setUpLocation(input.up_min, input.up_sec)
+                        toggleOverlayEditUpLocation()
+                        Context.updateUserSetting()
+                    }
+                })
+                .catch(error => console.log(error))
         }
         else {
             console.log("miss")
         }
     }
-
-
-
 
     const inputEAR = (text) => {
         if (text.length < 6) {
@@ -290,33 +322,24 @@ export default function setting_device({ navigation }) {
         }
     }
 
-
-
-
-
-    const inputcfNewPass = (text) => {
-        checktext = false
-
-        if (text.length < 50) {
-
-            if (text.length == 0) {
-                setInput({ ...input, cfnew_password: text })
-            }
-            else {
-                checktext = checkInput(text[text.length - 1])
-                if (checktext) {
-                    setInput({ ...input, cfnew_password: text })
-                }
-            }
-
-        }
+    const saveSetting = () => {
+        // console.log(input.distance)
+        API.post('/update_setting', data = {
+            username: dataUser.Username,
+            bluetooth_name: dataUserSetting.bluetooth_name,
+            EAR: parseFloat(dataUserSetting.EAR),
+            distance: parseInt(dataUserSetting.distance),
+            rest: parseInt(dataUserSetting.rest_hour) * 60 + parseInt(dataUserSetting.rest_min),
+            time_update: parseInt(dataUserSetting.up_min) * 60 + parseInt(dataUserSetting.up_sec),
+        })
     }
-
-
 
     renderLeftComponent = () => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+            <TouchableOpacity onPress={() => {
+                saveSetting()
+                navigation.navigate('Setting')
+            }}>
                 <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.smallIcon} />
                 </View>
@@ -342,8 +365,9 @@ export default function setting_device({ navigation }) {
                             <View style={{ width: '100%' }}>
                                 <Text style={styles.textInput}>Bluetooth</Text>
                                 <View style={styles.space}>
-                                    <TouchableOpacity  onPress={() => {
+                                    <TouchableOpacity onPress={() => {
                                         toggleOverlaybluetooth()
+                                        getBluetooth()
                                         setInput({
                                             ...input,
                                             bluetooth_name: dataUserSetting.bluetooth_name
@@ -492,7 +516,7 @@ export default function setting_device({ navigation }) {
                 <Overlay key={2} isVisible={visible.editEAR} onBackdropPress={toggleOverlayEditEAR} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
                         <View style={{ margin: hp('2%') }}>
-                            <Text style={[styles.textInput, { color: '#000'}]}>สามารถดูขนาดตาของท่านได้จากจอ</Text>
+                            <Text style={[styles.textInput, { color: '#000' }]}>สามารถดูขนาดตาของท่านได้จากจอ</Text>
                         </View>
                         <View style={{ borderWidth: 1, width: wp('70%'), height: wp('40%'), padding: 0 }}>
                             <Image source={require('../assets/EAR.png')} style={[styles.addimage, { resizeMode: 'cover' }]} />
@@ -594,12 +618,12 @@ export default function setting_device({ navigation }) {
                                 </View>
                                 <View style={{ width: '40%', flexDirection: "row", justifyContent: 'center', alignItems: 'center', }}>
                                     <TextInput
-                                        style={[styles.Input, { width: '40%'}]}
+                                        style={[styles.Input, { width: '40%' }]}
                                         keyboardType='decimal-pad'
                                         value={input.rest_hour}
                                         onChangeText={inputRest_HH}
                                     />
-                                    <Text style={[styles.textInput, { margin: '2%', color: '#000',paddingLeft :0 }]}>:</Text>
+                                    <Text style={[styles.textInput, { margin: '2%', color: '#000', paddingLeft: 0 }]}>:</Text>
                                     <TextInput
                                         style={[styles.Input, { width: '40%' }]}
                                         keyboardType='decimal-pad'
@@ -657,7 +681,7 @@ export default function setting_device({ navigation }) {
                                         value={input.up_min}
                                         onChangeText={inputUp_min}
                                     />
-                                    <Text style={[styles.textInput, { margin: '2%', color: '#000',paddingLeft :0 }]}>:</Text>
+                                    <Text style={[styles.textInput, { margin: '2%', color: '#000', paddingLeft: 0 }]}>:</Text>
                                     <TextInput
                                         style={[styles.Input, { width: '40%' }]}
                                         keyboardType='decimal-pad'
@@ -744,7 +768,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingRight: '5%',
         paddingLeft: '5%',
-        
+
     },
     space: {
         width: '100%',
@@ -753,7 +777,7 @@ const styles = StyleSheet.create({
 
     textshow: {
         fontSize: hp('2.5%'),
-        color : 'rgba(255, 255, 255, 0.85)'
+        color: 'rgba(255, 255, 255, 0.85)'
     },
 
     textedit: {
@@ -817,10 +841,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign : 'center',
-        textAlignVertical : 'center',
-        paddingBottom : ('2.5%'),
-        color : '#fff'
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        paddingBottom: ('2.5%'),
+        color: '#fff'
 
 
     },
@@ -864,8 +888,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    textbt:{
-        fontSize : hp('2.25%')
+    textbt: {
+        fontSize: hp('2.25%')
     }
 
 })

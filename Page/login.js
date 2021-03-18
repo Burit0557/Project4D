@@ -104,6 +104,52 @@ export default function login({ navigation }) {
             console.log('Failed to save the saveData to the storage')
         }
     }
+    const setsetting = async (dataUserSetting) => {
+        dataUserSetting = JSON.stringify(dataUserSetting)
+        //console.log(dataUserSetting)
+        try {
+            await AsyncStorage.setItem('@dataUserSetting', dataUserSetting)
+            console.log('save dataUserSetting successfully saved')
+        } catch (e) {
+            console.log('Failed to save the saveData to the storage')
+        }
+    }
+
+    const getSetting = async (dataUser) => {
+        API.get('/get_setting', data = {
+            params: {
+                username: input.username.toLowerCase(),
+            }
+        })
+            .then((res) => {
+                data = res.data[0]
+                if (data) {
+                    rest_hour = parseInt(data.rest / 60)
+                    rest_min = (data.rest % 60)
+                    if (rest_min < 10) {
+                        rest_min = '0' + rest_min
+                    }
+                    up_min = parseInt(data.time_update / 60)
+                    up_sec = (data.time_update % 60)
+                    if (up_sec < 10) {
+                        up_sec = '0' + up_sec
+                    }
+                    dataUserSetting = {
+                        bluetooth_name: data.bluetooth_name,
+                        EAR: data.EAR.toString(),
+                        distance: data.distance.toString(),
+                        rest_hour: rest_hour.toString(),
+                        rest_min: rest_min.toString(),
+                        up_min: up_min.toString(),
+                        up_sec: up_sec.toString(),
+
+                    }
+                    Context.setDataUserSetting(dataUserSetting)
+                    setsetting(dataUserSetting)
+                }
+            })
+            .catch(error => console.log(error))
+    }
 
 
     loginFunction = () => {
@@ -123,12 +169,7 @@ export default function login({ navigation }) {
                 setlogin(res.data[0])
                 Context.setDataUser(res.data[0])
                 console.log(res.data[0])
-                let dataUserSetting = await AsyncStorage.getItem('@dataUserSetting')
-
-                if (dataUserSetting !== null) {
-                    Context.setDataUserSetting(JSON.parse(dataUserSetting))
-                }
-
+                getSetting()
                 navigation.reset({
                     index: 0,
                     routes: [
