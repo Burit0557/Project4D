@@ -59,6 +59,7 @@ app.get('/', function (req, res) {
 });
 
 /* POST localhost:3000/login 
+
 req body    {    
     username,
     password
@@ -96,11 +97,13 @@ app.post('/login', function (req, res) {
 
 
 /* POST localhost:3000/register 
+
 req body {
     username,
     password,
     email,
 }
+
 ---------------------------------------------- Register --------------------------------------*/
 app.post('/register', function (req, res) {
     let { username, password, email } = req.body;
@@ -125,6 +128,7 @@ app.post('/register', function (req, res) {
 
 
 /* POST localhost:3000/update_info
+
 req body {
     username,
     password,
@@ -171,6 +175,7 @@ app.post('/update_info', function (req, res) {
 
 
 /* POST localhost:3000/add_image
+
 req body {
     username,
     image,
@@ -190,6 +195,7 @@ app.post('/add_image', function (req, res) {
 });
 
 /* GET localhost:3000/get_image
+
 req params {
     username
     }
@@ -214,6 +220,7 @@ app.get('/get_image', function (req, res) {
 });
 
 /* POST localhost:3000/add_name
+
 req body {
     username,
     name,
@@ -233,6 +240,7 @@ app.post('/add_name', function (req, res) {
 });
 
 /* GET localhost:3000/get_name
+
 req params {
     username
     }
@@ -652,6 +660,7 @@ app.post('/delete_friend_req', function (req, res) {
     distance, 160
     rest, 120
     time_update 30
+
 req body {
     username,
 }
@@ -936,6 +945,7 @@ app.post('/delete_friend', function (req, res) {
     res.status(200).end();
 })
 
+
 /* GET localhost:3000/get_friend_acces
 req params {
     username,
@@ -961,5 +971,6 @@ app.get('/get_friend_acces', function (req, res) {
 });
 
 var server = app.listen(8080, function () {
+
     console.log('Server is running..');
 });
