@@ -476,42 +476,56 @@ app.post('/post_noti', function (req, res) {
         }
         else {
             try {
-                admin.messaging().sendMulticast({
-                    tokens: data,
-                    data: {
-                        notifee: JSON.stringify({
-                            body: `มีการง่วงของ ${username} เกิดขึ้น`,
-                            title: 'แจ้งเตื่อนการง่วง',
-                            data: { Username: "suhaimee24" },
-                            android: {
-                                channelId: 'default',
-                                actions: [
-                                    // {
-                                    //     title: 'Open',
-                                    //     icon: 'https://my-cdn.com/icons/open-chat.png',
-                                    //     pressAction: {
-                                    //         id: 'open-chat',
-                                    //         launchActivity: 'default',
-                                    //     },
-                                    // },
-                                ],
-                            },
-                            collapseKey: "com.project4d",
-                        }),
-                    },
-                    // collapseKey: "com.project4d",    
-                    notification: {
-                        title: 'แจ้งเตื่อนการง่วง',
-                        body: `มีการง่วงของ ${username} เกิดขึ้น`,
-                    },
+                // console.log('test',data)
+                let tdata = data.map(item => {
+                    console.log('tddest',item)
+                    if (item.token != '') {
+                        return item.token
+                    }
                 })
-                    .then(() => {
-                        console.log("send finish..")
-                        res.status(200).end()
+                // console.log('tddest',tdata)
+                if (tdata.length === 0) {
+                    console.log("NO user")
+                    res.status(404).end();
+                }
+                else {
+                    admin.messaging().sendMulticast({
+                        tokens: tdata,
+                        data: {
+                            notifee: JSON.stringify({
+                                body: `มีการง่วงของ ${username} เกิดขึ้น`,
+                                title: 'แจ้งเตื่อนการง่วง',
+                                data: { Username: `${username}` },
+                                android: {
+                                    channelId: 'default',
+                                    actions: [
+                                        // {
+                                        //     title: 'Open',
+                                        //     icon: 'https://my-cdn.com/icons/open-chat.png',
+                                        //     pressAction: {
+                                        //         id: 'open-chat',
+                                        //         launchActivity: 'default',
+                                        //     },
+                                        // },
+                                    ],
+                                },
+                                collapseKey: "com.project4d",
+                            }),
+                        },
+                        // collapseKey: "com.project4d",    
+                        notification: {
+                            title: 'แจ้งเตื่อนการง่วง',
+                            body: `มีการง่วงของ ${username} เกิดขึ้น`,
+                        },
                     })
+                        .then(() => {
+                            console.log("send finish..")
+                            res.status(200).end()
+                        })
+                }
             }
             catch {
-                res.status(403);
+                res.status(403).end();
             }
         }
     })

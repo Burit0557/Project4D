@@ -825,7 +825,7 @@ const styles = StyleSheet.create({
     },
     Input: {
         //flexDirection: 'row',
-        fontSize: hp('2.5%'),
+        fontSize: hp('2.25%'),
         paddingLeft: ('10%'),
         //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',

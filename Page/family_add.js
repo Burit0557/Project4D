@@ -257,7 +257,7 @@ export default function family_add({ navigation }) {
                                     <Text style={[styles.Text, { color: '#014D81', marginTop: '5%' }]}>{dataFriend.name === '' ? dataFriend.Username : dataFriend.name}</Text>
                                     <Button
                                         title="เพิ่มสมาชิก"
-                                        buttonStyle={[styles.btnAdd, styles.Shadow, { marginTop: hp('2%'), width: wp('22%') }]}
+                                        buttonStyle={[styles.btnAdd, styles.Shadow, { marginTop: hp('2%'), width: wp('29%') }]}
                                         onPress={() => addFriend()}
                                         titleStyle={{ fontSize: hp('2.25%') }}
                                     />
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     },
     btnAdd: {
         backgroundColor: '#49BB21',
-        height: hp('4%'),
+        height: hp('6%'),
         borderRadius: 25,
     },
     btnCF: {

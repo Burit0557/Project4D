@@ -179,7 +179,7 @@ export default function journey({ navigation }) {
 
     renderLeftComponent = () => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
                 <View style={{ width: wp('6%'), height: wp('6%'), color: '#fff', marginLeft: wp('3%') }}>
                     <Image source={require('../assets/previous.png')} style={styles.iconhome} />
                 </View>
@@ -297,7 +297,14 @@ export default function journey({ navigation }) {
                         <Button
                             title="สิ้นสุดการเดินทาง"
                             buttonStyle={[styles.btreset, styles.Shadow, {}]}
-                            onPress={() => { }}
+                            onPress={() => {
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{
+                                        name: "Home"
+                                    }]
+                                })
+                            }}
                             titleStyle={styles.textbt}
                         />
                         {

@@ -179,7 +179,14 @@ export default function journey({ navigation }) {
                         <Button
                             title="สิ้นสุดการเดินทาง"
                             buttonStyle={[styles.btreset, styles.Shadow, {}]}
-                            onPress={() => { }}
+                            onPress={() => {
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{
+                                        name: "Home"
+                                    }]
+                                })
+                            }}
                             titleStyle={styles.textbt}
                         />
                         <Button

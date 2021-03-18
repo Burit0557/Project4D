@@ -182,7 +182,13 @@ export default function journey_home({ navigation }) {
         }
         console.log(dataJourney)
         Context.setDataJourney(dataJourney)
-        navigation.navigate('Journey')
+        //navigation.navigate('Journey')
+        navigation.reset({
+            index: 0,
+            routes: [{
+                name: "Journey"
+            }]
+        })
     }
 
 
@@ -470,7 +476,7 @@ const styles = StyleSheet.create({
     },
     Input: {
         //flexDirection: 'row',
-        fontSize: hp('2.5%'),
+        fontSize: hp('2.25%'),
         //paddingLeft: ('10%'),
         //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',
