@@ -180,7 +180,7 @@ export default function hifamily_settingstory({ navigation }) {
                         onPress={() => {
                             deleteFriend()
                         }}
-                        titleStyle={{ fontSize: hp('2%') }}
+                        titleStyle={{ fontSize: hp('2.25%') }}
                     />
                 </View>
                 <View style={{ height: hp('10%') }}>
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     Text: {
         margin: '1%',
         color: '#ffff',
-        fontSize: hp('2%')
+        fontSize: hp('2.25%')
     },
     select: {
         flexDirection: 'row',
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     },
     box: {
         backgroundColor: '#014D81',
-        marginTop: hp('2%'),
+        marginTop: hp('5%'),
         borderRadius: 10,
         paddingBottom: 10,
         paddingTop: 10,
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     },
     btnLogin: {
         alignSelf: 'center',
-        backgroundColor: '#014D81',
+        backgroundColor: '#EA2626',
         height: hp('5%'),
         borderRadius: 10,
     },

@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     Text: {
         margin: '1%',
         color: '#ffff',
-        fontSize: hp('2%')
+        fontSize: hp('2.25%')
     },
     leftCard: {
         width: '80%',

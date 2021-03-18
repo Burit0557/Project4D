@@ -4,11 +4,15 @@ import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableOpacity, 
 import { Button, Image, Icon, Header } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import { CategoryContext } from '../context_api/myContext';
+import { API } from './axios';
 
 
 
 export default function setting({ navigation }) {
-
+    const Context = useContext(CategoryContext)
+    const [dataUser, setdataUser] = useState(
+        Context.dataUser
+    )
 
 
     renderLeftComponent = () => {
@@ -27,6 +31,7 @@ export default function setting({ navigation }) {
             await AsyncStorage.removeItem('@dataUser');
             await AsyncStorage.removeItem('@dataUserSetting');
             console.log('saveData successfully saved')
+
         } catch (e) {
             console.log('Failed to save the saveData to the storage')
         }
@@ -44,6 +49,10 @@ export default function setting({ navigation }) {
                 },
                 {
                     text: "ยืนยัน", onPress: () => {
+                        API.post('/up_token', data = {
+                            username: dataUser.Username,
+                            token: ''
+                        })
                         setlogin()
                         navigation.navigate('Login')
                     }

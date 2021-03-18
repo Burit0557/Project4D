@@ -222,12 +222,12 @@ export default function family_add({ navigation }) {
                                             title="ยอมรับ"
                                             buttonStyle={[styles.btnCF, { backgroundColor: '#49BB21', }]}
                                             onPress={() => Friend_confirm(item.Username)}
-                                            titleStyle={{ fontSize: hp('1.5%') }}
+                                            titleStyle={{ fontSize: hp('2%') }}
                                         /><Button
                                             title="ปฏิเสธ"
                                             buttonStyle={[styles.btnCF, { backgroundColor: '#EA2626', }]}
                                             onPress={() => Friend_cancel(item.Username)}
-                                            titleStyle={{ fontSize: hp('1.5%') }}
+                                            titleStyle={{ fontSize: hp('2%') }}
                                         />
                                     </View>
                                 </View>
@@ -259,7 +259,7 @@ export default function family_add({ navigation }) {
                                         title="เพิ่มสมาชิก"
                                         buttonStyle={[styles.btnAdd, styles.Shadow, { marginTop: hp('2%'), width: wp('22%') }]}
                                         onPress={() => addFriend()}
-                                        titleStyle={{ fontSize: hp('2%') }}
+                                        titleStyle={{ fontSize: hp('2.25%') }}
                                     />
                                 </View>
                                 :
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     Text: {
         margin: '1%',
         color: '#ffff',
-        fontSize: hp('2%')
+        fontSize: hp('2.25%')
     },
     select: {
         flexDirection: 'row',
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
     },
     btnCF: {
-        height: hp('2.5%'),
+        height: hp('3.5%'),
         width: wp('15%'),
         borderRadius: 15,
         alignItems: 'center',
