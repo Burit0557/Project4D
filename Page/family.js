@@ -100,7 +100,7 @@ export default function family({ navigation }) {
                                                         <Text style={styles.Text}>ตำแหน่ง</Text>
                                                     </View>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity onPress={goSetting}>
+                                                <TouchableOpacity onPress={()=>{goSetting(item)}}>
                                                     <View style={styles.select}>
                                                         <View style={{ width: wp('7%'), height: wp('7%'), color: '#fff', marginRight: '3%' }}>
                                                             <Image source={require('../assets/setting.png')} style={styles.icondown} />

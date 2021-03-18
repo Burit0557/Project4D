@@ -57,11 +57,11 @@ export default function login({ navigation }) {
 
         setTimeout(() => {  //assign interval to a variable to clear it.
             readlogin()
-     
+
         }, 1200)
     }, ([]))
 
-    
+
 
 
 
@@ -106,7 +106,7 @@ export default function login({ navigation }) {
     }
 
 
-    loginFunction =  () => {
+    loginFunction = () => {
         if (input.username === '' || input.password === '') {
             Alert.alert('ผิดพลาด', 'กรุณากรอกข้อมูลให้ครบทุกช่อง')
             setInput({
@@ -119,7 +119,7 @@ export default function login({ navigation }) {
             username: input.username.toLowerCase(),
             password: input.password,
         })
-            .then (async(res) => {
+            .then(async (res) => {
                 setlogin(res.data[0])
                 Context.setDataUser(res.data[0])
                 console.log(res.data[0])
@@ -205,6 +205,7 @@ export default function login({ navigation }) {
                 :
                 <View style={styles.container}>
                     <View style={styles.logo} >
+                        <Image source={require('../assets/logo_name1024.png')} style={[styles.addimage, { resizeMode: 'cover' }]} />
                     </View>
                     <View style={[styles.listRow, { marginTop: hp('7%') }]}>
                         <ImageBackground source={require('../assets/profile-user2.png')} style={styles.smallIcon} />
@@ -256,15 +257,15 @@ const styles = StyleSheet.create({
         flex: 1
     },
     logo: {
-        height: hp('25%'),
-        width: wp('70%'),
+        height: wp('55%'),
+        width: wp('55%'),
         alignSelf: 'center',
         borderRadius: 15,
         marginTop: hp('10%'),
-        backgroundColor: '#DBCCCC',
+        //backgroundColor: '#DBCCCC',
     },
     listRow: {
-        
+
         flexDirection: 'row',
         // justifyContent: 'space-around',
         alignItems: 'center',
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     textInput: {
-       
+
         width: wp('70%') - hp('6%') - 10,
         color: '#000',
         height: hp('5%'),
@@ -332,5 +333,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.5)',
         alignSelf: 'center',
+    },
+    addimage: {
+        height: '100%',
+        width: '100%',
     },
 })

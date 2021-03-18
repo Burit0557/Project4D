@@ -111,7 +111,7 @@ export default function home({ navigation }) {
                 containerStyle={{ height: hp('15%') }}
                 // leftContainerStyle={{ marginBottom: '5%' }}
                 leftComponent={{ Icon: 'g_translate', color: '#fff', }}
-                centerComponent={{ text: 'NAME’s App', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
+                centerComponent={{ text: 'DDaS', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
                 // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 // barStyle="dark-content"
                 backgroundColor='#014D81'
