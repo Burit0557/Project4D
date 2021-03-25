@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const mysql = require('mysql');
 const saltRounds = 10;
 const admin = require('firebase-admin');
+const nodemailer = require('nodemailer');
 
 
 let app = express();
@@ -441,8 +442,8 @@ req params {
 app.get('/friend_location', function (req, res) {
     let { username } = req.query;
     console.log(`friend_location username ${username}`)
-    let sql = 'SELECT * FROM user_location WHERE time IN (SELECT max(time) FROM user_location) and Username=?';
-    connection.query(sql, username, function (err, data, field) {
+    let sql = 'SELECT * FROM user_location WHERE time IN (SELECT max(time) FROM user_location WHERE Username=?) and Username=?';
+    connection.query(sql, [username, username], function (err, data, field) {
         if (err) {
             console.log(err);
             res.status(403).end();
@@ -478,7 +479,7 @@ app.post('/post_noti', function (req, res) {
             try {
                 // console.log('test',data)
                 let tdata = data.map(item => {
-                    console.log('tddest',item)
+                    console.log('tddest', item)
                     if (item.token != '') {
                         return item.token
                     }
@@ -1016,8 +1017,184 @@ app.post('/up_token', function (req, res) {
     });
 });
 
+/* POST localhost:3000/req_reset_pass_email
+req body {
+    email
+}
+---------------------------------------------- req_reset_pass_email --------------------------------------*/
+app.post('/req_reset_pass_email', function (req, res) {
+    let { email } = req.body;
+    console.log(`email ${email}`)
+    let sql = 'SELECT Email, Username FROM profile WHERE Email = ?';
+    connection.query(sql, email, function (err, data, field) {
+        if (err) {
+            res.status(403);
+        }
+        if (data.length === 0) {
+            console.log("NO USER")
+            res.status(404).end()
+        }
+        else {
+            sendEmail(data[0])
+            res.send(data)
+        }
+    });
+});
+
+/* POST localhost:3000/req_reset_pass_user
+req body {
+    username
+}
+---------------------------------------------- req_reset_pass_user --------------------------------------*/
+app.post('/req_reset_pass_user', function (req, res) {
+    let { username } = req.body;
+    console.log(`username ${username}`)
+    let sql = 'SELECT Email, Username FROM profile WHERE Username = ?';
+    connection.query(sql, username, function (err, data, field) {
+        if (err) {
+            res.status(403);
+        }
+        if (data.length === 0) {
+            console.log("NO USER")
+            res.status(404).end()
+        }
+        else {
+            sendEmail(data[0])
+            res.send(data)
+        }
+    });
+});
+
+function sendEmail(data) {
+    let code = Math.floor(Math.random() * 1000000) + 100000
+    console.log('code', code)
+    add_code(data.Username, code)
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+            // user: 'malody19227@gmail.com',
+            // pass: 'plenglove2541'
+            user: '60010252@kmitl.ac.th',
+            pass: 'Sm11849783'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    })
+
+    const message = {
+        from: 'no reply <60010252@kmitl.ac.th>',
+        to: data.Email,
+        subject: 'Your App - Reset Password',
+        html: `
+          <h3> สวัสดี ${data.Username} </h3>
+          <p> นี้คือ Code สำหรับใช้ในการรีเซ็ตรหัสผ่าน CODE : ${code}</p>
+          <p>Your Application Team</p>
+        `
+    };
+
+    transporter.sendMail(message, function (err, info) {
+        if (err) {
+            console.log(err)
+        }
+    })
+}
+
+function add_code(username, code) {
+    let sql = 'SELECT * FROM user_resetcode WHERE Username = ?';
+    connection.query(sql, username, function (err, data, field) {
+        if (err) {
+            console.log(err)
+        }
+        if (data.length === 0) {
+            let sql = 'INSERT INTO user_resetcode (Username, code) VALUES (?,?)';
+            connection.query(sql, [username, code], function (err, data, field) {
+                if (err) {
+                    console.log(err)
+                }
+            });
+        }
+        else {
+            let sql = 'UPDATE user_resetcode SET code = ? WHERE Username = ?';
+            connection.query(sql, [code, username], function (err, data, field) {
+                if (err) {
+                    console.log(err)
+                }
+            });
+        }
+
+    });
+}
+
+/* POST localhost:3000/send_code
+req body {
+    username,
+    code
+}
+---------------------------------------------- send_code --------------------------------------*/
+app.post('/send_code', function (req, res) {
+    let { username, code } = req.body;
+    console.log(`username ${username}`)
+    let sql = 'SELECT * FROM user_resetcode WHERE Username = ?';
+    connection.query(sql, username, function (err, data, field) {
+        if (err) {
+            res.status(403);
+        }
+        if (data.length === 0) {
+            console.log("NO USER")
+            res.status(404).end();
+        }
+        else {
+            if (data[0].code === code) {
+                delete_code(username)
+                res.status(200).end();
+            }
+            else {
+                res.status(401).end();
+            }
+        }
+    });
+});
+
+function delete_code(username) {
+    let sql = 'DELETE FROM user_resetcode WHERE Username = ? ';
+    connection.query(sql, username, function (err, data, field) {
+        if (err) {
+            console.log(err)
+        }
+    });
+}
+
+/* POST localhost:3000/reset_password
+req body    {
+    username,
+    new_password
+}
+---------------------------------------------- reset_password -------------------------------------*/
+app.post('/reset_password', function (req, res) {
+    let { username, new_password } = req.body;
+    console.log(`username ${username} new_password ${new_password}`)
+    let sql = 'UPDATE profile SET Password = ? WHERE Username = ?';
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+        bcrypt.hash(new_password, salt, function (err, hash) {
+            if (err) {
+                console.log(err)
+            } else {
+                connection.query(sql, [hash, username], function (err, result) {
+                    if (err) {
+                        res.status(403);
+                    } else {
+                        res.status(200).end();
+                    }
+                })
+            }
+        });
+    });
+})
 
 
-var server = app.listen(8080, function () {
+var server = app.listen(3000, function () {
     console.log('Server is running..');
 });

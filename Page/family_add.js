@@ -207,15 +207,17 @@ export default function family_add({ navigation }) {
                         <View style={styles.box}>
                             <Text style={[styles.Text, { alignSelf: 'center', marginTop: '3%', marginBottom: '3%' }]}>คำขอเป็นสมาชิก</Text>
                             {dataFriendReq.map((item, index) => {
-                                return (<View key={index} style={styles.select}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                return (<View key={index} style={[styles.select]}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' ,width : '57%' }}>
                                         <View style={[styles.profile, { backgroundColor: '#c4c4c4', marginRight: '5%' }]}>
                                             <Image style={styles.profile}
                                                 source={item.image === "" ?
                                                     require('../assets/profile-user.png')
                                                     : { uri: `data:image/jpg;base64,${item.image}` }} />
                                         </View>
-                                        <Text style={styles.Text}>{item.name === "" ? item.Username : item.name}</Text>
+                                        <View style={{flex :1 ,marginRight :'1%'}}>
+                                            <Text style={[styles.Text, { textAlign: 'center',margin :0 }]}>{item.name === "" ? item.Username : item.name}</Text>
+                                        </View>
                                     </View>
                                     <View style={{ flexDirection: 'row', }}>
                                         <Button
@@ -295,7 +297,7 @@ const styles = StyleSheet.create({
         fontSize: hp('50%')
     },
     content: {
-        width: wp('75%'),
+        width: wp('80%'),
     },
     listRow: {
         flexDirection: 'row',
@@ -357,6 +359,7 @@ const styles = StyleSheet.create({
     },
     box: {
         backgroundColor: '#014D81',
+        width: '100%',
         marginTop: hp('2%'),
         borderRadius: 15,
         paddingBottom: 15,

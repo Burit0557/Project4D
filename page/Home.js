@@ -13,6 +13,7 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import Geolocation from 'react-native-geolocation-service';
 navigator.geolocation = require('react-native-geolocation-service');
 import { CategoryContext } from '../context_api/myContext';
+import { API } from './axios';
 
 export default function home({ navigation }) {
     const Context = useContext(CategoryContext)

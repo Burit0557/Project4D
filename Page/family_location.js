@@ -33,6 +33,43 @@ export default function history_detail({ navigation }) {
     const GOOGLE_MAPS_APIKEY = Context.GOOGLE_MAPS_APIKEY;
 
     useEffect(() => {
+        API.get('/get_friend_acces', data = {
+            params: {
+                username: dataUser.Username,
+                friend_user: friendSetting.Username,
+            }
+        })
+            .then(result => {
+                console.log(result.data)
+                let data = result.data[0]
+                if (data.position_acces === 1) {
+                    API.get('/friend_location', data = {
+                        params: {
+                            username: friendSetting.Username
+                        }
+                    })
+                        .then(result => {
+                            console.log(result.data)
+                            let data = result.data[0]
+                            if (data) {
+                                setMyPlaces({
+                                    latitude: data.latitude ? data.latitude : 13.728567,
+                                    longitude: data.longitude ? data.longitude : 100.774061,
+                                })
+                                setNoAcces(false)
+                            }
+
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            setNoAcces(true)
+                        });
+                }
+                else {
+                    setNoAcces(true)
+                }
+            })
+            .catch(error => console.log(error));
 
     }, []);
 
@@ -81,7 +118,7 @@ export default function history_detail({ navigation }) {
         return () => clearInterval(intervalId); //This is important
     }, [api, setapi])
 
-    
+
 
 
     renderLeftComponent = () => {
@@ -98,7 +135,7 @@ export default function history_detail({ navigation }) {
             <Header
                 containerStyle={{ height: hp('15%') }}
                 leftComponent={this.renderLeftComponent()}
-                centerComponent={{ text: 'ประวัติ', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
+                centerComponent={{ text: 'ตำแหน่ง', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
                 // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 // barStyle="dark-content"
                 backgroundColor='#014D81'
@@ -112,8 +149,8 @@ export default function history_detail({ navigation }) {
                         <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%') }]}>ตำแหน่งปัจจุบันของ</Text>
                         <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%') }]}>{friendSetting.name === '' ? friendSetting.Username : friendSetting.name}</Text>
                         {NoAcces ?
-                            <View style={{ height: hp('55%'), width: wp('80%'), marginTop: hp('1%'), alignItems: 'center', justifyContent: 'center',backgroundColor: '#FFFFFF' }}>
-                                <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%'),color: '#000000' }]}>ไม่สามารถดูตำแหน่งปัจจุบันได้</Text>
+                            <View style={{ height: hp('55%'), width: wp('80%'), marginTop: hp('1%'), alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFFFFF' }}>
+                                <Text style={[styles.Text, { fontSize: hp('2.25%'), marginTop: hp('1%'), color: '#000000' }]}>ไม่สามารถดูตำแหน่งปัจจุบันได้</Text>
                             </View>
                             :
                             <View style={{ height: hp('55%'), width: wp('80%'), marginTop: hp('1%') }}>

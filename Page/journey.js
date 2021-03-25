@@ -266,7 +266,7 @@ export default function journey({ navigation }) {
                     {
                         nearbyShow ?
                             <View style={{
-                                height: hp('50%'), width: wp('80%'), marginTop: '5%', borderWidth: 2,
+                                height: hp('50%'), width: wp('80%'), marginTop: '5%' ,
                                 alignItems: 'center', backgroundColor: '#014D81', borderRadius: 10,
                             }}>
                                 <Text style={{ color: '#fff', fontSize: hp('2.25%'), marginBottom: '1%' }}>สถานที่พักรถใกล้เคียง</Text>

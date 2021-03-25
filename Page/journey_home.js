@@ -210,7 +210,7 @@ export default function journey_home({ navigation }) {
             <Header
                 containerStyle={{ height: hp('15%') }}
                 leftComponent={this.renderLeftComponent()}
-                centerComponent={{ text: 'อุปกรณ์', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
+                centerComponent={{ text: 'เดินทางไกล', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
                 // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 // barStyle="dark-content"
                 backgroundColor='#014D81'

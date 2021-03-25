@@ -17,6 +17,9 @@ import FriendHistoryScreen from './Page/history_friend';
 
 
 import ForgotPassScreen from './Page/forgotpass';
+import ForgotPassScreen_code from './Page/forgotpass_code';
+import ForgotPassScreen_reset from './Page/forgotpass_reset';
+
 import SettingScreen from './Page/setting';
 import Setting_profileScreen from './Page/setting_profile';
 import RegisterScreen from './Page/register';
@@ -80,7 +83,11 @@ function router() {
 
                     <Stack.Screen name="History_detail" component={HistoryDetailScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="History_friend" component={FriendHistoryScreen} options={{ headerShown: false }} />
+
                     <Stack.Screen name="ForgotPass" component={ForgotPassScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="ForgotPass_code" component={ForgotPassScreen_code} options={{ headerShown: false }} />
+                    <Stack.Screen name="ForgotPass_reset" component={ForgotPassScreen_reset} options={{ headerShown: false }} />
+
                     <Stack.Screen name="Setting" component={SettingScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Setting_profile" component={Setting_profileScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />

@@ -37,7 +37,8 @@ class MyContext extends React.Component {
                 disLocation: 'secret',
                 latitude: 13.7290644,
                 longitude: 100.7755085
-            }
+            },
+            UserReset : ''
         }
     }
 
@@ -167,6 +168,12 @@ class MyContext extends React.Component {
         })
     }
 
+    setUserReset = (data) => {
+        this.setState({
+           UserReset: data
+        })
+    }
+
 
     render() {
         return (
@@ -183,6 +190,7 @@ class MyContext extends React.Component {
                     GOOGLE_MAPS_APIKEY: this.state.GOOGLE_MAPS_APIKEY,
                     dataJourney: this.state.dataJourney,
                     Destination: this.state.Destination,
+                    UserReset: this.state.UserReset,
 
                     setDataUser: this.setDataUser,
                     setImage: this.setImage,
@@ -201,6 +209,8 @@ class MyContext extends React.Component {
 
                     setFriendSetting: this.setFriendSetting,
                     setHistoryDetail: this.setHistoryDetail,
+
+                    setUserReset : this.setUserReset,
 
 
                 }}

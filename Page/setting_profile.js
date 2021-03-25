@@ -587,7 +587,7 @@ export default function setting_profile({ navigation }) {
                 <Overlay key={2} isVisible={visible.optionEditimg_cf} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
 
-                        <View style={styles.overlat_show}>
+                        <View style={styles.overlay_show}>
                             <View style={{ width: wp('36%'), height: wp('36%') }}>
                                 <Image style={[styles.profile, { resizeMode: 'cover' }]} source={profileImage.imgEdit} />
                             </View>
@@ -620,7 +620,7 @@ export default function setting_profile({ navigation }) {
                 {/* --------------------------------Editname-------------------------------- */}
                 <Overlay key={3} isVisible={visible.editname} onBackdropPress={toggleOverlayEditname} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
-                        <View style={styles.overlat_show}>
+                        <View style={styles.overlay_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>แก้ไขชื่อเล่น</Text>
                             <TextInput
                                 style={styles.Input}
@@ -645,7 +645,7 @@ export default function setting_profile({ navigation }) {
                 {/* --------------------------------Editpassword-------------------------------- */}
                 <Overlay key={4} isVisible={visible.editpass} onBackdropPress={toggleOverlayEditpass} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
-                        <View style={styles.overlat_show}>
+                        <View style={styles.overlay_show}>
                             <View style={{ width: '95%', marginBottom: ('5%') }}>
                                 <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>รหัสผ่านเดิม</Text>
                                 <TextInput
@@ -848,7 +848,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: hp('2.5%')
     },
-    overlat_show: {
+    overlay_show: {
         width: '95%',
         marginTop: hp('2%'),
         alignItems: 'center',
