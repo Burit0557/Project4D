@@ -163,7 +163,7 @@ export default function family({ navigation }) {
                     </View>
                     <Button
                         title="เพิ่มสมาชิก"
-                        buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), width: wp('25%') }]}
+                        buttonStyle={[styles.btnLogin, styles.Shadow, { marginTop: hp('2%'), }]}
                         onPress={() => {
                             console.log(dataUser.Username)
                             navigation.navigate('Family-Add')}}
