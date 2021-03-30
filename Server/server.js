@@ -466,7 +466,7 @@ req body    {
 app.post('/post_noti', function (req, res) {
     let { username, friend_user } = req.body;
     console.log(`username ${username}`)
-    let sql = 'SELECT token FROM user_token WHERE Username in (SELECT Username FROM friend WHERE Username in ( SELECT Friend_user as Usernam FROM friend WHERE Username = ? and alert_acces=1) and Friend_user = ? and friend_alert = 1)';
+    let sql = `SELECT token FROM user_token WHERE Username in (SELECT Username FROM friend WHERE Username in ( SELECT Friend_user as Usernam FROM friend WHERE Username = ? and alert_acces=1) and Friend_user = ? and friend_alert = 1) AND NOT token = '' `;
     connection.query(sql, [username, username], function (err, data, result) {
         if (err) {
             res.status(403);
@@ -478,13 +478,13 @@ app.post('/post_noti', function (req, res) {
         else {
             try {
                 // console.log('test',data)
-                let tdata = data.map(item => {
-                    console.log('tddest', item)
+                let tdata = data.map((item) => {
+                    // console.log('dert', item)
                     if (item.token != '') {
                         return item.token
                     }
                 })
-                // console.log('tddest',tdata)
+                console.log('tddest',tdata)
                 if (tdata.length === 0) {
                     console.log("NO user")
                     res.status(404).end();

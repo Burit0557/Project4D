@@ -20,7 +20,7 @@ export default function home({ navigation }) {
     const [dataUser, setdataUser] = useState(
         Context.dataUser
     )
-    const [MyPlaces, setMyPlaces] = useState();
+    const [checkbluetooth, setcheckbluetooth] = useState(false);
 
 
     async function requestPermissions() {
@@ -116,14 +116,32 @@ export default function home({ navigation }) {
                 .then(res => {
                     peripheral.onDataReceived((data) => onReceivedData(data))
                     let EAR = Context.EAR
-                    peripheral.write(` EAR ${EAR}`)
-                    peripheral.write("end")
+                    peripheral.write(` EAR ${EAR} `)
+                    peripheral.write(" end")
                 })
         }
         catch (error) {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {  //assign interval to a variable to clear it.
+            try {
+                connected = await RNBluetoothClassic.getConnectedDevices();
+                console.log("test",connected)
+                if (connected.length === 0) {
+                    connect()
+                }
+                else{
+                    console.log("connected")
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }, 10000)
+        return () => clearInterval(intervalId); //This is important
+    }, [checkbluetooth, setcheckbluetooth])
 
     const onReceivedData = (data) => {
         console.log(data)
