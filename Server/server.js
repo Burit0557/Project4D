@@ -1144,11 +1144,11 @@ app.post('/send_code', function (req, res) {
             res.status(404).end();
         }
         else {
-            if(data[0].code === code){
+            if (data[0].code === code) {
                 delete_code(username)
                 res.status(200).end();
             }
-            else{
+            else {
                 res.status(401).end();
             }
         }
@@ -1163,6 +1163,33 @@ function delete_code(username) {
         }
     });
 }
+
+/* POST localhost:3000/reset_password
+req body    {    
+    username,
+    new_password
+}
+---------------------------------------------- reset_password -------------------------------------*/
+app.post('/reset_password', function (req, res) {
+    let { username, new_password } = req.body;
+    console.log(`username ${username} new_password ${new_password}`)
+    let sql = 'UPDATE profile SET Password = ? WHERE Username = ?';
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+        bcrypt.hash(new_password, salt, function (err, hash) {
+            if (err) {
+                console.log(err)
+            } else {
+                connection.query(sql, [hash, username], function (err, result) {
+                    if (err) {
+                        res.status(403);
+                    } else {
+                        res.status(200).end();
+                    }
+                })
+            }
+        });
+    });
+})
 
 var server = app.listen(8080, function () {
 
