@@ -6,6 +6,7 @@ import HomeScreen from './Page/home';
 import LoginScreen from './Page/login';
 import HistoryScreen from './Page/history';
 import HistoryDetailScreen from './Page/history_detail';
+import HistoryTimeScreen from './Page/history_time';
 
 import FamilyScreen from './Page/family';
 import FamilyAddScreen from './Page/family_add';
@@ -80,7 +81,8 @@ function router() {
                     <Stack.Screen name="Journey_home" component={Journey_homeScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Journey_rest" component={Journey_restScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="Family-Location" component={FamilyLocationScreen} options={{ headerShown: false }} />
-
+                    
+                    <Stack.Screen name="History_time" component={HistoryTimeScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="History_detail" component={HistoryDetailScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="History_friend" component={FriendHistoryScreen} options={{ headerShown: false }} />
 

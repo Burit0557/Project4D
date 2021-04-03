@@ -19,6 +19,7 @@ export default function history({ navigation }) {
 
     const [Data, setData] = useState([])
     const [allData, setallData] = useState([])
+    const [AllTempData, setAllTempData] = useState([])
     const [date, setDate] = useState({
         dateStart: '',
         dateEnd: ''
@@ -47,8 +48,10 @@ export default function history({ navigation }) {
                                 data = data.sort(function (a, b) {
                                     return stringtonum(getdate_string(b.time)) - stringtonum(getdate_string(a.time))
                                 })
-                                setData(data);
-                                setallData(data);
+                                setAllTempData(data)
+                                GroupBy(data);
+                                // setData(data);
+                                // setallData(data);
                             }
 
                         })
@@ -100,13 +103,30 @@ export default function history({ navigation }) {
         return parseInt(year) * 10000 + parseInt(month) * 100 + parseInt(day)
     }
 
+    GroupBy = (data) => {
+        groups = [];
+        for (i = 0; i < data.length; i++) {
+            if (!groups[getdate_string(data[i].time)]) {
+                groups[getdate_string(data[i].time)] = data[i];
+            }
+        }
+        groupArrays = Object.keys(groups).map((date) => {
+            return {
+              ...groups[date]
+            };
+          });
+        console.log(groupArrays)
+        setData(groupArrays);
+        setallData(groupArrays);
+    }
+
     getdate_string = (str) => {
 
         let date = new Date(str)
         // let time = Date.parse(date);
         // time = time + (7 * 3600 * 1000)
         // date = new Date(time)
-       
+
         let year = date.getFullYear()
         let month = date.getMonth() + 1
         let day = date.getDate()
@@ -119,12 +139,20 @@ export default function history({ navigation }) {
         return `${day}-${month}-${year}`
     }
 
-    goDetail = (data) => {
+    goTime = (data) => {
         console.log(data)
-        Context.setHistoryDetail(data)
-        navigation.navigate('History_detail')
+        groups = [];
+        AllTempData.forEach(item =>{
+            if(getdate_string(item.time) === getdate_string(data.time)){
+                groups.push(item)
+            }
+        })
+        console.log(groups)
+        Context.setDataTime(data.time)
+        Context.setHistoryTime(groups)
+        navigation.navigate('History_time')
     }
-    
+
     renderLeftComponent = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('Family')}>
@@ -256,7 +284,7 @@ export default function history({ navigation }) {
                                 :
                                 Data.map((item, index) => {
                                     return (
-                                        <TouchableOpacity key={index} onPress={() => goDetail(item)}>
+                                        <TouchableOpacity key={index} onPress={() => goTime(item)}>
                                             <View style={styles.listRow}>
                                                 <View style={styles.leftCard}>
                                                     <Text style={styles.Text}>วัน-เดือน-ปี</Text>

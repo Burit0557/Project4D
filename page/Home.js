@@ -129,7 +129,6 @@ export default function home({ navigation }) {
         const intervalId = setInterval(async () => {  //assign interval to a variable to clear it.
             try {
                 connected = await RNBluetoothClassic.getConnectedDevices();
-                console.log("test",connected)
                 if (connected.length === 0) {
                     connect()
                 }

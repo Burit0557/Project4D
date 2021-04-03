@@ -28,6 +28,8 @@ class MyContext extends React.Component {
             },
             friendSetting: {},
             historyDetail: {},
+            historyTime: {},
+            DataTime: {},
             dataJourney: {
                 mode: 0,
                 count: 0,
@@ -168,6 +170,18 @@ class MyContext extends React.Component {
         })
     }
 
+    setHistoryTime = (data) => {
+        this.setState({
+            historyTime: data
+        })
+    }
+
+    setDataTime = (Time) => {
+        this.setState({
+            DataTime: Time
+        })
+    }
+
     setUserReset = (data) => {
         this.setState({
            UserReset: data
@@ -187,6 +201,8 @@ class MyContext extends React.Component {
                     EAR: this.state.dataUserSetting.EAR,
                     friendSetting: this.state.friendSetting,
                     historyDetail: this.state.historyDetail,
+                    historyTime: this.state.historyTime,
+                    DataTime: this.state.DataTime,
                     GOOGLE_MAPS_APIKEY: this.state.GOOGLE_MAPS_APIKEY,
                     dataJourney: this.state.dataJourney,
                     Destination: this.state.Destination,
@@ -209,6 +225,8 @@ class MyContext extends React.Component {
 
                     setFriendSetting: this.setFriendSetting,
                     setHistoryDetail: this.setHistoryDetail,
+                    setHistoryTime: this.setHistoryTime,
+                    setDataTime: this.setDataTime,
 
                     setUserReset : this.setUserReset,
 

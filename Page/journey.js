@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Vibration } from 'react-native';
 import { Button, Image, Icon, Header } from 'react-native-elements';
 
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -14,6 +14,9 @@ import Geolocation from 'react-native-geolocation-service';
 import { _ } from "lodash";
 
 import { API } from './axios';
+import RNBluetoothClassic, {
+    BluetoothDevice
+} from 'react-native-bluetooth-classic';
 
 export default function journey({ navigation }) {
     const Context = useContext(CategoryContext)
@@ -30,12 +33,19 @@ export default function journey({ navigation }) {
         title: '',
         disLocation: '',
     })
+    const [checkbluetooth, setcheckbluetooth] = useState(false);
+
+    const ONE_SECOND_IN_MS = 1000;
 
     const [dataJourney, setDataJourney] = useState(Context.dataJourney)
     const [dataUserSetting, setDataUserSetting] = useState(Context.dataUserSetting)
     const [dataUser, setdataUser] = useState(Context.dataUser)
 
     const [distance, setDistance] = useState({
+        start: 0,
+        current: 0,
+    })
+    const [timecount, setTimecount] = useState({
         start: 0,
         current: 0,
     })
@@ -52,9 +62,6 @@ export default function journey({ navigation }) {
     // const GOOGLE_MAPS_APIKEY = Context.GOOGLE_MAPS_APIKEY;
 
     const GOOGLE_MAPS_APIKEY = 'AIzaSyAaZ9OqZiu0Ap4yMwWI1qhGb-8xp71BYzU';
-    const goSetting = () => {
-        navigation.navigate('Family-Setting')
-    }
 
     useEffect(() => {
         Geolocation.getCurrentPosition((data) => {
@@ -71,16 +78,17 @@ export default function journey({ navigation }) {
             setNearbyShow(false)
 
         })
-
         pressedPrediction(dataJourney.Destination)
-
+        if (timecount.start === 0) {
+            setTimeStart()
+        }
     }, []);
 
     getNearbyPlaces = async (latitude, longitude) => {
         const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=20000&type=restaurant&key=${GOOGLE_MAPS_APIKEY}`;
         const result = await fetch(apiUrl);
         const jsonResult = await result.json();
-        console.log(jsonResult);
+        // console.log(jsonResult);
         let data = jsonResult.results
         data = data.sort(function (a, b) {
             return b.rating - a.rating
@@ -100,7 +108,7 @@ export default function journey({ navigation }) {
                     title: 'My Places',
                 })
             })
-        }, 10000)
+        }, 10 * ONE_SECOND_IN_MS)
         return () => clearInterval(intervalId); //This is important
     }, [MyPlaces, setMyPlaces])
 
@@ -115,35 +123,62 @@ export default function journey({ navigation }) {
                 })
                 setapi(true)
             })
-        }, (parseInt(dataUserSetting.up_min) * 60 + parseInt(dataUserSetting.up_sec)) * 1000)
+        }, (parseInt(dataUserSetting.up_min) * 60 + parseInt(dataUserSetting.up_sec)) * ONE_SECOND_IN_MS)
         return () => clearInterval(intervalId); //This is important
     }, [api, setapi])
 
     useEffect(() => {
         if (dataJourney.mode === 0) {
-            const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-                if (distance.start - distance.current > dataJourney.count) {
-                    getNearbyPlaces(MyPlaces.latitude, MyPlaces.longitude)
-                    setNearbyShow(true)
-                }
-                setCheck(true)
-            }, 600000)
-            return () => clearInterval(intervalId); //This is important
+            console.log("mode 0")
+            checkdistant()
         }
         if (dataJourney.mode === 1) {
-            let minute = 1000//60000
-            const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
-
-                getNearbyPlaces(MyPlaces.latitude, MyPlaces.longitude)
-                setNearbyShow(true)
-
-                setCheck(true)
-            }, dataJourney.count * minute)
-            return () => clearInterval(intervalId); //This is important
+            console.log("mode 1")
+            checktime()
         }
 
+        const intervalId = setInterval(() => {  //assign interval to a variable to clear it.
+            setCheck(!check)
+        }, 20 * ONE_SECOND_IN_MS)
+        return () => clearInterval(intervalId); //This is important
     }, [check, setCheck])
 
+    useEffect(() => {
+        const intervalId = setInterval(async () => {  //assign interval to a variable to clear it.
+            try {
+                connected = await RNBluetoothClassic.getConnectedDevices();
+                if (connected.length === 0) {
+                    connect()
+                }
+                else {
+                    console.log("connected")
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }, 10000)
+        return () => clearInterval(intervalId); //This is important
+    }, [checkbluetooth, setcheckbluetooth])
+
+    async function connect() {
+        try {
+            let bonded = await RNBluetoothClassic.getBondedDevices();
+            // console.log('DeviceListScreen::getBondedDevices found', bonded);
+            let bluetoothname = Context.bluetooth_name
+            let peripheral = bonded.find(element => element.name === bluetoothname);
+            console.log(peripheral)
+            peripheral.connect()
+                .then(res => {
+                    peripheral.onDataReceived((data) => onReceivedData(data))
+                    let EAR = Context.EAR
+                    peripheral.write(` EAR ${EAR} `)
+                    peripheral.write(" end")
+                })
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
 
 
@@ -152,7 +187,7 @@ export default function journey({ navigation }) {
         const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&fields=name,geometry,rating,formatted_phone_number&key=${GOOGLE_MAPS_APIKEY}`;
         const result = await fetch(apiUrl);
         const jsonResult = await result.json();
-        console.log(jsonResult.result);
+        // console.log(jsonResult.result);
         setDestination({
             ...Destination,
             disLocation: jsonResult.result.name,
@@ -175,6 +210,33 @@ export default function journey({ navigation }) {
         navigation.navigate('Journey_rest')
     }
 
+    const checkdistant = () => {
+        console.log('in', distance.start, distance.current, dataJourney.count)
+        if (distance.start - distance.current > dataJourney.count) {
+            getNearbyPlaces(MyPlaces.latitude, MyPlaces.longitude)
+            setNearbyShow(true)
+            Vibration.vibrate(2 * ONE_SECOND_IN_MS)
+        }
+    }
+
+    const checktime = () => {
+        temp = new Date()
+        current = temp.getMinutes() * 60 + temp.getSeconds() //temp.getHours()*60 + temp.getMinutes()
+        console.log('time', timecount.start, current, dataJourney.count)
+        if (current - timecount.start >= dataJourney.count) {
+            getNearbyPlaces(MyPlaces.latitude, MyPlaces.longitude)
+            setNearbyShow(true)
+            Vibration.vibrate(2 * ONE_SECOND_IN_MS)
+        }
+    }
+
+    const setTimeStart = () => {
+        temp = new Date()
+        setTimecount({
+            ...timecount,
+            start: temp.getMinutes() * 60 + temp.getSeconds() //temp.getHours()*60 + temp.getMinutes()
+        })
+    }
 
 
     renderLeftComponent = () => {
@@ -228,6 +290,7 @@ export default function journey({ navigation }) {
                                             onReady={result => {
                                                 console.log(`Distance: ${result.distance} km`)
                                                 console.log(`Duration: ${result.duration} min.`)
+                                                temp = new Date()
                                                 if (distance.start === 0) {
                                                     setDistance({
                                                         ...distance,
@@ -235,6 +298,7 @@ export default function journey({ navigation }) {
                                                     })
                                                 }
                                                 else {
+                                                    console.log('test change else')
                                                     setDistance({
                                                         ...distance,
                                                         current: result.distance
@@ -266,7 +330,7 @@ export default function journey({ navigation }) {
                     {
                         nearbyShow ?
                             <View style={{
-                                height: hp('50%'), width: wp('80%'), marginTop: '5%' ,
+                                height: hp('50%'), width: wp('80%'), marginTop: '5%',
                                 alignItems: 'center', backgroundColor: '#014D81', borderRadius: 10,
                             }}>
                                 <Text style={{ color: '#fff', fontSize: hp('2.25%'), marginBottom: '1%' }}>สถานที่พักรถใกล้เคียง</Text>
@@ -318,6 +382,7 @@ export default function journey({ navigation }) {
                                         ...distance,
                                         start: 0
                                     })
+                                    setTimeStart()
                                     setNearbyPlaces([])
                                 }}
                                 titleStyle={styles.textbt}

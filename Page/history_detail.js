@@ -11,24 +11,9 @@ import { CategoryContext } from '../context_api/myContext';
 export default function history_detail({ navigation }) {
     const Context = useContext(CategoryContext)
 
-    const [dataUser, setdataUser] = useState(
-        Context.dataUser
-    )
     const [historyDetail, setHistoryDetail] = useState(
         Context.historyDetail
     )
-
-    const [Data, setData] = useState([])
-    const [allData, setallData] = useState([])
-    const [date, setDate] = useState({
-        dateStart: '',
-        dateEnd: ''
-    })
-    const GOOGLE_MAPS_APIKEY = Context.GOOGLE_MAPS_APIKEY;
-
-    useEffect(() => {
-
-    }, []);
 
     getdate_string = (str) => {
         let date = new Date(str)

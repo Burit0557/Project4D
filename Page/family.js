@@ -55,14 +55,14 @@ export default function family({ navigation }) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () =>{
-            console.log("testaww")
+            // console.log("testaww")
             API.get('/friend', body = {
                 params: {
                     username: dataUser.Username
                 }
             })
                 .then(res => {
-                    console.log("testssss",res)
+                    // console.log("testssss",res)
                     console.log(res.data)
                     if (res.data.length !== 0) {
                         setData(res.data)
