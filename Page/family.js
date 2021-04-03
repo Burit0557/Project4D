@@ -55,12 +55,14 @@ export default function family({ navigation }) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () =>{
+            console.log("testaww")
             API.get('/friend', body = {
                 params: {
                     username: dataUser.Username
                 }
             })
                 .then(res => {
+                    console.log("testssss",res)
                     console.log(res.data)
                     if (res.data.length !== 0) {
                         setData(res.data)
@@ -191,7 +193,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff0000',
     },
     body: {
-
         // height: hp('90%'),
         width: wp('100%'),
         // justifyContent: 'center',
@@ -215,15 +216,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 4.65,
         elevation: 8,
-    },
-    item: {
-        width: wp('35%'),
-        height: wp('35%'),
-        backgroundColor: '#0E77BF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        marginTop: '5%',
     },
     Text: {
         margin: '1%',

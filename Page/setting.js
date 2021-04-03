@@ -134,57 +134,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // backgroundColor: '#00ff00',
         fontSize: hp('50%'),
-
-
     },
     content: {
         width: wp('80%'),
-    },
-    Input: {
-        // flexDirection: 'row',
-        marginTop: hp('3%'),
-        // backgroundColor: '#0E77BF',
-        width: wp('80%'),
-        height: hp('5%'),
-        borderRadius: 10,
-        justifyContent: 'center',
-    },
-    Shadow: {
-
-        backgroundColor: '#FFFFFF',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 1,
-            height: 12,
-        },
-        shadowOpacity: 0.8,
-        shadowRadius: 16.00,
-
-        elevation: 24,
-    },
-    smallIcon: {
-        width: hp('5%'),
-        height: hp('5%'),
-        borderWidth: 1,
-        marginLeft: wp('2%')
-    },
-    textInput: {
-        color: '#000',
-        width: '100%',
-        height: '80%',
-        fontSize: hp('3%'),
-        paddingBottom: 0,
-        // marginLeft: 10,
-        backgroundColor: '#C4C4C4'
-    },
-    btnLogin: {
-        alignSelf: 'center',
-        backgroundColor: '#014D81',
-        width: wp('30%'),
-        height: hp('5%'),
-        borderRadius: 10,
-
-
     },
     Text: {
         margin: '2%',
@@ -203,18 +155,6 @@ const styles = StyleSheet.create({
         marginBottom: '0.2%',
         backgroundColor: '#0E77BF',
 
-    },
-    test: {
-        backgroundColor: '#FFFFFF',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 1,
-            height: 12,
-        },
-        shadowOpacity: 0.8,
-        shadowRadius: 16.00,
-
-        elevation: 24,
     },
     iconbt: {
         width: '100%',

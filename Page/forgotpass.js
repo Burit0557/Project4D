@@ -148,8 +148,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // backgroundColor: '#00ff00',
         fontSize: hp('50%'),
-
-
     },
     content: {
         width: wp('80%'),
@@ -164,7 +162,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     Shadow: {
-
         backgroundColor: '#FFFFFF',
         shadowColor: "#000",
         shadowOffset: {
@@ -175,12 +172,6 @@ const styles = StyleSheet.create({
         shadowRadius: 16.00,
 
         elevation: 24,
-    },
-    smallIcon: {
-        width: hp('5%'),
-        height: hp('5%'),
-        borderWidth: 1,
-        marginLeft: wp('2%')
     },
     textInput: {
         color: '#000',
@@ -197,40 +188,12 @@ const styles = StyleSheet.create({
         width: wp('29%'),
         height: hp('6%'),
         borderRadius: 15,
-
-
     },
     Text: {
         margin: '2%',
         marginTop: '4%',
         color: '#12283D',
         fontSize: hp('2.25%'),
-        
-    },
-    button: {
-        borderRadius: 25,
-        // paddingTop: 5,
-        // paddingBottom: 5,
-        // paddingLeft: 50,
-        // paddingRight: 50,
-        backgroundColor: '#FFFFFF',
-        shadowColor: 'rgba(0, 0, 0, 0.1)',
-        shadowOpacity: 0.8,
-        elevation: 6,
-        shadowRadius: 15,
-        shadowOffset: { width: 1, height: 13 },
-    },
-    test: {
-        backgroundColor: '#FFFFFF',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 1,
-            height: 12,
-        },
-        shadowOpacity: 0.8,
-        shadowRadius: 16.00,
-
-        elevation: 24,
     },
     iconhome: {
         width: '100%',

@@ -209,88 +209,16 @@ const styles = StyleSheet.create({
     content: {
         width: wp('80%'),
     },
-    listRow: {
-        flexDirection: 'row',
-        marginTop: hp('2%'),
-    },
-    Shadow: {
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.30,
-        shadowRadius: 4.65,
-        elevation: 8,
-    },
-    item: {
-        width: wp('35%'),
-        height: wp('35%'),
-        backgroundColor: '#0E77BF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        marginTop: '5%',
-    },
     Text: {
         margin: '1%',
         color: '#ffff',
         fontSize: hp('2%')
-    },
-    leftCard: {
-        width: '70%',
-        height: hp('10%'),
-        margin: 0,
-        backgroundColor: '#0E77BF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
-    },
-    rightCard: {
-        width: '30%',
-        height: hp('10%'),
-        margin: 0,
-        backgroundColor: '#014D81',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
-
     },
     iconhome: {
         width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    dateStyle: {
-        height: hp('6%'),
-        flex: 1,
-        //backgroundColor: '#fff',
-        color: 'white',
-        borderRadius: 10,
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center'
-    },
-    btn: {
-        //alignSelf: 'center',
-        backgroundColor: '#014D81',
-        width: wp('35.2%'),
-        height: hp('6%'),
-        borderRadius: 10,
-        //borderWidth:1
-    },
-    textbt: {
-        fontSize: hp('2.25%')
-    },
-    textshow: {
-        color: '#000',
-        fontSize: hp('2.25%'),
-        paddingBottom: 0,
-        textAlign: 'center'
     },
     map: {
         ...StyleSheet.absoluteFillObject,

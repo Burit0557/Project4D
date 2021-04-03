@@ -233,10 +233,6 @@ const styles = StyleSheet.create({
     content: {
         width: wp('90%'),
     },
-    listRow: {
-        flexDirection: 'row',
-        marginTop: hp('2%'),
-    },
     Shadow: {
         shadowColor: "#000",
         shadowOffset: {
@@ -250,36 +246,10 @@ const styles = StyleSheet.create({
     map: {
         ...StyleSheet.absoluteFillObject,
     },
-    item: {
-        width: wp('35%'),
-        height: wp('35%'),
-        backgroundColor: '#0E77BF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        marginTop: '5%',
-    },
     Text: {
         margin: '1%',
         color: '#ffff',
         fontSize: hp('2%')
-    },
-    select: {
-        flexDirection: 'row',
-        width: '100%',
-        height: hp('6%'),
-        backgroundColor: '#0E77BF',
-        justifyContent: 'flex-start',
-        alignItems: "center",
-        paddingStart: '5%',
-        marginBottom: 3,
-
-    },
-    box: {
-        backgroundColor: '#014D81',
-        marginTop: hp('2%'),
-        borderRadius: 10,
-        paddingBottom: 10,
     },
     iconhome: {
         width: '100%',
@@ -287,33 +257,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    icondown: {
-        width: '100%',
-        height: '100%',
-    },
-    btnLogin: {
-        alignSelf: 'center',
-        backgroundColor: '#014D81',
-        height: hp('5%'),
-        borderRadius: 10,
-    },
-    destinationInput: {
-        borderWidth: 0.5,
-        borderColor: "grey",
-        height: 40,
-        // marginTop: 50,
-        marginLeft: 5,
-        marginRight: 5,
-        padding: 5,
-        backgroundColor: "white"
-    },
-    locationSuggestion: {
-        backgroundColor: "white",
-        padding: 5,
-        fontSize: hp('2%')
-    },
     btsave: {
-        //alignSelf: 'center',
         backgroundColor: '#0E77BF',
         width: wp('29%'),
         height: hp('6%'),

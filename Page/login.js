@@ -329,7 +329,6 @@ const styles = StyleSheet.create({
         //backgroundColor: '#DBCCCC',
     },
     listRow: {
-
         flexDirection: 'row',
         // justifyContent: 'space-around',
         alignItems: 'center',
@@ -359,7 +358,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     textInput: {
-
         width: wp('70%') - hp('6%') - 10,
         color: '#000',
         height: hp('5%'),
@@ -385,12 +383,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         //marginTop: hp('5%'),
         paddingBottom: 0,
-
     },
     touchtext: {
         alignSelf: 'center',
         marginTop: hp('5%'),
-
     },
     line: {
         width: wp('70%'),

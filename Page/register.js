@@ -535,10 +535,6 @@ const styles = StyleSheet.create({
         height: hp('6%'),
         borderRadius: 15,
     },
-    textAlert: {
-        color: '#FF0000',
-        fontSize: hp('1.5%'),
-    },
     textdetail: {
         fontSize: hp('2%')
     }

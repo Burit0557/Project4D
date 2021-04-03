@@ -114,7 +114,7 @@ app.post('/register', function (req, res) {
             } else {
                 connection.query(sql, [username, hash, email], function (err, result) {
                     if (err) {
-                        res.status(403);
+                        res.status(403).end();;
                     } else {
                         res.status(200).end();
                     }
@@ -484,7 +484,7 @@ app.post('/post_noti', function (req, res) {
                         return item.token
                     }
                 })
-                console.log('tddest',tdata)
+                console.log('tddest', tdata)
                 if (tdata.length === 0) {
                     console.log("NO user")
                     res.status(404).end();

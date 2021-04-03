@@ -214,10 +214,6 @@ const styles = StyleSheet.create({
     content: {
         width: wp('80%'),
     },
-    listRow: {
-        flexDirection: 'row',
-        marginTop: hp('2%'),
-    },
     Shadow: {
         shadowColor: "#000",
         shadowOffset: {
@@ -227,15 +223,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 4.65,
         elevation: 8,
-    },
-    item: {
-        width: wp('35%'),
-        height: wp('35%'),
-        backgroundColor: '#0E77BF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        marginTop: '5%',
     },
     Text: {
         margin: '1%',
@@ -269,17 +256,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    icondown: {
-        width: '100%',
-        height: '100%',
-    },
     btnLogin: {
         alignSelf: 'center',
         backgroundColor: '#EA2626',
         height: hp('5%'),
         borderRadius: 10,
-    },
-    checkboxStyle: {
-        borderWidth: 1,
     },
 })

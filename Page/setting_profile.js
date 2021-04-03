@@ -763,7 +763,6 @@ const styles = StyleSheet.create({
         fontSize: hp('2.5%'),
         color : 'rgba(255, 255, 255, 0.85)'
     },
-
     textedit: {
         color: '#000000BF',
         borderColor: '#0000007F',
@@ -771,16 +770,11 @@ const styles = StyleSheet.create({
         borderWidth: wp('0.2%'),
         padding: wp('1%')
     },
-
     smallIcon: {
         width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        // width: hp('5%'),
-        // height: hp('5%'),
-        // borderWidth: 1,
-        // marginLeft: wp('2%')
     },
     textInput: {
         paddingLeft: 5,

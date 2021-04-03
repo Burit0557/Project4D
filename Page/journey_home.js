@@ -150,7 +150,7 @@ export default function journey_home({ navigation }) {
                 return
             }
             if (distance < 30) {
-                Alert.alert('ระยะทางสั้นกว่าที่กำหนด', 'กรุณากรอกข้อมูลใหม่อีกครั้ง')
+                Alert.alert('ระยะทางสั้นกว่าที่กำหนด', 'ต้อง 30 กิโลเมตรขึ้นไป กรุณากรอกข้อมูลใหม่อีกครั้ง')
                 return
             }
         }
@@ -167,7 +167,7 @@ export default function journey_home({ navigation }) {
                 return
             }
             if (time < 20) {
-                Alert.alert('ระยะเวลาสั้นกว่าที่กำหนด', 'กรุณากรอกข้อมูลใหม่อีกครั้ง')
+                Alert.alert('ระยะเวลาสั้นกว่าที่กำหนด', 'ต้อง 20 นาทีขึ้นไป กรุณากรอกข้อมูลใหม่อีกครั้ง')
                 return
             }
         }
@@ -406,59 +406,17 @@ const styles = StyleSheet.create({
     content: {
         width: wp('80%'),
     },
-    bgtext: {
-        flexDirection: 'row',
-        marginBottom: hp('3%'),
-        backgroundColor: '#0E77BF',
-        width: '100%',
-        height: hp('4.5%'),
-        borderRadius: 10,
-        alignItems: 'center',
-        // justifyContent: 'center',
-        justifyContent: 'space-between',
-        paddingRight: '5%',
-        paddingLeft: '5%'
-    },
-
-    textshow: {
-        fontSize: hp('2%'),
-    },
-
-    textedit: {
-        color: '#000000BF',
-        borderColor: '#0000007F',
-        fontSize: hp('1.8%'),
-        borderWidth: wp('0.2%'),
-        padding: wp('1%')
-    },
-
     smallIcon: {
         width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        // width: hp('5%'),
-        // height: hp('5%'),
-        // borderWidth: 1,
-        // marginLeft: wp('2%')
     },
     textInput: {
         paddingLeft: 5,
         color: '#fff',
         fontSize: hp('2.25%'),
         paddingBottom: 0,
-    },
-    textTopic: {
-        color: '#000',
-        fontSize: hp('2.5%'),
-        marginLeft: 15,
-        paddingBottom: 0,
-    },
-    textprofile: {
-        color: '#0E77BF',
-        fontSize: hp('2%'),
-        marginTop: hp('0.2%'),
-        alignSelf: 'center'
     },
     profile: {
         borderRadius: 100,
@@ -475,10 +433,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#014D81',
     },
     Input: {
-        //flexDirection: 'row',
         fontSize: hp('2.25%'),
-        //paddingLeft: ('10%'),
-        //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',
         width: '100%',
         height: hp('5%'),
@@ -489,12 +444,6 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         paddingBottom: ('2.5%'),
         color: '#fff'
-
-
-    },
-    addimage: {
-        height: '100%',
-        width: '100%',
     },
     text: {
         color: '#12283D',
@@ -510,19 +459,6 @@ const styles = StyleSheet.create({
     },
     overlay_head: {
         borderRadius: 15,
-    },
-    overlay_body: {
-        width: wp('80%'),
-        padding: hp('0.7%'),
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: hp('2.5%')
-    },
-    overlat_show: {
-        width: '95%',
-        marginTop: hp('2%'),
-        alignItems: 'center',
-        justifyContent: 'center'
     },
     viewRadio: {
         width: '100%',

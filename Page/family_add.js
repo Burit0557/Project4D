@@ -299,10 +299,6 @@ const styles = StyleSheet.create({
     content: {
         width: wp('80%'),
     },
-    listRow: {
-        flexDirection: 'row',
-        marginTop: hp('2%'),
-    },
     Shadow: {
         shadowColor: "#000",
         shadowOffset: {
@@ -369,10 +365,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    icondown: {
-        width: '100%',
-        height: '100%',
     },
     btnAdd: {
         backgroundColor: '#49BB21',

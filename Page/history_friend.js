@@ -322,15 +322,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 8,
     },
-    item: {
-        width: wp('35%'),
-        height: wp('35%'),
-        backgroundColor: '#0E77BF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        marginTop: '5%',
-    },
     Text: {
         margin: '1%',
         color: '#ffff',

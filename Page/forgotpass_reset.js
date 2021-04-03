@@ -312,10 +312,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        // width: hp('5%'),
-        // height: hp('5%'),
-        // borderWidth: 1,
-        // marginLeft: wp('2%')
     },
     textInput: {
         color: '#000',
@@ -333,10 +329,6 @@ const styles = StyleSheet.create({
         width: wp('29%'),
         height: hp('6%'),
         borderRadius: 15,
-    },
-    textAlert: {
-        color: '#FF0000',
-        fontSize: hp('1.5%'),
     },
     textdetail: {
         fontSize: hp('2%')

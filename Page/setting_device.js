@@ -471,7 +471,7 @@ export default function setting_device({ navigation }) {
                 <Overlay key={1} isVisible={visible.bluetooth} onBackdropPress={toggleOverlaybluetooth} overlayStyle={styles.overlay_head}>
                     <View style={[styles.overlay_body, { marginBottom: hp('1.5%') }]}>
                         <ScrollView>
-                            <View style={[styles.overlat_show, { width: '100%', marginTop: hp('1%') }]}>
+                            <View style={[styles.overlay_show, { width: '100%', marginTop: hp('1%') }]}>
                                 <Text style={{ color: '#000', fontSize: hp('2.5%'), marginBottom: hp('1%') }}>อุปกรณ์ที่จับคู่แล้ว</Text>
                                 {
                                     bluetooth.map((item, index) => {
@@ -564,7 +564,7 @@ export default function setting_device({ navigation }) {
                 <Overlay key={3} isVisible={visible.editRestDis} onBackdropPress={toggleOverlayEditRestDis} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
 
-                        <View style={styles.overlat_show}>
+                        <View style={styles.overlay_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะทางที่ต้องการให้แจ้งเตือน</Text>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('2%') }]}>ระหว่าง 30 ถึง 450 กิโลเมตร</Text>
 
@@ -608,7 +608,7 @@ export default function setting_device({ navigation }) {
                 <Overlay key={4} isVisible={visible.editRestTime} onBackdropPress={toggleOverlayEditRestTime} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
 
-                        <View style={styles.overlat_show}>
+                        <View style={styles.overlay_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะเวลาที่ต้องการให้แจ้งเตือน</Text>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('2%') }]}>ระหว่าง 0:20 ถึง 4:30 ชั่วโมง:นาที</Text>
 
@@ -666,7 +666,7 @@ export default function setting_device({ navigation }) {
                 <Overlay key={5} isVisible={visible.editUpLocation} onBackdropPress={toggleOverlayEditUpLocation} overlayStyle={styles.overlay_head}>
                     <View style={styles.overlay_body}>
 
-                        <View style={styles.overlat_show}>
+                        <View style={styles.overlay_show}>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', }]}>ระยะเวลาที่ต้องการอัพเดตตำแหน่ง</Text>
                             <Text style={[styles.textInput, { color: '#000', alignSelf: 'flex-start', fontSize: hp('2%') }]}>ระหว่าง 00:30 ถึง 10:00 นาที:วินาที</Text>
 
@@ -768,18 +768,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingRight: '5%',
         paddingLeft: '5%',
-
     },
     space: {
         width: '100%',
         marginBottom: hp('3%'),
     },
-
     textshow: {
         fontSize: hp('2.5%'),
         color: 'rgba(255, 255, 255, 0.85)'
     },
-
     textedit: {
         color: '#000000BF',
         borderColor: '#0000007F',
@@ -787,16 +784,11 @@ const styles = StyleSheet.create({
         borderWidth: wp('0.2%'),
         padding: wp('1%')
     },
-
     smallIcon: {
         width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        // width: hp('5%'),
-        // height: hp('5%'),
-        // borderWidth: 1,
-        // marginLeft: wp('2%')
     },
     textInput: {
         paddingLeft: 5,
@@ -810,17 +802,6 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         paddingBottom: 0,
     },
-    textprofile: {
-        color: '#0E77BF',
-        fontSize: hp('2%'),
-        marginTop: hp('0.2%'),
-        alignSelf: 'center'
-    },
-    profile: {
-        borderRadius: 100,
-        height: '100%',
-        width: '100%',
-    },
     bgInput: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -831,10 +812,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#014D81',
     },
     Input: {
-        //flexDirection: 'row',
         fontSize: hp('2.5%'),
-        //paddingLeft: ('10%'),
-        //marginBottom: hp('1.5%'),
         backgroundColor: '#0E77BF',
         width: '100%',
         height: hp('5%'),
@@ -844,9 +822,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
         paddingBottom: ('2.5%'),
-        color: '#fff'
-
-
+        color: '#fff',
     },
     addimage: {
         height: '100%',
@@ -882,7 +858,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: hp('2.5%')
     },
-    overlat_show: {
+    overlay_show: {
         width: '95%',
         marginTop: hp('2%'),
         alignItems: 'center',
