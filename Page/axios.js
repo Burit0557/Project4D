@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// const kmitl = 'http://161.246.5.138:8080'
+// const kmitl = 'http://161.246.5.138:3000'
 // const local = 'http://192.168.56.1:3000'
 // const local = 'localhost:3000'
 export const API = axios.create({

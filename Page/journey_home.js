@@ -300,6 +300,7 @@ export default function journey_home({ navigation }) {
                                 <TextInput
                                     style={[styles.Input, { width: '30%', marginRight: ('5%') }]}
                                     value={input.distance}
+                                    keyboardType={'number-pad'}
                                     onChangeText={inputDistance}
                                 //placeholder="Enter location.."
                                 />
@@ -321,6 +322,7 @@ export default function journey_home({ navigation }) {
                                 <TextInput
                                     style={[styles.Input, { width: '20%' }]}
                                     value={input.rest_hour}
+                                    keyboardType='decimal-pad'
                                     onChangeText={inputRest_HH}
                                 //placeholder="Enter location.."
                                 />
@@ -330,6 +332,7 @@ export default function journey_home({ navigation }) {
                                 <TextInput
                                     style={[styles.Input, { width: '20%', marginRight: ('5%') }]}
                                     value={input.rest_min}
+                                    keyboardType='decimal-pad'
                                     onChangeText={inputRest_MM}
                                 //placeholder="Enter location.."
                                 />

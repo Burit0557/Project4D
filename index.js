@@ -2,7 +2,7 @@
  * @format
  */
 
-import { AppRegistry } from 'react-native';
+import { AppRegistry,LogBox } from 'react-native';
 
 import App from './router';
 import connectbluetooth from './Page/connectbluetooth'
@@ -106,7 +106,7 @@ function HeadlessCheck({ isHeadless }) {
   return isHeadless ? null : router;
 }
 
-
+LogBox.ignoreAllLogs();
 
 AppRegistry.registerHeadlessTask('connectbluetooth', () => connectbluetooth);
 AppRegistry.registerComponent(appName, () => App);

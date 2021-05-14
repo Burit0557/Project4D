@@ -379,7 +379,7 @@ export default function register({ navigation }) {
                                 <TextInput
                                     style={styles.textInput}
                                     value={input.password}
-                                    //secureTextEntry={true}
+                                    secureTextEntry={true}
                                     onFocus={() => setShowPass({ ...showPass, hide: false })}
                                     onBlur={() => setShowPass({
                                         text: "มีจำนวน 8 ตัวขึ้นไปที่มีทั้งตัวอักษรภาษาอังกฤษและตัวเลขผสมกัน",

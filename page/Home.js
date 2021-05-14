@@ -4,7 +4,7 @@ import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity, Alert
 import { Button, Icon, Header } from 'react-native-elements'
 import messaging from '@react-native-firebase/messaging';
 import { Platform, PermissionsAndroid } from 'react-native';
-import notifee, { EventType } from '@notifee/react-native';
+//import notifee, { EventType } from '@notifee/react-native';
 import RNBluetoothClassic, {
     BluetoothDevice
 } from 'react-native-bluetooth-classic';
@@ -42,17 +42,17 @@ export default function home({ navigation }) {
 
 
     useEffect(() => {
-        notifee.onForegroundEvent(({ type, detail }) => {
-            switch (type) {
-                case EventType.DISMISSED:
-                    console.log('User dismissed notification', detail.notification);
-                    break;
-                case EventType.PRESS:
-                    console.log('User pressed notification', detail.notification);
-                    navigation.navigate('Family-Location')
-                    break;
-            }
-        })
+        // notifee.onForegroundEvent(({ type, detail }) => {
+        //     switch (type) {
+        //         case EventType.DISMISSED:
+        //             console.log('User dismissed notification', detail.notification);
+        //             break;
+        //         case EventType.PRESS:
+        //             console.log('User pressed notification', detail.notification);
+        //             navigation.navigate('Family-Location')
+        //             break;
+        //     }
+        // })
         checkOpen()
         RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
             interval: 10000,
@@ -167,7 +167,7 @@ export default function home({ navigation }) {
                 containerStyle={{ height: hp('15%') }}
                 // leftContainerStyle={{ marginBottom: '5%' }}
                 leftComponent={{ Icon: 'g_translate', color: '#fff', }}
-                centerComponent={{ text: 'หน้าแรก', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
+                centerComponent={{ text: 'หน้าหลัก', style: { color: '#fff', fontWeight: 'bold', fontSize: hp('5%'), } }}
                 // rightComponent={{ text: 'แจ้งเตือน', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
                 // barStyle="dark-content"
                 backgroundColor='#014D81'

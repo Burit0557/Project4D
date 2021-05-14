@@ -651,6 +651,7 @@ export default function setting_profile({ navigation }) {
                                 <TextInput
                                     style={styles.Input}
                                     value={input.password}
+                                    secureTextEntry={true}
                                     onChangeText={inputPass}
                                     onFocus={() => setShowPass({ ...showPass, hide: true })}
                                 //placeholder="กรุณากรอกรหัสผ่านเดิม"
@@ -667,6 +668,7 @@ export default function setting_profile({ navigation }) {
                                 <TextInput
                                     style={styles.Input}
                                     value={input.new_password}
+                                    secureTextEntry={true}
                                     onChangeText={inputNewPass}
                                     onFocus={() => setShowNewPass({ ...showNewPass, hide: false })}
                                     onBlur={() => setShowNewPass({
@@ -689,6 +691,7 @@ export default function setting_profile({ navigation }) {
                                 <TextInput
                                     style={styles.Input}
                                     value={input.cfnew_password}
+                                    secureTextEntry={true}
                                     onChangeText={inputcfNewPass}
                                     onFocus={() => setShowcfNewPass({ ...showcfNewPass, hide: true })}
                                 //placeholder="ยืนยันรหัสผ่านใหม่"
